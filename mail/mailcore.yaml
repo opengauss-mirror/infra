@@ -1,0 +1,86 @@
+# StatefulSet for mail core service
+---
+kind: StatefulSet
+apiVersion: apps/v1beta1
+metadata:
+  name: mailman-core
+  namespace: mail
+  labels:
+    app: mail-suit-service
+spec:
+  serviceName: mail-suit-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mail-suit-service
+  template:
+    metadata:
+      labels:
+        app: mail-suit-service
+    spec:
+      containers:
+        - name: mailman-core
+          image: swr.cn-north-1.myhuaweicloud.com/hwstaff_h00223369/mail-core:v0.1.1
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - mountPath: /opt/mailman/
+              name: mailman-core-volume
+          env:
+            - name: DATABASE_TYPE
+              value: postgres
+            - name: DATABASE_CLASS
+              value: mailman.database.postgresql.PostgreSQLDatabase
+            - name: HYPERKITTY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: hyperkitty_api_key
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_password
+            - name: MAILMAN_REST_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: mailman_core_user
+            - name: MAILMAN_REST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: mailman_core_password
+            - name: HYPERKITTY_URL
+            # NOTE: Please update the HYPERKITTY_URL
+              value: http://mailman-web-service.mail.svc.cluster.local:8000/hyperkitty
+            - name: SMTP_HOST
+              value: mailman-exim4-service.mail.svc.cluster.local
+            - name: EMAIL_HOST_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: exim4_credential_username
+            - name: EMAIL_HOST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: exim4_credential_password
+          # Sed command is used here to force change default charsets to UTF-8
+          # related issue: https://gitlab.com/mailman/postorius/issues/325
+          command:
+            - /bin/sh
+            - -c
+            - |
+              export DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@mailman-database-0.mail-suit-service.mail.svc.cluster.local/mailmandb
+              sed -i "s/charset: us-ascii/charset: utf-8/g" /usr/lib/python3.6/site-packages/mailman/config/schema.cfg;
+              exec docker-entrypoint.sh master --force
+      #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
+      volumes:
+        - name: mailman-core-volume
+          persistentVolumeClaim:
+            claimName: config-vol
