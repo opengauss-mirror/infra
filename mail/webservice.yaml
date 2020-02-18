@@ -81,7 +81,7 @@ spec:
             - name: DATABASE_TYPE
               value: postgres
             - name: DATABASE_URL
-              value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}mailman-database-0.mail-suit-service.mail.svc.cluster.local/mailmandb
+              value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@mailman-database-0.mail-suit-service.mail.svc.cluster.local/mailmandb
             - name: HYPERKITTY_API_KEY
               valueFrom:
                 secretKeyRef:
