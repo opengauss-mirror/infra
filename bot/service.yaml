@@ -4,7 +4,13 @@ kind: Service
 metadata:
   name: botservice
   namespace: bot
+  annotations:
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.id: 662a0e64-b9cd-477e-b9b8-8f0e24be56eb
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
 spec:
+  externalTrafficPolicy: Cluster
+  loadBalancerIP: 159.138.133.68
   ports:
     - name: httpport
       protocol: TCP
@@ -13,4 +19,4 @@ spec:
       nodePort: 31200
   selector:
     app: botinfo
-  type: NodePort
+  type: LoadBalancer
