@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: botinfod
-        image: opengauss/bot:latest
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/cibot:v1.0.2020031000
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8888
