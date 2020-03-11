@@ -6,6 +6,9 @@ metadata:
   namespace: meeting
   labels:
     app: meet-bot-dep
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.meet-bot: semver:~1.0
 spec:
   selector:
     matchLabels:
@@ -17,7 +20,7 @@ spec:
     spec:
       containers:
       - name: meet-bot
-        image: swr.cn-north-1.myhuaweicloud.com/opengauss/meetbot:v0.0.2
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/meetingbot:v1.0.2020031100
         imagePullPolicy: IfNotPresent
         env:
         - name: NICK
