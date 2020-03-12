@@ -42,7 +42,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: meetbot-secret
-              key: irc_password 
+              key: irc_password
         - name: IRC_CHANNELS
           valueFrom:
             configMapKeyRef:
@@ -73,7 +73,7 @@ spec:
         - mountPath: /logs
           name: log-volume
       - name: meet-explorer
-        image: nginx:latest
+        image: nginx:1-alpine-perl
         imagePullPolicy: IfNotPresent
         env:
         - name: NGINX_PORT
