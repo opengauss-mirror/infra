@@ -9,6 +9,7 @@ metadata:
   annotations:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.meet-bot: semver:~1.0
+    flux.weave.works/tag.meet-explorer: semver:~1.0
 spec:
   selector:
     matchLabels:
@@ -73,7 +74,7 @@ spec:
         - mountPath: /logs
           name: log-volume
       - name: meet-explorer
-        image: nginx:1-alpine-perl
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/nginx:v1.0.2020031200
         imagePullPolicy: IfNotPresent
         env:
         - name: NGINX_PORT
