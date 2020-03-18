@@ -10,8 +10,8 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 2000Gi
-  storageClassName: ssd
+      storage: 100Gi
+  storageClassName: nfs-rw
   volumeMode: Filesystem
 
 #define the log volume for meetbot
@@ -26,6 +26,6 @@ spec:
   - ReadWriteMany
   resources:
     requests:
-      storage: 500Gi
-  storageClassName: ssd
+      storage: 100Gi
+  storageClassName: nfs-rw
   volumeMode: Filesystem
