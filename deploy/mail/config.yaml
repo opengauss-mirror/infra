@@ -252,7 +252,7 @@ data:
     ALLOWED_HOSTS = [
         "localhost",  # Archiving API from Mailman, keep it.
         # Add here all production URLs you may have.
-        "mailman-database-0.mail-suit-service.mail.svc.cluster.local",
+        "192.168.0.164",
         "mailman-core-0.mail-suit-service.mail.svc.cluster.local",
         "mailman-web-0.mail-suit-service.mail.svc.cluster.local",
         "mailman-web-service.mail.svc.cluster.local",
