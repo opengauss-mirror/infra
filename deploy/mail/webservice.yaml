@@ -39,6 +39,9 @@ metadata:
   labels:
     component: mail-web-service
     app: mail-suit-service
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.mailman-web: semver:~1.0
 spec:
   replicas: 2
   selector:
@@ -55,7 +58,7 @@ spec:
       containers:
         - name: mailman-web
           # We modified the mail-web image to add static folder.
-          image: swr.cn-north-1.myhuaweicloud.com/hwstaff_h00223369/mail-web:v1.0.1
+          image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-web:v1.0.2020031900
           imagePullPolicy: "IfNotPresent"
           volumeMounts:
             - mountPath: /opt/mailman-web-config
@@ -91,7 +94,10 @@ spec:
             - name: DATABASE_TYPE
               value: postgres
             - name: DATABASE_URL
-              value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_IP}:${POSTGRES_PORT}/mailmandb
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_url
             - name: HYPERKITTY_API_KEY
               valueFrom:
                 secretKeyRef:
