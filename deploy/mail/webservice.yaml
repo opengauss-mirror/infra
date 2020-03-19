@@ -69,10 +69,10 @@ spec:
               subPath: summary.html
           env:
             - name: POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: mailman-secrets
-                    key: postgres_user
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
