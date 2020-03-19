@@ -78,10 +78,20 @@ spec:
                 secretKeyRef:
                   name: mailman-secrets
                   key: postgres_password
+            - name: POSTGRES_IP
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_ip
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_port
             - name: DATABASE_TYPE
               value: postgres
             - name: DATABASE_URL
-              value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@mailman-database-0.mail-suit-service.mail.svc.cluster.local/mailmandb
+              value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_IP}:${POSTGRES_PORT}/mailmandb
             - name: HYPERKITTY_API_KEY
               valueFrom:
                 secretKeyRef:
