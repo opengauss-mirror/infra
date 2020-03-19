@@ -91,7 +91,10 @@ spec:
             - name: DATABASE_TYPE
               value: postgres
             - name: DATABASE_URL
-              value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_IP}:${POSTGRES_PORT}/mailmandb
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_url
             - name: HYPERKITTY_API_KEY
               valueFrom:
                 secretKeyRef:
