@@ -45,6 +45,16 @@ spec:
                 secretKeyRef:
                   name: mailman-secrets
                   key: postgres_password
+            - name: POSTGRES_IP
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_ip
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: postgres_port
             - name: MAILMAN_REST_USER
               valueFrom:
                 secretKeyRef:
@@ -76,7 +86,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              export DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@mailman-database-0.mail-suit-service.mail.svc.cluster.local/mailmandb
+              export DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_IP}:${POSTGRES_PORT}/mailmandb
               sed -i "s/charset: us-ascii/charset: utf-8/g" /usr/lib/python3.6/site-packages/mailman/config/schema.cfg;
               exec docker-entrypoint.sh master --force
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
