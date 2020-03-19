@@ -32,7 +32,7 @@ spec:
           env:
             # the repo which contains the templates folder
             - name: TEMPLATE_REPO
-              value: https://github.com/opengauss/mail_templates.git
+              value: https://gitee.com/opengauss/infra.git
           command:
             - /bin/sh
             - -c
@@ -79,7 +79,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              cp -r /opt/mailman-utils/data_source/templates  .;
+              cp -r /opt/mailman-utils/data_source/templates/src/mail/templates  .;
               exec docker-entrypoint.sh python -u mailman-core-utils.py
       volumes:
         - name: mailman-core-utils
