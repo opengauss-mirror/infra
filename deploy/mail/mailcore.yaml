@@ -7,6 +7,9 @@ metadata:
   namespace: mail
   labels:
     app: mail-suit-service
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.mailman-core: semver:~1.0
 spec:
   serviceName: mail-suit-service
   replicas: 1
@@ -20,7 +23,7 @@ spec:
     spec:
       containers:
         - name: mailman-core
-          image: swr.cn-north-1.myhuaweicloud.com/hwstaff_h00223369/mail-core:v0.1.1
+          image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-core:v1.0.2020031900
           imagePullPolicy: "IfNotPresent"
           volumeMounts:
             - mountPath: /opt/mailman/
