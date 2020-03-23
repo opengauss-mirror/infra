@@ -1,4 +1,3 @@
-# Deployment for mail core utils service
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -9,7 +8,6 @@ metadata:
     component: mail-core-utils
     app: mail-suit-service
   annotations:
-    flux.weave.works/automated: "true"
     flux.weave.works/tag.mail-git-tools: semver:~1.0
     flux.weave.works/tag.mailman-core-utils: semver:~1.0
 spec:
@@ -26,65 +24,65 @@ spec:
     spec:
       # init container used to clone the repo and move it into the dir that core-utils will use.
       initContainers:
-        - name: mail-git-tools
+      - name: mail-git-tools
           # Please ensure the image exists
-          image: swr.cn-south-1.myhuaweicloud.com/opengauss/git-tools:v1.0.2020031900
-          imagePullPolicy: "IfNotPresent"
-          volumeMounts:
-            - mountPath: /opt/mailman-utils/data_source
-              name: mailman-core-utils
-          env:
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/git-tools:v1.0.2020031900
+        imagePullPolicy: "IfNotPresent"
+        volumeMounts:
+        - mountPath: /opt/mailman-utils/data_source
+          name: mailman-core-utils
+        env:
             # the repo which contains the templates folder
-            - name: TEMPLATE_REPO
-              value: https://gitee.com/opengauss/infra.git
-          command:
-            - /bin/sh
-            - -c
-            - |
-              cd /opt/mailman-utils/data_source;
-              git clone ${TEMPLATE_REPO} templates
+        - name: TEMPLATE_REPO
+          value: https://gitee.com/opengauss/infra.git
+        command:
+        - /bin/sh
+        - -c
+        - |
+          cd /opt/mailman-utils/data_source;
+          git clone ${TEMPLATE_REPO} templates
       containers:
-        - name: mailman-core-utils
+      - name: mailman-core-utils
           # Please ensure the image exists
-          image: swr.cn-south-1.myhuaweicloud.com/opengauss/mailman-core-utils:v1.0.2020031900
-          imagePullPolicy: "IfNotPresent"
-          volumeMounts:
-            - mountPath: /opt/mailman-utils/data_source
-              name: mailman-core-utils
-          env:
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/mailman-core-utils:v1.0.2020031900
+        imagePullPolicy: "IfNotPresent"
+        volumeMounts:
+        - mountPath: /opt/mailman-utils/data_source
+          name: mailman-core-utils
+        env:
             # the mailman core API used to handling creating list and replace templates
-            - name: MAILMAN_CORE_ENDPOINT
-              value: http://mailman-core-0.mail-suit-service.mail.svc.cluster.local:8001/3.1
+        - name: MAILMAN_CORE_ENDPOINT
+          value: http://mailman-core-0.mail-suit-service.mail.svc.cluster.local:8001/3.1
             # the credential for mailman core API
-            - name: MAILMAN_CORE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mailman-secrets
-                  key: mailman_core_user
-            - name: MAILMAN_CORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mailman-secrets
-                  key: mailman_core_password
+        - name: MAILMAN_CORE_USER
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailman_core_user
+        - name: MAILMAN_CORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailman_core_password
             # default domain name that will be created when starts up
-            - name: DEFAULT_DOMAIN_NAME
-              value: opengauss.org
+        - name: DEFAULT_DOMAIN_NAME
+          value: opengauss.org
             # default mail lists that will created when starts up, if not specified, container will scan all of the list file in templates folder.
-            - name: DEFAULT_MAIL_LISTS
-              value: community,dev,infra
+        - name: DEFAULT_MAIL_LISTS
+          value: community,dev,infra
             # the template server address, this is default to self IP address
-            - name: TEMPLATE_FOLDER_PATH
-              value: templates
-            - name: TEMPLATE_SERVER_ADDRESS
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-          command:
-            - /bin/sh
-            - -c
-            - |
-              cp -r /opt/mailman-utils/data_source/templates/src/mail/templates  .;
-              exec docker-entrypoint.sh python -u mailman-core-utils.py
+        - name: TEMPLATE_FOLDER_PATH
+          value: templates
+        - name: TEMPLATE_SERVER_ADDRESS
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        command:
+        - /bin/sh
+        - -c
+        - |
+          cp -r /opt/mailman-utils/data_source/templates/src/mail/templates  .;
+          exec docker-entrypoint.sh python -u mailman-core-utils.py
       volumes:
-        - name: mailman-core-utils
-          emptyDir: {}
+      - name: mailman-core-utils
+        emptyDir: {}
