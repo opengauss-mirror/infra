@@ -39,7 +39,6 @@ metadata:
     component: mail-web-service
     app: mail-suit-service
   annotations:
-    flux.weave.works/automated: "true"
     flux.weave.works/tag.mailman-web: semver:~1.0
 spec:
   replicas: 2
