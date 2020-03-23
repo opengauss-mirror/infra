@@ -8,6 +8,7 @@ metadata:
     app: mail-suit-service
   annotations:
     flux.weave.works/tag.mailman-core: semver:~1.0
+    flux.weave.works/automated: 'true'
 spec:
   serviceName: mail-suit-service
   replicas: 1
