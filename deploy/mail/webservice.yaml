@@ -40,6 +40,7 @@ metadata:
     app: mail-suit-service
   annotations:
     flux.weave.works/tag.mailman-web: semver:~1.0
+    flux.weave.works/automated: 'true'
 spec:
   replicas: 2
   selector:
