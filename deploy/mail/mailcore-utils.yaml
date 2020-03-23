@@ -10,6 +10,7 @@ metadata:
   annotations:
     flux.weave.works/tag.mail-git-tools: semver:~1.0
     flux.weave.works/tag.mailman-core-utils: semver:~1.0
+    flux.weave.works/automated: 'true'
 spec:
   replicas: 1
   selector:
