@@ -32,7 +32,6 @@ metadata:
     app: mail-suit-service
     component: mail-exim4-service
   annotations:
-    flux.weave.works/automated: "true"
     flux.weave.works/tag.mailman-exim4: semver:~1.0
 spec:
   serviceName: mail-suit-service
@@ -50,74 +49,74 @@ spec:
       nodeSelector:
         mail_exim4: "true"
       containers:
-        - name: mailman-exim4
+      - name: mailman-exim4
           #NOTE: This image is directly built from our dockerfile located in exim4 folder
-          image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-exim4:v1.0.2020031900
-          imagePullPolicy: "IfNotPresent"
-          volumeMounts:
-            - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
-              name: mailman-exim4-configmap-volume
-              subPath: 25_mm3_macros
-            - mountPath: /etc/exim4/conf.d/main/01_exim4-config_listmacrosdefs
-              name: mailman-exim4-configmap-volume
-              subPath: 01_exim4-config_listmacrosdefs
-            - mountPath: /etc/exim4/conf.d/auth/30_exim4-config_examples
-              name: mailman-exim4-configmap-volume
-              subPath: 30_exim4-config_examples
-            - mountPath: /etc/exim4/conf.d/main/00_local_macros
-              name: mailman-exim4-configmap-volume
-              subPath: 00_local_macros
-            - mountPath: /etc/exim4/conf.d/transport/55_mm3_transport
-              name: mailman-exim4-configmap-volume
-              subPath: 55_mm3_transport
-            - mountPath: /etc/exim4/conf.d/router/455_mm3_router
-              name: mailman-exim4-configmap-volume
-              subPath: 455_mm3_router
-            - mountPath: /etc/exim4/update-exim4.conf.conf
-              name: mailman-exim4-configmap-volume
-              subPath: update-exim4-conf.conf
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-exim4:v1.0.2020031900
+        imagePullPolicy: "IfNotPresent"
+        volumeMounts:
+        - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
+          name: mailman-exim4-configmap-volume
+          subPath: 25_mm3_macros
+        - mountPath: /etc/exim4/conf.d/main/01_exim4-config_listmacrosdefs
+          name: mailman-exim4-configmap-volume
+          subPath: 01_exim4-config_listmacrosdefs
+        - mountPath: /etc/exim4/conf.d/auth/30_exim4-config_examples
+          name: mailman-exim4-configmap-volume
+          subPath: 30_exim4-config_examples
+        - mountPath: /etc/exim4/conf.d/main/00_local_macros
+          name: mailman-exim4-configmap-volume
+          subPath: 00_local_macros
+        - mountPath: /etc/exim4/conf.d/transport/55_mm3_transport
+          name: mailman-exim4-configmap-volume
+          subPath: 55_mm3_transport
+        - mountPath: /etc/exim4/conf.d/router/455_mm3_router
+          name: mailman-exim4-configmap-volume
+          subPath: 455_mm3_router
+        - mountPath: /etc/exim4/update-exim4.conf.conf
+          name: mailman-exim4-configmap-volume
+          subPath: update-exim4-conf.conf
               # This file path also used in command option that used as a exim4 log path
-            - mountPath: /opt/mailman/
-              name: mailman-core-data
-            - name: mailman-secrets
-              mountPath: /etc/exim4/passwd
-              subPath: exim4_credential
-            - name: mailman-cert-secrets
-              mountPath: /etc/exim4/exim.crt
-              subPath: server.crt
-            - name: mailman-cert-secrets
-              mountPath: /etc/exim4/exim.key
-              subPath: server.key
-            - name: mailman-secrets
-              mountPath: /etc/exim4/dkim/opengauss.key
-              subPath: dkim_key
+        - mountPath: /opt/mailman/
+          name: mailman-core-data
+        - name: mailman-secrets
+          mountPath: /etc/exim4/passwd
+          subPath: exim4_credential
+        - name: mailman-cert-secrets
+          mountPath: /etc/exim4/exim.crt
+          subPath: server.crt
+        - name: mailman-cert-secrets
+          mountPath: /etc/exim4/exim.key
+          subPath: server.key
+        - name: mailman-secrets
+          mountPath: /etc/exim4/dkim/opengauss.key
+          subPath: dkim_key
           # NOTE: since we added new configuration files we need reload exim4 and start up
           # 1. update password  and key file mode
           # 2. update the log folder permission
           # 3. reconfigure exim4
           # 4. start the service
-          command:
-            - /bin/sh
-            - -c
-            - |
-              sudo chown root:Debian-exim /etc/exim4/passwd /etc/exim4/exim.crt /etc/exim4/exim.key /etc/exim4/dkim/opengauss.key
-              sudo chmod 640 /etc/exim4/passwd /etc/exim4/exim.crt /etc/exim4/exim.key /etc/exim4/dkim/opengauss.key
-              mkdir -p /opt/mailman/exim_log
-              chown Debian-exim:Debian-exim -R /opt/mailman/exim_log
-              sudo update-exim4.conf
-              exec tini -- exim -bd -v;
+        command:
+        - /bin/sh
+        - -c
+        - |
+          sudo chown root:Debian-exim /etc/exim4/passwd /etc/exim4/exim.crt /etc/exim4/exim.key /etc/exim4/dkim/opengauss.key
+          sudo chmod 640 /etc/exim4/passwd /etc/exim4/exim.crt /etc/exim4/exim.key /etc/exim4/dkim/opengauss.key
+          mkdir -p /opt/mailman/exim_log
+          chown Debian-exim:Debian-exim -R /opt/mailman/exim_log
+          sudo update-exim4.conf
+          exec tini -- exim -bd -v;
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
       volumes:
-        - name: mailman-exim4-configmap-volume
-          configMap:
-            name: mailman-exim4-configmap
-        - name: mailman-core-data
-          persistentVolumeClaim:
-            claimName: config-vol
-        - name: mailman-secrets
-          secret:
-            secretName: mailman-secrets
-        - name: mailman-cert-secrets
-          secret:
-            secretName: mailman-cert-secrets
+      - name: mailman-exim4-configmap-volume
+        configMap:
+          name: mailman-exim4-configmap
+      - name: mailman-core-data
+        persistentVolumeClaim:
+          claimName: config-vol
+      - name: mailman-secrets
+        secret:
+          secretName: mailman-secrets
+      - name: mailman-cert-secrets
+        secret:
+          secretName: mailman-cert-secrets
 
