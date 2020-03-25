@@ -3,7 +3,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: opengauss-jenkins
+  name: jenkins-data-vol
   namespace: jenkins
   labels:
     "app.kubernetes.io/name": 'jenkins'
