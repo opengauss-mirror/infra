@@ -1,41 +1,41 @@
-# Resource for medium specification slave pods
+# Resource for small specification slave pods
 apiVersion: v1
 kind: Service
 metadata:
-  name: x86-medium-slaves-service
+  name: x86-small-slaves-service
   namespace: jenkins
   labels:
-    app: x86-medium-slaves
+    app: x86-small-slaves
 spec:
   ports:
     - port: 80
       name: port-placeholder
   clusterIP: None
   selector:
-    app: x86-medium-slaves
+    app: x86-small-slaves
 
 ---
 kind: StatefulSet
 apiVersion: apps/v1beta1
 metadata:
-  name: x86-medium-slaves
+  name: x86-small-slaves
   namespace: jenkins
   labels:
-    app: x86-medium-slaves
+    app: x86-small-slaves
 spec:
-  serviceName: x86-medium-slaves-service
-  replicas: 4
+  serviceName: x86-small-slaves-service
+  replicas: 1
   selector:
     matchLabels:
-      app: x86-medium-slaves
+      app: x86-small-slaves
   template:
     metadata:
       labels:
-        app: x86-medium-slaves
+        app: x86-small-slaves
     spec:
       initContainers:
         - name: slave-init
-          image: swr.cn-north-1.myhuaweicloud.com/hwstaff_h00223369/jenkins-slave-tools:0.0.1
+          image: swr.cn-south-1.myhuaweicloud.com/opengauss/jenkins-slave-tools:v1.0.2020032500
           volumeMounts:
             - mountPath: /home/jenkins/share-config
               name: jenkins-share-config
@@ -45,9 +45,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: JENKINS_USER_NAME
-              value: admin
+              value: opengauss
             - name: JENKINS_USER_PASSWORD
-              value: 11644f18a4601e09a02313bf1a5d8920fe
+              value: 110ec45dcf86130cb6f350e5c2ff714d74
             - name: JENKINS_AGENT_WORKDIR
               value: /home/jenkins/agent-working-dir
             - name: JENKINS_URL
@@ -57,18 +57,15 @@ spec:
             - name: EXECUTOR_NUMBERS
               value: "1"
             - name: NODE_LABELS
-              value: x86 k8s-medium
+              value: x86 k8s-small
           args: ["$(JENKINS_URL)", "$(JENKINS_USER_NAME)", "$(JENKINS_USER_PASSWORD)", "$(JENKINS_NODE_NAME)", "$(EXECUTOR_NUMBERS)", "$(JENKINS_AGENT_WORKDIR)", "$(NODE_LABELS)", "$(JENKINS_SHARE_FOLDER)"]
       containers:
         - name: jenkins-slave
-          image: swr.cn-north-1.myhuaweicloud.com/hwstaff_h00223369/ubuntu_gpu:0.0.2
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-          imagePullPolicy: "Always"
+          image: swr.cn-south-1.myhuaweicloud.com/opengauss/ms_check_slave:v1.0.2020032500
+          imagePullPolicy: "IfNotPresent"
           volumeMounts:
             - mountPath: /home/jenkins/agent-working-dir
-              name: medium-workspace-pvc
+              name: x86-small-slaves-pvc
             - mountPath: /home/jenkins/share-config
               name: jenkins-share-config
             - mountPath: /home/jenkins/share-data
@@ -81,11 +78,11 @@ spec:
               exec jenkins-agent
           resources:
             requests:
-              cpu: 6000m
-              memory: 16000Mi
+              cpu: 1000m
+              memory: 2000Mi
             limits:
-              cpu: 12000m
-              memory: 32000Mi
+              cpu: 2000m
+              memory: 3000Mi
           env:
             - name: JENKINS_TUNNEL
               value: jenkins.opengauss.org:50000
@@ -106,16 +103,15 @@ spec:
           emptyDir: {}
         - name: jenkins-share-data
           persistentVolumeClaim:
-            # NOTE: this persistenvolumeclaim is imported on CCE web console, not created by command.
-            claimName: cce-sfs-import-k735j4kx-mepe
+            claimName: x86-small-slaves-share
   updateStrategy:
     type: RollingUpdate
   volumeClaimTemplates:
     - metadata:
-        name: medium-workspace-pvc
+        name: x86-small-slaves-pvc
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 200Gi
+            storage: 100Gi
         storageClassName: "sas"

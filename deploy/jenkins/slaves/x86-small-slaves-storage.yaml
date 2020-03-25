@@ -1,0 +1,15 @@
+#define the share volume for x86-small-slaves
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: x86-small-slaves-share
+  namespace: jenkins
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-rw
+  volumeMode: Filesystem
