@@ -156,4 +156,4 @@ spec:
         emptyDir: {}
       - name: jenkins-home
         persistentVolumeClaim:
-          claimName: opengauss-jenkins
+          claimName: jenkins-data-vol
