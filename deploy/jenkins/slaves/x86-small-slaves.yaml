@@ -22,6 +22,10 @@ metadata:
   namespace: jenkins
   labels:
     app: x86-small-slaves
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.slave-init: semver:~1.0
+    flux.weave.works/tag.jenkins-slave: semver:~1.0
 spec:
   serviceName: x86-small-slaves-service
   replicas: 1

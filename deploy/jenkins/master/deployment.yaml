@@ -12,6 +12,10 @@ metadata:
     "app.kubernetes.io/managed-by": "Tiller"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-master"
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.copy-default-config: semver:~1.0
+    flux.weave.works/tag.jenkins: semver:~1.0
 spec:
   replicas: 1
   strategy:
@@ -117,15 +121,13 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
-
           resources:
             limits:
               cpu: 15000m
               memory: 55000Mi
             requests:
               cpu: 8000m
-              memory: 16000Mi
-            
+              memory: 16000Mi    
           volumeMounts:
             - mountPath: /tmp
               name: tmp
@@ -141,7 +143,6 @@ spec:
             - mountPath: /usr/share/jenkins/ref/plugins/
               name: plugin-dir
               readOnly: false
-
       volumes:
       - name: plugins
         emptyDir: {}
