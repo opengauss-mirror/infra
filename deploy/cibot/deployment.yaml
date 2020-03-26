@@ -28,6 +28,21 @@ spec:
       - name: botinfod
         image: swr.cn-south-1.myhuaweicloud.com/opengauss/cibot:v1.0.2020031001
         imagePullPolicy: IfNotPresent
+        args:
+        - --stderrthreshold=0
+        env:
+        - name: GITEE_OAUTH2_SECRET
+          valueFrom:
+            configMapKeyRef:
+              key: gitee_oauth2_secret
+              name: bot-configmap
+        - name: GITEE_OAUTH2_CLIENT_CODE
+          valueFrom:
+            configMapKeyRef:
+              key: gitee_oauth2_client_code
+              name: bot-configmap
+        - name: WEBSITE_URL
+          value: http://119.8.33.182/
         ports:
         - containerPort: 8888
           name: http
