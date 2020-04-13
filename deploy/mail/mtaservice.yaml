@@ -47,8 +47,6 @@ spec:
         app: mail-suit-service
         component: mail-exim4-service
     spec:
-      nodeSelector:
-        mail_exim4: "true"
       containers:
       - name: mailman-exim4
           #NOTE: This image is directly built from our dockerfile located in exim4 folder
