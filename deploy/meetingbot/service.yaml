@@ -16,7 +16,11 @@ spec:
   - port: 80
     name: meet-log-http
     targetPort: 8080
-    protocol: TCP  
+    protocol: TCP
+  - port: 443 
+    name: meet-log-https
+    targetPort: 443 
+    protocol: TCP
   - port: 81
     name: meet-bot-http
     targetPort: 80
@@ -24,3 +28,4 @@ spec:
   selector:
     app: meet-bot
   type: LoadBalancer
+
