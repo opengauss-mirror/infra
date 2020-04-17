@@ -83,12 +83,17 @@ spec:
         - containerPort: 8080
           name: http
           protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
         volumeMounts:
         - mountPath: /usr/share/nginx/html
           name: data-volume
         - mountPath: /etc/nginx/nginx.conf
           name: nginx-config-vol
           subPath: nginx.conf
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
@@ -99,3 +104,6 @@ spec:
       - name: nginx-config-vol
         configMap:
           name: meetbot-config
+      - name: secret-volume
+        secret:
+          secretName: meetbot-cert-secret

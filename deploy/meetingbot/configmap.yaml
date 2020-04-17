@@ -10,7 +10,7 @@ data:
   username: opengauss-bot
   irc_channels: "#opengauss-meeting"
   url_info: https://opengauss.org/en/meetings.html
-  log_url_prefix: http://meetings.opengauss.org/
+  log_url_prefix: https://meetings.opengauss.org/
   log_pattern: "%(channel)s/%%Y/%(meetingname)s/%%F-%%H.%%M"
   nginx.conf: |
     user  root;
@@ -30,7 +30,18 @@ data:
         keepalive_timeout  65;
         server {
             listen 8080;                 ##listen port
-            server_name opengauss.org;   ##server_name domain
+            server_name meetings.opengauss.org;   ##server_name domain
+            return 301 https://$server_name$request_uri;
+        }
+        server {
+            listen 443 ssl;
+
+            server_name meetings.opengauss.org;
+            ssl on;
+            ssl_certificate /etc/nginx/ssl/fullchain.pem;
+            ssl_certificate_key  /etc/nginx/ssl/privkey.pem;
+            ssl_trusted_certificate /etc/nginx/ssl/chain.pem;
+
             location / {
                 root /usr/share/nginx/html/public_html;  ## work folder
                 autoindex on;
@@ -40,4 +51,5 @@ data:
                 root /usr/share/nginx/html;
             }
         }
-    }  
+    }
+
