@@ -37,7 +37,6 @@ spec:
     spec:
       nodeSelector:
         master_node: "true"
-        
       securityContext:
         runAsUser: 0
       serviceAccountName: "opengauss-jenkins"
@@ -79,6 +78,25 @@ spec:
             - mountPath: /var/jenkins_plugins
               name: plugin-dir
       containers:
+        - name: nginx
+          image: swr.cn-south-1.myhuaweicloud.com/opengauss/nginx:v1.0.2020031200
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: NGINX_PORT
+            value: "80"
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          - containerPort: 443
+            name: https
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /etc/nginx/ssl
+            name: secret-volume
+          - mountPath: /etc/nginx/conf.d
+            name: configmap-volume
+
         - name: jenkins
           image: "swr.cn-south-1.myhuaweicloud.com/opengauss/jenkins:v1.0.2020032500"
           imagePullPolicy: "Always"
@@ -158,3 +176,9 @@ spec:
       - name: jenkins-home
         persistentVolumeClaim:
           claimName: jenkins-data-vol
+      - name: secret-volume
+        secret:
+          secretName: websecret
+      - name: configmap-volume
+        configMap:
+          name: webconfigmap
