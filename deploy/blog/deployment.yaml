@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: bloginfod
-        image: swr.cn-south-1.myhuaweicloud.com/opengauss/blog:v1.0.202004171804091181
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/blog:v1.0.202004201817108289
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
