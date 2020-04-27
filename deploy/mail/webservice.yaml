@@ -57,7 +57,7 @@ spec:
       containers:
       - name: mailman-web
           # We modified the mail-web image to add static folder.
-        image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-web:v1.0.2020032400
+        image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-web:v1.0.2020042700
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /opt/mailman-web-config
