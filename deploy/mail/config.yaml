@@ -260,6 +260,7 @@ data:
         "opengauss.org",
         #NOTE: this can be removed if domain name finally get used.
         "159.138.24.25",
+        "159.138.9.224",
         "mailweb.opengauss.org",
         "mail.opengauss.org",
         "mailman-web",
