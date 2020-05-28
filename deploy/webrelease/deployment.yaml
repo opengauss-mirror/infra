@@ -1,0 +1,93 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: web-release
+  namespace: release
+  labels:
+    appgroup: ''
+  annotations:
+    deployment.kubernetes.io/revision: '13'
+    description: ''
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-release
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: web-release
+      annotations:
+        metrics.alpha.kubernetes.io/custom-endpoints: '[{"api":"","path":"","port":"","names":""}]'
+    spec:
+      volumes:
+        - name: vol-config-map
+          configMap:
+            name: release-config
+            items:
+              - key: config.yaml
+                path: config.yaml
+            defaultMode: 420
+        - name: vol-docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: ''
+      containers:
+        - name: container-1
+          image: 'swr.cn-south-1.myhuaweicloud.com/release/web-release:1.0.6'
+          env:
+            - name: config.yaml
+              valueFrom:
+                configMapKeyRef:
+                  name: release-config
+                  key: config.yaml
+          resources:
+            limits:
+              cpu: 250m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          volumeMounts:
+            - name: vol-config-map
+              readOnly: true
+              mountPath: /go/src/webrelease/config/
+            - name: vol-docker-sock
+              mountPath: /var/run/docker.sock
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      imagePullSecrets:
+        - name: default-secret
+      affinity: {}
+      schedulerName: default-scheduler
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+      dnsConfig:
+        options:
+          - name: timeout
+            value: ''
+          - name: ndots
+            value: '5'
+          - name: single-request-reopen
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

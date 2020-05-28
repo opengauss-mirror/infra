@@ -1,0 +1,19 @@
+imageConfig:
+  - git_url: "https://gitee.com/opengauss/docs"
+    name: docs
+    version: 1.1
+    image_group: docs
+    branch:
+      - dev
+      - master
+  - git_url: "https://gitee.com/opengauss/website"
+    name: website
+    version: 1.1
+    image_group: website
+    branch:
+      - dev
+      - master
+region: cn-east-2
+AK: "******"
+SK: "******"
+webhookSec: "******"
