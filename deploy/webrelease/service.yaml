@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: web-release
+  name: releaseinfo
   namespace: release
   annotations:
     kubernetes.io/elb.class: union
@@ -17,6 +17,6 @@ spec:
       targetPort: 8080
       nodePort: 32132
   selector:
-    app: web-release
+    app: releaseinfo
   type: LoadBalancer
 
