@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: web-release
+  namespace: release
+  labels:
+    app: web-release
+    name: web-release
+spec:
+  ports:
+    - name: httpnodeport
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 32132
+  selector:
+    app: web-release
+  type: NodePort
+status:
+  loadBalancer: {}
