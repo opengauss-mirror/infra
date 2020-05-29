@@ -3,18 +3,20 @@ apiVersion: v1
 metadata:
   name: web-release
   namespace: release
-  labels:
-    app: web-release
-    name: web-release
+  annotations:
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.id: 1e1327c7-0650-439d-bfb7-9977eb4cdebf
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
 spec:
+  externalTrafficPolicy: Cluster
+  loadBalancerIP: 119.8.36.131
   ports:
-    - name: httpnodeport
+    - name: httpport
       protocol: TCP
       port: 8080
       targetPort: 8080
       nodePort: 32132
   selector:
     app: web-release
-  type: NodePort
-status:
-  loadBalancer: {}
+  type: LoadBalancer
+
