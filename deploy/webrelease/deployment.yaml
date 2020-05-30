@@ -48,6 +48,8 @@ spec:
           mountPath: /go/src/webrelease/config/
         - name: vol-docker-sock
           mountPath: /var/run/docker.sock
+        - name: vol-docker-logpath
+          mountPath: /var/log/web-release
       volumes:
       - name: vol-config-map
         configMap:
@@ -58,4 +60,7 @@ spec:
       - name: vol-docker-sock
         hostPath:
           path: /var/run/docker.sock
+      - name: vol-docker-logpath
+        hostPath:
+          path: /var/log/web-release
 
