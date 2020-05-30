@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: mailman-core
-        image: swr.cn-south-1.myhuaweicloud.com/opengauss/mail-core:v1.0.2020031900
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/mail-core:v1.0.2020031900
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /opt/mailman/

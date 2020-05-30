@@ -9,7 +9,7 @@ This is a docker container to get [meetbot](https://wiki.debian.org/MeetBot) run
 Pull the latest version of the image from the docker index. This is the recommended method of installation as it is easier to update image in the future.
 
 ```
-docker pull swr.cn-south-1.myhuaweicloud.com/opengauss/meetingbot:v1.0.2020031100
+docker pull swr.ap-southeast-1.myhuaweicloud.com/opengauss/meetingbot:v1.0.2020031100
 ```
 
 ## Quick Start
@@ -19,7 +19,7 @@ Run the image
 ```
 docker run --name="meetbot-running" -d -p 80:80/tcp \
    --env-file ./opengauss.env \
-   -v /data:/data -v /var/log:/logs swr.cn-south-1.myhuaweicloud.com/opengauss/meetingbot:v1.0.2020031100
+   -v /data:/data -v /var/log:/logs swr.ap-southeast-1.myhuaweicloud.com/opengauss/meetingbot:v1.0.2020031100
 ```
 
 It has a `meetbot.conf` in the repo that'll connect to freenode
