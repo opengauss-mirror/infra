@@ -2,9 +2,9 @@
 
 > Uncomment only one, leave it on its own line: 
 >
-> - kind/bug
+> /kind bug
 >
-> - kind/feature
+> /kind feature
 
 
 **What happened**:
