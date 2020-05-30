@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etherpad-config
+  namespace: etherpad
+data:
+  settings.json: |
+    {
+      "skinName":"no-skin",
+      "title":"Etherpad",
+      "defaultPadText" : "Welcome to Etherpad!\n\nThis pad text is synchronized as you type, so that everyone viewing this page sees the same text. This allows you to collaborate seamlessly on documents!\n\nGet involved with Etherpad at https:\/\/etherpad.org\n",
+      "suppressErrorsInPadText": true
+    }

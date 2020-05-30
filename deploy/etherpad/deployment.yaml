@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etherpad
+  namespace: etherpad
+  labels:
+    app: etherpad
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.etherpad: semver:~1.0
+    flux.weave.works/tag.etherpad-explorer: semver:~1.0
+spec:
+  selector:
+    matchLabels:
+      app: etherpad
+  template:
+    metadata:
+      labels:
+        app: etherpad
+    spec:
+      containers:
+      - name: etherpad
+        image: etherpad/etherpad:1.7.5
+        ports:
+        - containerPort: 9001
+          name: web
+        volumeMounts:
+        - name: "config"
+          mountPath: "/opt/etherpad/settings.json"
+          subPath: "settings.json"
+      - name: etherpad-explorer
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/nginx:v1.0.2020031200
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NGINX_PORT
+          value: "80"
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
+        - mountPath: /etc/nginx/conf.d
+          name: nginx-config-vol
+      volumes:
+      - name: config
+        configMap:
+          name: etherpad-config
+      - name: nginx-config-vol
+        configMap:
+          name: webconfigmap
+      - name: secret-volume
+        secret:
+          secretName: websecret
