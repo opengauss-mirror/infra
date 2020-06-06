@@ -2,16 +2,16 @@ package webhook
 
 import (
 	"bytes"
-	"os/exec"
 	"github.com/golang/glog"
+	"os/exec"
 	"webrelease/util"
 )
 
-func ReleaseImage(buildHadle BuildHandle){
+func ReleaseImage(buildHadle BuildHandle) {
 	execBuildCmd(buildHadle)
 }
 
-func execBuildCmd(buildHadle BuildHandle){
+func execBuildCmd(buildHadle BuildHandle) {
 
 	var cmd *exec.Cmd
 	buildShell := "build.sh"
@@ -30,7 +30,7 @@ func execBuildCmd(buildHadle BuildHandle){
 
 	var out bytes.Buffer
 
-	glog.Infof("Execute Param: GitUrl %s, Branch %s, tmpDir %s, ImageName %s, ImageTag %s" +
+	glog.Infof("Execute Param: GitUrl %s, Branch %s, tmpDir %s, ImageName %s, ImageTag %s"+
 		"Load Region %s, Swr Group %s", gitUrl, gitBranch, gitDir, name, tag, region, group)
 
 	cmd = exec.Command("bash", buildShell, gitUrl, gitBranch, gitDir, name, tag, region, group, AK, SK)

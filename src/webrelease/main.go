@@ -1,8 +1,9 @@
 package main
-import(
-	"webrelease/webhook"
+
+import (
 	"flag"
 	"github.com/golang/glog"
+	"webrelease/webhook"
 )
 
 func main() {
@@ -13,4 +14,3 @@ func main() {
 
 	webhook.Run()
 }
-

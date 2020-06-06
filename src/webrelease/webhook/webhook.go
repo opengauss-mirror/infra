@@ -2,11 +2,11 @@ package webhook
 
 import (
 	"encoding/json"
+	"gitee.com/openeuler/go-gitee/gitee"
+	"github.com/golang/glog"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
-	"gitee.com/openeuler/go-gitee/gitee"
-	"gopkg.in/yaml.v2"
-	"github.com/golang/glog"
 	"strings"
 	"webrelease/util"
 )
@@ -18,28 +18,27 @@ const WebServerPort string = "8080"
 var projectConfigs PConfig
 
 type ImageConfig struct {
-	Url string `yaml:"git_url"`
-	Branch []string `yaml:"branch"`
-	Name string `yaml:"name"`
-	Version string `yaml:"version"`
-	Group string `yaml:"image_group"`
-
+	Url     string   `yaml:"git_url"`
+	Branch  []string `yaml:"branch"`
+	Name    string   `yaml:"name"`
+	Version string   `yaml:"version"`
+	Group   string   `yaml:"image_group"`
 }
 
-type PConfig struct{
+type PConfig struct {
 	ImageConfig []ImageConfig `yaml:"imageConfig"`
-	Region string           `yaml:"region"`
-	AK string               `yaml:"AK"`
-	SK string               `yaml:"SK"`
-	WebhookSec string       `yaml:"webhookSec"`
+	Region      string        `yaml:"region"`
+	AK          string        `yaml:"AK"`
+	SK          string        `yaml:"SK"`
+	WebhookSec  string        `yaml:"webhookSec"`
 }
 
-func Run(){
+func Run() {
 
 	projectConfigs = getConf()
 
 	http.HandleFunc(WebHookUrl, webhookFunc)
-	err := http.ListenAndServe(":" + WebServerPort, nil)
+	err := http.ListenAndServe(":"+WebServerPort, nil)
 	if err != nil {
 		glog.Error("Server Started Failed. ", err)
 	} else {
@@ -64,7 +63,7 @@ func getConf() PConfig {
 	return gitWatch
 }
 
-func webhookFunc(w http.ResponseWriter, r *http.Request){
+func webhookFunc(w http.ResponseWriter, r *http.Request) {
 
 	defer glog.Flush()
 
@@ -93,7 +92,7 @@ func webhookFunc(w http.ResponseWriter, r *http.Request){
 	ref := *pushEvent.Ref
 	refArr := strings.Split(ref, "/")
 	if len(refArr) > 0 {
-		branch = refArr[len(refArr) - 1]
+		branch = refArr[len(refArr)-1]
 	}
 
 	projectHook := pushEvent.Repository
@@ -114,14 +113,14 @@ func webhookFunc(w http.ResponseWriter, r *http.Request){
 	glog.Warningf("Start build images. gitUrl is %s and git branch is %s", gitUrl, branch)
 
 	buildImage := BuildHandle{
-		Url:      gitUrl,
-		Branch:   branch,
-		Name:     imgConf.Name,
-		Version:  imgConf.Version,
-		Group:    imgConf.Group,
-		Region:   projectConfigs.Region,
-		AK:       projectConfigs.AK,
-		SK:       projectConfigs.SK,
+		Url:     gitUrl,
+		Branch:  branch,
+		Name:    imgConf.Name,
+		Version: imgConf.Version,
+		Group:   imgConf.Group,
+		Region:  projectConfigs.Region,
+		AK:      projectConfigs.AK,
+		SK:      projectConfigs.SK,
 	}
 	ReleaseImage(buildImage)
 }
