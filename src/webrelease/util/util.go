@@ -6,7 +6,7 @@ import (
 )
 
 func ArrContains(item string, arr []string) bool {
-	for i:=0;i<len(arr);i++ {
+	for i := 0; i < len(arr); i++ {
 		if arr[i] == item {
 			return true
 		}
