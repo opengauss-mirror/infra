@@ -42,7 +42,7 @@ spec:
               key: gitee_oauth2_client_code
               name: bot-configmap
         - name: WEBSITE_URL
-          value: https://test.opengauss.org/
+          value: https://opengauss.org/
         ports:
         - containerPort: 8888
           name: http
