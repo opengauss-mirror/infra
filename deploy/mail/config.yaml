@@ -234,7 +234,7 @@ data:
     import socket
     import ipaddress
 
-    DEBUG = True
+    DEBUG = False
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     #NOTE: this is the MTA host, we need to update it.
