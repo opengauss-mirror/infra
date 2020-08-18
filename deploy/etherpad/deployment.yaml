@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: etherpad
-        image: etherpad/etherpad:1.7.5
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/etherpad:1.7.5
         ports:
         - containerPort: 9001
           name: web
