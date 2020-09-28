@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: indextoolinfo
+  namespace: indextool
+  labels:
+    app: indextoolinfo
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.indextoolinfod: semver:~1.0
+spec:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: indextoolinfo
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      labels:
+        app: indextoolinfo
+    spec:
+      containers:
+      - name: indextoolinfod
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/index-tool:v1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /opengauss
+          name: configmap-volume
+      volumes:
+      - name: configmap-volume
+        configMap:
+          name: indextoolconfigmap
