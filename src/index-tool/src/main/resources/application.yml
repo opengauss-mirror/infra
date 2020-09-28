@@ -1,0 +1,18 @@
+#解析文档路径
+service:
+  path: <文件解析路径>
+
+#es用户名 密码等配置
+elasticsearch:
+  host: <es服务器地址>
+  username: <es用户名>
+  password: <es密码>
+  port: <es端口>
+
+#定时读取配置
+scheduled:
+  cron: <定时器cron表达式>
+
+#拉取代码解析脚本
+update:
+  shell: <每天定时拉取代码脚本文件路径>
