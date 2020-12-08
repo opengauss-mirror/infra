@@ -33,8 +33,9 @@ spec:
           name: http
           protocol: TCP
         volumeMounts:
-        - mountPath: /opengauss
+        - mountPath: /opengauss/application.yaml
           name: configmap-volume
+          subPath: application.yaml
       volumes:
       - name: configmap-volume
         configMap:
