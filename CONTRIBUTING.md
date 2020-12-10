@@ -12,7 +12,7 @@ When reporting issues, refer to this format:
 - What happened?
 - What you expected to happen?
 - What happened?
-- How to reproduce it (as minimally and precisely as possible)
+- How to reproduce it (as minimally and precisely as possible)?
 - Anything else we need to know?
 - Environment
 
