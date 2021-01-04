@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: indextoolinfod
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/index-tool:v1.0.0
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/index-tool:v1.0.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
