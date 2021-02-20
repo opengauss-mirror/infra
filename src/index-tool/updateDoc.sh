@@ -24,12 +24,12 @@ cd ./docs
 versions=(
   "1.0.0"
   "1.0.1"
+  "1.1.0"
 )
 for r in $(git branch -r --list "origin/*"); do
   b=${r##*origin/}
   if [[ "${versions[@]}" =~ $b ]]; then
-    #  if [ "$b" == "1.0.0" -o "$b" == "1.0.1" ]; then
-    git checkout -b $r
+    git checkout $b
     mkdir -p /usr/local/docs/target/docs/$b/zh/
     mkdir -p /usr/local/docs/target/docs/$b/en/
     cp -r ./content/zh/* /usr/local/docs/target/docs/$b/zh/
