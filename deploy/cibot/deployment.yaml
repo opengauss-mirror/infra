@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: botinfod
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/cibot:v1.0.2020060401
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/cibot:v1.0.2021022600
         imagePullPolicy: IfNotPresent
         args:
         - --stderrthreshold=0
