@@ -27,6 +27,9 @@ spec:
         volumeMounts:
         - mountPath: /opt/mailman/
           name: mailman-core-volume
+        - mountPath: /usr/lib/python3.6/site-packages/mailman/runners/command.py
+          name: mailman-core-config-volume
+          subPath: command.py
         env:
         - name: DATABASE_TYPE
           value: postgres
@@ -93,6 +96,9 @@ spec:
           exec docker-entrypoint.sh master --force
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
       volumes:
+      - name: mailman-core-config-volume
+        configMap:
+          name: mailman-core-configmap
       - name: mailman-core-volume
         persistentVolumeClaim:
           claimName: config-vol
