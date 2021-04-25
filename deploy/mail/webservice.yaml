@@ -153,6 +153,9 @@ spec:
         - -c
         - |
           cp /opt/mailman-web-config/settings_local.py /opt/mailman-web-data;
+          cp /opt/mailman-web-config/base.html /usr/lib/python3.6/site-packages/postorius/templates/postorius;
+          #disable signup page for mailman web hyperkitty
+          cp /opt/mailman-web-config/base2.html /usr/lib/python3.6/site-packages/hyperkitty/templates/hyperkitty/base.html
           docker-entrypoint.sh nginx && uwsgi --ini /opt/mailman-web/uwsgi.ini;
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
       volumes:
