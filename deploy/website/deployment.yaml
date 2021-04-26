@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: websiteinfod
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website:v1.0.20210425091439
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website:v1.0.20210426191030
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
