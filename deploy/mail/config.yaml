@@ -898,7 +898,6 @@ data:
         root /opt/mailman-web-data;
         index index.html;
         server_name mailweb.opengauss.org;
-        ssl on;
         ssl_certificate /etc/nginx/ssl/server.crt;
         ssl_certificate_key  /etc/nginx/ssl/server.key;
         server_tokens off;
