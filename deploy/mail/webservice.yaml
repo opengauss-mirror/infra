@@ -62,9 +62,6 @@ spec:
         volumeMounts:
         - mountPath: /opt/mailman-web-config
           name: mailman-web-configmap-volume
-        - mountPath: /etc/nginx/conf.d/default.conf
-          name: mailman-web-configmap-volume
-          subPath: default.conf
         - mountPath: /etc/nginx/ssl
           name: mailman-secret-volume
         - mountPath: /opt/mailman-web-data
@@ -156,8 +153,17 @@ spec:
           cp /opt/mailman-web-config/base.html /usr/lib/python3.6/site-packages/postorius/templates/postorius;
           #disable signup page for mailman web hyperkitty
           cp /opt/mailman-web-config/base2.html /usr/lib/python3.6/site-packages/hyperkitty/templates/hyperkitty/base.html
-          docker-entrypoint.sh nginx && uwsgi --ini /opt/mailman-web/uwsgi.ini;
+          exec docker-entrypoint.sh uwsgi --ini /opt/mailman-web/uwsgi.ini;
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
+      - image: nginx/nginx:1.20.0
+        imagePullPolicy: IfNotPresent
+        name: nginx-web
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/default.conf
+          name: mailman-web-configmap-volume
+          subPath: default.conf
+        - mountPath: /opt/mailman-web-data
+          name: mailman-web-volume
       volumes:
       - name: mailman-web-volume
         emptyDir: {}
