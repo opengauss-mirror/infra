@@ -164,6 +164,8 @@ spec:
           subPath: default.conf
         - mountPath: /opt/mailman-web-data
           name: mailman-web-volume
+        - mountPath: /etc/nginx/ssl
+          name: mailman-secret-volume
       volumes:
       - name: mailman-web-volume
         emptyDir: {}
