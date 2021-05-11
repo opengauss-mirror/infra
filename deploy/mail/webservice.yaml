@@ -155,7 +155,7 @@ spec:
           cp /opt/mailman-web-config/base2.html /usr/lib/python3.6/site-packages/hyperkitty/templates/hyperkitty/base.html
           exec docker-entrypoint.sh uwsgi --ini /opt/mailman-web/uwsgi.ini;
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
-      - image: swr.ap-southeast-1.myhuaweicloud.com/opensourceway/nginx:latest
+      - image: swr.ap-southeast-1.myhuaweicloud.com/opensourceway/nginx:1.20.0
         imagePullPolicy: IfNotPresent
         name: nginx-web
         volumeMounts:
