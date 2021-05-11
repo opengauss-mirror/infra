@@ -79,7 +79,7 @@ spec:
               name: plugin-dir
       containers:
         - name: nginx
-          image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/nginx:v1.0.2020031200
+          image: swr.ap-southeast-1.myhuaweicloud.com/opensourceway/nginx:latest
           imagePullPolicy: IfNotPresent
           env:
           - name: NGINX_PORT
