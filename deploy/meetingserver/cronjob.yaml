@@ -19,6 +19,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: secret_key
+                      name: meeting-server-secrets
                 - name: DB_USER
                   valueFrom:
                     secretKeyRef:
@@ -106,6 +107,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: secret_key
+                      name: meeting-server-secrets
                 - name: TZ
                   value: Asia/Shanghai
               command:
@@ -179,6 +181,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: secret_key
+                      name: meeting-server-secrets
                 - name: DB_PORT
                   value: "3306"
                 - name: TZ
