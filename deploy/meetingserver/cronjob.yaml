@@ -1,0 +1,244 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: sync-sigs
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: meeting-server
+              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:v1
+              env:
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_user
+                      name: meeting-server-secrets
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_password
+                      name: meeting-server-secrets
+                - name: DB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_host
+                      name: meeting-server-secrets
+                - name: DB_PORT
+                  value: "3306"
+                - name: TZ
+                  value: Asia/Shanghai
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  python manage.py sync_sigs
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: handle-recordings
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: meeting-server
+              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:v1
+              env:
+                - name: ZOOM_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_token
+                      name: meeting-server-secrets
+                - name: ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: access_key_id
+                      name: meeting-server-secrets
+                - name: SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_access_key
+                      name: meeting-server-secrets
+                - name: OBS_ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      key: obs_endpoint
+                      name: meeting-server-secrets
+                - name: OBS_BUCKETNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: obs_bucketname
+                      name: meeting-server-secrets
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_user
+                      name: meeting-server-secrets
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_password
+                      name: meeting-server-secrets
+                - name: DB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_host
+                      name: meeting-server-secrets
+                - name: DB_PORT
+                  value: "3306"
+                - name: TZ
+                  value: Asia/Shanghai
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  python manage.py handle_recordings
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: upload-to-bilibili
+spec:
+  schedule: "10 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: meeting-server
+              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:v1
+              env:
+                - name: ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: access_key_id
+                      name: meeting-server-secrets
+                - name: SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_access_key
+                      name: meeting-server-secrets
+                - name: OBS_ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      key: obs_endpoint
+                      name: meeting-server-secrets
+                - name: OBS_BUCKETNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: obs_bucketname
+                      name: meeting-server-secrets
+                - name: SESSDATA
+                  valueFrom:
+                    secretKeyRef:
+                      key: sessdata
+                      name: meeting-server-secrets
+                - name: BILI_JCT
+                  valueFrom:
+                    secretKeyRef:
+                      key: bili_jct
+                      name: meeting-server-secrets
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_user
+                      name: meeting-server-secrets
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_password
+                      name: meeting-server-secrets
+                - name: DB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_host
+                      name: meeting-server-secrets
+                - name: DB_PORT
+                  value: "3306"
+                - name: TZ
+                  value: Asia/Shanghai
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  python manage.py upload_to_bilibili
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: check-examination
+spec:
+  schedule: "20 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: meeting-server
+              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:v1
+              env:
+                - name: ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: access_key_id
+                      name: meeting-server-secrets
+                - name: SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_access_key
+                      name: meeting-server-secrets
+                - name: OBS_ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      key: obs_endpoint
+                      name: meeting-server-secrets
+                - name: OBS_BUCKETNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: obs_bucketname
+                      name: meeting-server-secrets
+                - name: BILI_UID
+                  valueFrom:
+                    secretKeyRef:
+                      key: bili_uid
+                      name: meeting-server-secrets
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_user
+                      name: meeting-server-secrets
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_password
+                      name: meeting-server-secrets
+                - name: DB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      key: db_host
+                      name: meeting-server-secrets
+                - name: DB_PORT
+                  value: "3306"
+                - name: TZ
+                  value: Asia/Shanghai
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  python manage.py check_examination

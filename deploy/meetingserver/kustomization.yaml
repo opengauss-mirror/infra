@@ -1,0 +1,15 @@
+resources:
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- secrets.yaml
+- cronjob.yaml
+- pvc.yaml
+commonLabels:
+  app: opengauss-meetingserver
+commonAnnotations:
+  owner: liuqi
+  email: "469227928@qq.com"
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: meetingserver

@@ -1,0 +1,165 @@
+# Deployment for meeting service
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: meeting-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: meeting-server
+      component: web-server
+  template:
+    metadata:
+      labels:
+        app: meeting-server
+        component: web-server
+    spec:
+      containers:
+        - name: meeting-server
+          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:v1
+          volumeMounts:
+            - mountPath: /work/app-meeting-server/meetings/migrations
+              name: meeting-data-volume
+          resources:
+            requests:
+              cpu: 2000m
+              memory: 2000Mi
+          env:
+            - name: ZOOM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: zoom_token
+                  name: meeting-server-secrets
+            - name: GIT_OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: git_oauth_client_id
+                  name: meeting-server-secrets
+            - name: GIT_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: git_oauth_client_secret
+                  name: meeting-server-secrets
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: secret_key
+                  name: meeting-server-secrets
+            - name: GMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: gmail_username
+                  name: meeting-server-secrets
+            - name: GMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: gmail_password
+                  name: meeting-server-secrets
+            - name: SMTP_SERVER_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: smtp_server_host
+                  name: meeting-server-secrets
+            - name: BILI_UID
+              valueFrom:
+                secretKeyRef:
+                  key: bili_uid
+                  name: meeting-server-secrets
+            - name: SESSDATA
+              valueFrom:
+                secretKeyRef:
+                  key: sessdata
+                  name: meeting-server-secrets
+            - name: BILI_JCT
+              valueFrom:
+                secretKeyRef:
+                  key: bili_jct
+                  name: meeting-server-secrets
+            - name: ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: access_key_id
+                  name: meeting-server-secrets
+            - name: SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: secret_access_key
+                  name: meeting-server-secrets
+            - name: OBS_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  key: obs_endpoint
+                  name: meeting-server-secrets
+            - name: OBS_BUCKETNAME
+              valueFrom:
+                secretKeyRef:
+                  key: obs_bucketname
+                  name: meeting-server-secrets
+            - name: REDIRECT_HOME_PAGE
+              valueFrom:
+                secretKeyRef:
+                  key: redirect_home_page
+                  name: meeting-server-secrets
+            - name: ZOOM_HOST_FIRST
+              valueFrom:
+                secretKeyRef:
+                  key: zoom_host_first
+                  name: meeting-server-secrets
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: db_user
+                  name: meeting-server-secrets
+            - name: TZ
+              value: Asia/Shanghai
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: db_password
+                  name: meeting-server-secrets
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: db_host
+                  name: meeting-server-secrets
+            - name: DB_PORT
+              value: "3306"
+            - name: GITEE_OAUTH_REDIRECT
+              valueFrom:
+                secretKeyRef:
+                  key: gitee_oauth_redirect
+                  name: meeting-server-secrets
+          command:
+            - /bin/sh
+            - -c
+            - |
+              strip -R .note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.11.3
+              python manage.py collectstatic
+              python manage.py makemigrations
+              python manage.py migrate
+              exec uwsgi --ini /work/app-meeting-server/deploy/production/uwsgi.ini
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:              #就绪探针
+            initialDelaySeconds: 20    #延迟加载时间
+            periodSeconds: 5           #重试时间间隔
+            timeoutSeconds: 10         #超时时间设置
+            failureThreshold: 5        #探测失败的重试次数
+            tcpSocket:
+              port: 8080
+          livenessProbe:               #存活探针
+            initialDelaySeconds: 60    #延迟加载时间
+            periodSeconds: 5           #重试时间间隔
+            timeoutSeconds: 5          #超时时间设置
+            failureThreshold: 3        #探测失败的重试次数
+            tcpSocket:
+              port: 8080
+      volumes:
+        - name: meeting-data-volume
+          persistentVolumeClaim:
+            claimName: meeting-data-volume
