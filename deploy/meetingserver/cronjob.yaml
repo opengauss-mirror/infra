@@ -35,6 +35,16 @@ spec:
                     secretKeyRef:
                       key: db_host
                       name: meeting-server-secrets
+                - name: ZOOM_HOST_FIRST
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_first
+                      name: meeting-server-secrets
+                - name: ZOOM_HOST_SECOND
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_second
+                      name: meeting-server-secrets
                 - name: DB_PORT
                   value: "3306"
                 - name: TZ
@@ -100,6 +110,16 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: db_host
+                      name: meeting-server-secrets
+                - name: ZOOM_HOST_FIRST
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_first
+                      name: meeting-server-secrets
+                - name: ZOOM_HOST_SECOND
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_second
                       name: meeting-server-secrets
                 - name: DB_PORT
                   value: "3306"
@@ -182,6 +202,16 @@ spec:
                     secretKeyRef:
                       key: secret_key
                       name: meeting-server-secrets
+                - name: ZOOM_HOST_FIRST
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_first
+                      name: meeting-server-secrets
+                - name: ZOOM_HOST_SECOND
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_second
+                      name: meeting-server-secrets
                 - name: DB_PORT
                   value: "3306"
                 - name: TZ
@@ -252,6 +282,16 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: db_host
+                      name: meeting-server-secrets
+                - name: ZOOM_HOST_FIRST
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_first
+                      name: meeting-server-secrets
+                - name: ZOOM_HOST_SECOND
+                  valueFrom:
+                    secretKeyRef:
+                      key: zoom_host_second
                       name: meeting-server-secrets
                 - name: DB_PORT
                   value: "3306"

@@ -107,6 +107,11 @@ spec:
                 secretKeyRef:
                   key: zoom_host_first
                   name: meeting-server-secrets
+            - name: ZOOM_HOST_SECOND
+              valueFrom:
+                secretKeyRef:
+                  key: zoom_host_second
+                  name: meeting-server-secrets
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
