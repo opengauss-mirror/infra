@@ -15,6 +15,10 @@ spec:
             - name: meeting-server
               image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:v1
               env:
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_key
                 - name: DB_USER
                   valueFrom:
                     secretKeyRef:
@@ -98,6 +102,10 @@ spec:
                       name: meeting-server-secrets
                 - name: DB_PORT
                   value: "3306"
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_key
                 - name: TZ
                   value: Asia/Shanghai
               command:
@@ -167,6 +175,10 @@ spec:
                     secretKeyRef:
                       key: db_host
                       name: meeting-server-secrets
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_key
                 - name: DB_PORT
                   value: "3306"
                 - name: TZ
@@ -212,6 +224,11 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: obs_bucketname
+                      name: meeting-server-secrets
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret_key
                       name: meeting-server-secrets
                 - name: BILI_UID
                   valueFrom:
