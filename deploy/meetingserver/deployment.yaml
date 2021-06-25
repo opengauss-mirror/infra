@@ -32,15 +32,15 @@ spec:
                 secretKeyRef:
                   key: zoom_token
                   name: meeting-server-secrets
-            - name: GIT_OAUTH_CLIENT_ID
+            - name: GITEE_OAUTH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  key: git_oauth_client_id
+                  key: gitee_oauth_client_id
                   name: meeting-server-secrets
-            - name: GIT_OAUTH_CLIENT_SECRET
+            - name: GITEE_OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  key: git_oauth_client_secret
+                  key: gitee_oauth_client_secret
                   name: meeting-server-secrets
             - name: SECRET_KEY
               valueFrom:
