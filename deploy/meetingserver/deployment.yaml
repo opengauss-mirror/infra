@@ -144,6 +144,7 @@ spec:
               python manage.py collectstatic
               python manage.py makemigrations
               python manage.py migrate
+              python manage.py sync_sigs
               exec uwsgi --ini /work/app-meeting-server/deploy/production/uwsgi.ini
           imagePullPolicy: IfNotPresent
           ports:
