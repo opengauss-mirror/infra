@@ -13,7 +13,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:82ff0199cdfeb25c01922ce45a6e850bf60d5c34
+              image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/meeting-server:v1.0.20210629210407
               env:
                 - name: SECRET_KEY
                   valueFrom:
@@ -69,7 +69,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:82ff0199cdfeb25c01922ce45a6e850bf60d5c34
+              image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/meeting-server:v1.0.20210629210407
               env:
                 - name: ZOOM_TOKEN
                   valueFrom:
@@ -150,7 +150,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:82ff0199cdfeb25c01922ce45a6e850bf60d5c34
+              image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/meeting-server:v1.0.20210629210407
               env:
                 - name: ACCESS_KEY_ID
                   valueFrom:
@@ -236,7 +236,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:82ff0199cdfeb25c01922ce45a6e850bf60d5c34
+              image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/meeting-server:v1.0.20210629210407
               env:
                 - name: ACCESS_KEY_ID
                   valueFrom:
