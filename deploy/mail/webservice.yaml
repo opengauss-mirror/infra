@@ -69,7 +69,12 @@ spec:
         - mountPath: /usr/lib/python3.6/site-packages/postorius/templates/postorius/lists/summary.html
           name: mailman-webpage-hack-volume
           subPath: summary.html
+        - mountPath: /usr/lib/python3.6/site-packages/postorius/forms/list_forms.py
+          name: mailman-webpage-hack-volume
+          subPath: list_forms.py
         env:
+        - name: PRIVACY_LINK
+          value: https://opengauss.org/en/privacyPolicy.html
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
