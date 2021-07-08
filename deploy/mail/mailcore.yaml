@@ -30,6 +30,12 @@ spec:
         - mountPath: /usr/lib/python3.6/site-packages/mailman/runners/command.py
           name: mailman-core-config-volume
           subPath: command.py
+        - mountPath: /usr/lib/python3.6/email/base64mime.py
+          subPath: base64mime.py
+          name: mailman-core-config-volume
+        - mountPath: /usr/lib/python3.6/email/quoprimime.py
+          subPath: quoprimime.py
+          name: mailman-core-config-volume
         env:
         - name: DATABASE_TYPE
           value: postgres
