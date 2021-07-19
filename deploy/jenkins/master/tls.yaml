@@ -8,10 +8,10 @@ spec:
   keysMap:
     ca.crt:
       path: secrets/data/opengauss/mail_secrets
-      key: tls.cert
+      key: server.crt
     tls.crt:
       path: secrets/data/opengauss/mail_secrets
-      key: tls.cert
+      key: server.crt
     tls.key:
       path: secrets/data/opengauss/mail_secrets
-      key: tls.key
+      key: server.key
