@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: oauth2-proxy
+    spec:
+      containers:
+        - args:
+            - --provider=gitee
+            - --email-domain=*
+            - --gitee-org=opengauss-cie
+            - --upstream=http://opengauss-jenkins.jenkins.svc.cluster.local
+            - --http-address=0.0.0.0:4180
+            - --cookie-expire=6h0m0s
+            - --set-xauthrequest=true
+            - --reverse-proxy=true
+            # for jenkins job or views and their resource to to loaded
+            - --skip-auth-regex=^/job/
+            - --skip-auth-regex=^/queue/
+            - --skip-auth-regex=^/view/
+            - --skip-auth-regex=^/static/
+            - --skip-auth-regex=^/adjuncts/
+            - --skip-auth-regex=^/images/
+            - --skip-auth-regex=^/blue/
+            # for webhook to be triggered
+            - --skip-auth-regex=^/gitee-project/
+            - --custom-sign-in-logo=https://openeulerinfrastructure.obs.cn-north-4.myhuaweicloud.com/img/gardener-large.png
+          env:
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: jenkins-oauth-secret
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: jenkins-oauth-secret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: cookie_secret
+                  name: jenkins-oauth-secret
+          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy:4b64a9c04a247dd5da3ff664d9d497c902324c3a
+          imagePullPolicy: Always
+          name: oauth2-proxy
+          ports:
+            - containerPort: 4180
+              protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  ports:
+    - name: http
+      port: 4180
+      protocol: TCP
+      targetPort: 4180
+  selector:
+    k8s-app: oauth2-proxy
+
