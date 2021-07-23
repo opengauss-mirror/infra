@@ -78,25 +78,6 @@ spec:
         - mountPath: /var/jenkins_plugins
           name: plugin-dir
       containers:
-      - name: nginx
-        image: swr.ap-southeast-1.myhuaweicloud.com/opensourceway/nginx:1.20.0
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: NGINX_PORT
-          value: "80"
-        ports:
-        - containerPort: 80
-          name: http
-          protocol: TCP
-        - containerPort: 443
-          name: https
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /etc/nginx/ssl
-          name: secret-volume
-        - mountPath: /etc/nginx/conf.d
-          name: configmap-volume
-
       - name: jenkins
         image: "swr.ap-southeast-1.myhuaweicloud.com/opengauss/jenkins:v1.0.2020032500"
         imagePullPolicy: "Always"

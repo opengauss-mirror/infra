@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-XSS-Protection "1; mode=block";
+      add_header X-Frame-Options "SAMEORIGIN";
+  name: opengauss-jenkins-ingress
+spec:
+  tls:
+    - hosts:
+        - jenkins.opengauss.org
+      secretName: opengauss-jenkins-tls
+  rules:
+    - host: jenkins.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: opengauss-jenkins
+              servicePort: 80
+            path: /
