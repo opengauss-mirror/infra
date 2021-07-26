@@ -22,6 +22,8 @@ spec:
           volumeMounts:
             - mountPath: /work/app-meeting-server/meetings/migrations
               name: meeting-data-volume
+            - mountPath: /work/app-meeting-server/share
+              name: meeting-share-volume
           resources:
             requests:
               cpu: 2000m
@@ -174,3 +176,6 @@ spec:
         - name: meeting-data-volume
           persistentVolumeClaim:
             claimName: meeting-data-volume
+        - name: meeting-share-volume
+          persistentVolumeClaim:
+            claimName: meetingserver-share-volume
