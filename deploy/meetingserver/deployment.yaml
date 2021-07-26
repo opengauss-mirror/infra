@@ -136,6 +136,11 @@ spec:
                 secretKeyRef:
                   key: gitee_oauth_redirect
                   name: meeting-server-secrets
+            - name: QUERY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: query_token
+                  name: meeting-server-secrets
           command:
             - /bin/sh
             - -c
