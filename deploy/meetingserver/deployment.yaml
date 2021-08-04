@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: meeting-server
-          image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/meeting-server:v1.0.20210629210407
+          image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/meeting-server:v1.0.20210803203016
           volumeMounts:
             - mountPath: /work/app-meeting-server/meetings/migrations
               name: meeting-data-volume
