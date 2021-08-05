@@ -32,6 +32,7 @@ spec:
             - --skip-auth-regex=^/adjuncts/
             - --skip-auth-regex=^/images/
             - --skip-auth-regex=^/blue/
+            - --skip-auth-regex=^/computer/
             # for webhook to be triggered
             - --skip-auth-regex=^/gitee-project/
             - --custom-sign-in-logo=https://openeulerinfrastructure.obs.cn-north-4.myhuaweicloud.com/img/gardener-large.png
