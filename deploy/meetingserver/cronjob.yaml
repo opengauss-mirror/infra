@@ -54,6 +54,13 @@ spec:
                 - -c
                 - |
                   python manage.py sync_sigs
+              volumeMounts:
+              - mountPath: /work/app-meeting-server/share
+                name: meeting-share-volume
+            volumes:
+            - name: meeting-share-volume
+              persistentVolumeClaim:
+                claimName: meetingserver-share-volume
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
