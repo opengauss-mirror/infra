@@ -11,9 +11,6 @@ metadata:
     "app.kubernetes.io/managed-by": "Tiller"
     "app.kubernetes.io/instance": "jenkins"
     "app.kubernetes.io/component": "jenkins-master"
-    "kubernetes.io/elb.class": union
-    "kubernetes.io/elb.id": "fb8e59e3-d68d-488b-bc35-706d145d4271"
-    "kubernetes.io/elb.lb-algorithm": ROUND_ROBIN
 spec:
   ports:
     - port: 80
