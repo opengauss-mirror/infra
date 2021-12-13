@@ -75,6 +75,8 @@ spec:
         env:
         - name: PRIVACY_LINK
           value: https://opengauss.org/en/privacyPolicy.html
+        - name: CONDUCT_LINK
+          value: https://gitee.com/opengauss/community/blob/master/code-of-conduct.en.md
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:

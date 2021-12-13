@@ -2020,9 +2020,9 @@ data:
             initial=False,
             required=True,
             label=_(mark_safe(
-                'I have read and agree to the community '
-                '<a href="%s">Privacy Statement</a>.' % os.getenv(
-                    "PRIVACY_LINK", "#"))),
+                'I have read and agree to the community <a href="%s">Privacy Statement</a> and '
+                '<a href="%s">Community Conduct</a>.' % (os.getenv("PRIVACY_LINK", "#"), os.getenv("COMMUNITY_LINK"))
+            )),
             widget=forms.CheckboxInput())
 
 
