@@ -1,0 +1,37 @@
+邮箱订阅确认
+
+您好，这是$domain的邮件列表服务。
+
+我们收到来自以下邮箱的注册请求：
+
+    $user_email
+
+在开始使用本站的邮件列表服务之前，请确认这是您的邮箱。你可以通过回复此消息来
+进行确认，请保持回信的主题不变。
+
+若您不想注册该邮箱，请忽略此消息。若您怀疑自己被恶意订阅了该列表或有其他任何
+疑问，请联系：
+
+    $owner_email
+
+
+
+
+
+Email Address Registration Confirmation
+
+Hello, this is the GNU Mailman server at $domain.
+
+We have received a registration request for the email address
+
+    $user_email
+
+Before you can start using GNU Mailman at this site, you must first confirm
+that this is your email address. You can do this by replying to this message,
+keeping the Subject header intact.
+
+If you do not wish to register this email address, simply disregard this
+message. If you think you are being maliciously subscribed to the list, or
+have any other questions, you may contact
+
+    $owner_email
