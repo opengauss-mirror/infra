@@ -1,12 +1,8 @@
-import requests
 import os
-import signal
-from mailmanclient import Client
-from http.server import SimpleHTTPRequestHandler, HTTPServer
+import sys
+from mailmanclient.client import Client
 
-
-# This file used to create the default domain, list and welcome templates
-# for mail list
+# This file used to create the default domain, list and welcome templates for mail list
 # the configuration are listed below:
 MAILMAN_CORE_ENDPOINT = os.environ.get(
     "MAILMAN_CORE_ENDPOINT",
@@ -16,160 +12,84 @@ MAILMAN_CORE_USER = os.environ.get("MAILMAN_CORE_USER", "restadmin")
 
 MAILMAN_CORE_PASSWORD = os.environ.get("MAILMAN_CORE_PASSWORD", "restpass")
 
-DEFAULT_DOMAIN_NAME = os.environ.get("DEFAULT_DOMAIN_NAME", "opengauss.org")
-
-DEFAULT_MAIL_LISTS = os.environ.get("DEFAULT_MAIL_LISTS", "dev,community,user")
-
 # configure used for http server for mailman core service
 TEMPLATE_FOLDER_PATH = os.environ.get("TEMPLATE_FOLDER_PATH", "templates")
-TEMPLATE_SERVER_ADDRESS = os.environ.get("TEMPLATE_SERVER_ADDRESS",
-                                         "127.0.0.1")
-TEMPLATE_SERVER_PORT = os.environ.get("TEMPLATE_SERVER_PORT", 8000)
 
-TEMPLATE_FOLDER_CONVERSION_EXCEPTION = {
-    "domain-admin-notice-new-list": "domain:admin:notice:new-list",
-    "list-user-notice-no-more-today": "list:user:notice:no-more-today",
-}
+TEMPALTE_URI_PREFIX = 'https://gitee.com/opengauss/infra/raw/master/mail/templates'
 
-
-class TemplateHandler(SimpleHTTPRequestHandler):
-
-    def do_GET(self):
-        # Allow access for templates folder.
-        if not str.lstrip(self.path, "/").startswith("templates"):
-            self.send_response(403)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(
-                bytes("Only resource under templates folder are accessible!",
-                      'UTF-8'))
-        else:
-            super(TemplateHandler, self).do_GET()
-
-
-class SignalException(Exception):
-    pass
-
-
-def prepare_list():
+def main():
     # pre-check before handling mailman core service
-    if DEFAULT_DOMAIN_NAME == "":
-        print("Must specify 'DEFAULT_DOMAIN_NAME' for mail list preparation.")
-        exit(1)
-
-    lists = str.split(str(DEFAULT_MAIL_LISTS).lower(), ",")
     if not os.path.exists(TEMPLATE_FOLDER_PATH):
-        print("The template file folder 'DEFAULT_MAIL_LISTS' must exits on"
-              " local.")
-        exit(1)
-
-    if len(lists) == 0:
-        # find out all of the lists from local folder.
-        local_file = []
-        for _, _, f in os.walk(os.path.join(os.getcwd(),
-                                            TEMPLATE_FOLDER_PATH)):
-            for file in f:
-                if file.endswith(".txt"):
-                    local_file.append(os.path.splitext(file)[0])
-        lists = list(set(local_file))
-
+        print("The template file folder 'TEMPLATE_FOLDER_PATH' must exits on local.")
+        sys.exit(1)
+    if not MAILMAN_CORE_PASSWORD:
+        print("MAILMAN_CORE_PASSWORD required to login.")
+        sys.exit(1)
+    # connect mailman client
     client = Client(MAILMAN_CORE_ENDPOINT,
                     MAILMAN_CORE_USER,
                     MAILMAN_CORE_PASSWORD)
-
-    # Create default domain if not exists
-    default_domain = client.get_domain(DEFAULT_DOMAIN_NAME)
-    if default_domain is None:
-        default_domain = client.create_domain(DEFAULT_DOMAIN_NAME)
-
-    # Create default mail lists
-    existing_lists = [el.list_name for el in client.lists]
-    for l in lists:
-        if l in existing_lists:
-            print("skip creating list {0}, since it's already exist".format(l))
-            continue
-        else:
-            print("starting to create mail list {0}".format(l))
-            default_domain.create_list(l)
-
-    # Patch template for lists
-    for l in lists:
-        # browse all of the dirs and find out the template files
-        existing_folders = [
-            f for f in os.listdir(
-                os.path.join(os.getcwd(), TEMPLATE_FOLDER_PATH))]
-        for d in existing_folders:
-            # check the list file exists
-            local_file = get_template_file(d, l)
-            if os.path.exists(local_file):
-                patch_content = {
-                    convert_name_to_substitution(d): get_templates_url(d, l)
-                }
-            elif os.path.exists(get_base_template_file(d)):
-                patch_content = {
-                    convert_name_to_substitution(d): get_templates_url(d, "base")
-                }
-            else:
-                print("could not found template file for list {0}, path {1}, "
-                      "skipping".format(l, local_file))
+    domains = client.domains
+    for domain in domains:
+        # set domain templates
+        common_path = os.path.join(TEMPLATE_FOLDER_PATH, domain.mail_host, 'common')
+        common_templates = list(filter(lambda x: x.endswith('.txt'), os.listdir(common_path)))
+        if common_templates:
+            for template_file in common_templates:
+                if os.path.splitext(template_file)[-1] != '.txt':
+                    continue
+                template_name = os.path.splitext(template_file)[0].replace('-', ':')
+                uri = os.path.join(TEMPALTE_URI_PREFIX, domain.mail_host, 'common', template_file)
+                try:
+                    domain.set_template(template_name, uri)
+                    print('set common template \r\n'
+                          'template name: {} \r\n'
+                          'template file: {} \r\n'
+                          'uri: {} \r\n'.format(template_name, os.path.abspath(template_file), uri))
+                except Exception as e:
+                    print(e)
+                    sys.exit(1)
+        # set lists templates
+        existing_lists = domain.lists
+        list_dirs = os.listdir(os.path.join(TEMPLATE_FOLDER_PATH, domain.mail_host))
+        for list_dir in list_dirs:
+            if list_dir == 'common':
                 continue
-            patch_uri = "{0}/lists/{1}.{2}/uris".format(
-                MAILMAN_CORE_ENDPOINT,
-                l,
-                DEFAULT_DOMAIN_NAME)
-            response = requests.patch(
-                patch_uri, patch_content,
-                auth=(MAILMAN_CORE_USER, MAILMAN_CORE_PASSWORD))
-            print("patching list {0} with template file {1}, result {2} {3}"
-                  "".format(l, local_file, response.status_code, response.text))
+            if list_dir not in [x.list_name for x in existing_lists]:
+                domain.create_list(list_dir)
+                print('create list \r\n'
+                      'domain: {} \r\n'
+                      'list: {} \r\n'.format(domain.mail_host, list_dir))
 
-
-def convert_name_to_substitution(dir_name):
-    if dir_name in TEMPLATE_FOLDER_CONVERSION_EXCEPTION:
-        return TEMPLATE_FOLDER_CONVERSION_EXCEPTION[dir_name]
-    return str(dir_name).replace("-", ":")
-
-
-def get_templates_url(dir_name, list_name):
-    return "http://{0}:{1}/templates/{2}/{3}.txt".format(
-        TEMPLATE_SERVER_ADDRESS, TEMPLATE_SERVER_PORT, dir_name, list_name)
-
-
-def get_template_file(folder_name, list_name):
-    return os.path.join(os.getcwd(),
-                        TEMPLATE_FOLDER_PATH,
-                        folder_name, "{0}.txt".format(list_name))
-
-def get_base_template_file(folder_name):
-    return os.path.join(os.getcwd(),
-                        TEMPLATE_FOLDER_PATH,
-                        folder_name, "base.txt")
-
-
-def httpd_signal_handler(signum, frame):
-    print("signal received {0}, exiting".format(signum))
-    raise SignalException()
-
-
-def running_templates_server():
-    httpd = HTTPServer((TEMPLATE_SERVER_ADDRESS, int(TEMPLATE_SERVER_PORT)),
-                       TemplateHandler)
-    # Force encoding to UTF-8
-    m = SimpleHTTPRequestHandler.extensions_map
-    m[''] = 'text/plain'
-    m.update(dict([(k, v + ';charset=utf-8') for k, v in m.items()]))
-    print("template server starts at {0}:{1}".format(TEMPLATE_SERVER_ADDRESS,
-                                                     TEMPLATE_SERVER_PORT))
-    try:
-        # exit with 0 when sigterm signal received.
-        signal.signal(signal.SIGTERM, httpd_signal_handler)
-        httpd.serve_forever()
-    except (InterruptedError, SignalException):
-        pass
-    print("template server ends")
-    httpd.server_close()
+        for maillist in domain.lists:
+            try:
+                list_text_dirs = os.listdir(os.path.join(TEMPLATE_FOLDER_PATH, domain.mail_host, maillist.list_name))
+            except FileNotFoundError:
+                continue
+            list_text_dirs = list(filter(lambda x: x.endswith('.txt'), list_text_dirs))
+            for list_template_file in list_text_dirs:
+                if os.path.splitext(list_template_file)[-1] != '.txt':
+                    continue
+                template_name = os.path.splitext(list_template_file)[0].replace('-', ':')
+                uri = os.path.join(TEMPALTE_URI_PREFIX, domain.mail_host, maillist.list_name, list_template_file)
+                try:
+                    maillist.set_template(template_name, uri)
+                    print('set list template \r\n'
+                          'list: {} \r\n'
+                          'template name: {} \r\n'
+                          'template file: {} \r\n'
+                          'uri: {} \r\n'.format(maillist, template_name, os.path.abspath(list_template_file), uri))
+                except Exception as e:
+                    print(e)
+                    sys.exit(1)
+            templates = maillist.templates
+            for template in templates:
+                if (template.name.replace(':', '-') + '.txt') not in list_text_dirs:
+                    maillist.set_template(template.name, '')
+                    print('remove list template \r\n'
+                          'list: {} \r\n'
+                          'template name: {} \r\n'.format(maillist.list_name, template.name))
 
 
 if __name__ == "__main__":
-    prepare_list()
-    running_templates_server()
+    main()
