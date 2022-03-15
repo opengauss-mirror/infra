@@ -74,6 +74,7 @@ spec:
         - -c
         - |
           cp -r /opt/mailman-utils/data_source/infra/src/mail/templates  .;
+          cp /opt/mailman-utils/data_source/infra/src/mail/dockerfile/core_utils/mailman-core-utils.py ./mailman-core-utils.py
           docker-entrypoint.sh python -u mailman-core-utils.py
           sleep infinity
       volumes:
