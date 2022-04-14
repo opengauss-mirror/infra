@@ -21,3 +21,10 @@ $ docker build -t index-tool:v1.0.5 .
 ```
 $ docker run  -v /local_path/application.yaml:/opengauss/application.yaml  -d  index-tool:v1.0.5
 ```
+
+
+## 上传镜像 (可选)
+```
+$ docker tag index-tool:v1.0.5 swr.ap-southeast-1.myhuaweicloud.com/opengauss/index-tool:v1.0.5
+$ docker push swr.ap-southeast-1.myhuaweicloud.com/opengauss/index-tool:v1.0.5
+```
