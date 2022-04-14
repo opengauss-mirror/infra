@@ -12,5 +12,6 @@ mvn clean install package -Dmaven.test.skip
 #### 生成镜像
 
 cp target/index-tool.jar  .
+
 docker build -t index-tool:v1.0.5 .
 
