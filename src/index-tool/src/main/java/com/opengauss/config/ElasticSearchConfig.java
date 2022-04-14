@@ -35,6 +35,9 @@ public class ElasticSearchConfig {
     @Value("${elasticsearch.port}")
     private int port;
 
+    @Value("${scheduled.cron}")
+    private String dd;
+
     static TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
         @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -54,6 +57,9 @@ public class ElasticSearchConfig {
 
     @Bean
     public RestHighLevelClient restHighLevelClient() {
+
+        System.out.println(dd);
+
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials(userName, password));
