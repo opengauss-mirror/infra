@@ -17,3 +17,7 @@ $ cp target/index-tool.jar  .
 $ docker build -t index-tool:v1.0.5 .
 ```
 
+### 运行
+```
+$ docker run  -v /local_path/application.yaml:/opengauss/application.yaml  -d  index-tool:v1.0.5
+```
