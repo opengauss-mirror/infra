@@ -1,5 +1,9 @@
 package com.opengauss.utils;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.text.TextContentRenderer;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.pegdown.PegDownProcessor;
@@ -10,12 +14,13 @@ public class ParseHtmlUtil {
     private static final String regex = "\\+\\+\\+(.*?)\\+\\+\\+";
 
     public static String parseHtml(String mdStr) {
-        PegDownProcessor pdp = new PegDownProcessor(Integer.MAX_VALUE);
-        // 将markdown转成html
-        String htmlContent = pdp.markdownToHtml(mdStr);
-        //去除html标签
-        htmlContent = Jsoup.clean(htmlContent, Whitelist.none());
-        htmlContent = htmlContent.replaceAll(lineRegex, "").replaceAll(regex, "");
-        return htmlContent.trim();
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(mdStr);
+
+        TextContentRenderer textContentRenderer = TextContentRenderer.builder().build();
+        //This is Sparta
+        return textContentRenderer.render(document).replaceAll(lineRegex, "").replaceAll(regex, "");
+
+
     }
 }
