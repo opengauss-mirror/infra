@@ -79,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
             readFromFile(basePath, "", type);
         }
 
-        log.info("更新数据成功");
+        log.info("更新数据成功:" + type);
     }
 
 
@@ -179,7 +179,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Map<String, Object> searchByCondition(SearchCondition condition) throws IOException {
         int startIndex = (condition.getPage() - 1) * condition.getPageSize();
-        SearchRequest request = new SearchRequest("gauss_articles");
+        SearchRequest request = new SearchRequest("chenyang_gauss_articles");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder mustBuilder = QueryBuilders.boolQuery();
         BoolQueryBuilder shouldBuilder = QueryBuilders.boolQuery();
@@ -260,7 +260,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Set<String> searchTips(String lang, String keywords) {
         try {
-            SearchRequest searchRequest = new SearchRequest("gauss_tips");
+            SearchRequest searchRequest = new SearchRequest("chenyang_gauss_tips");
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             sourceBuilder.fetchSource("textTip", "");
             BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
