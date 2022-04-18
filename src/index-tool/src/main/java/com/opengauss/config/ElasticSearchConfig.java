@@ -36,8 +36,6 @@ public class ElasticSearchConfig {
     @Value("${elasticsearch.port}")
     private int port;
 
-    @Value("${scheduled.cron}")
-    private String dd;
 
     static TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
         @Override

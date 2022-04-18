@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Document(indexName = "chenyang_gauss_tips", shards = 5, replicas = 1)
+@Document(indexName = "gauss_tips", shards = 5, replicas = 1)
 public class Tips implements Serializable {
 
     private static final long serialVersionUID = -5333177350140861244L;
