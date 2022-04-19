@@ -66,10 +66,11 @@ public class SearchServiceImpl implements SearchService {
             log.error("服务器开小差了");
             return;
         }
-
+        log.info(String.format("===============开始执行%s文档解析存储=============", type));
         articleRepository.deleteByType(type);
         log.info("删除es - type:" + type);
 
+        log.info(String.format("===============开始解析%s文档=============", type));
         if (TypeConstants.DOCS.equals(type)) {
             File file = new File(basePath + type);
             for (File versionFile : Objects.requireNonNull(file.listFiles())) {
@@ -101,6 +102,7 @@ public class SearchServiceImpl implements SearchService {
         } else {
             languageDir = indexFile.listFiles();
         }
+
         JSONArray jsonArray = new JSONArray();
         for (File languageFile : languageDir) {
             String lang = languageFile.getName();
@@ -121,7 +123,7 @@ public class SearchServiceImpl implements SearchService {
                     continue;
                 }
             }
-
+            log.info(String.format("===============开始解析%s%s文档=============", type, docFile));
             Collection<File> listFiles = FileUtils.listFiles(docFile, new String[]{"md"}, true);
             for (File mdFile : listFiles) {
                 if (!mdFile.getName().startsWith("_")) {
