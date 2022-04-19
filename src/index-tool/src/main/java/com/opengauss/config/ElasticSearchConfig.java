@@ -4,6 +4,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.nio.conn.ssl.SSLIOSessionStrategy;
 import org.elasticsearch.client.RestClient;
@@ -35,6 +36,7 @@ public class ElasticSearchConfig {
     @Value("${elasticsearch.port}")
     private int port;
 
+
     static TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
         @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -54,6 +56,7 @@ public class ElasticSearchConfig {
 
     @Bean
     public RestHighLevelClient restHighLevelClient() {
+
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials(userName, password));
@@ -71,6 +74,21 @@ public class ElasticSearchConfig {
                 "https")).setHttpClientConfigCallback(httpClientConfigCallback);
         RestHighLevelClient client = new RestHighLevelClient(builder);
         return client;
+
+
+//        RestHighLevelClient highLevelClient = new RestHighLevelClient(
+//                RestClient.builder(new HttpHost("127.0.0.1", 9200, "http"))
+//                        .setRequestConfigCallback(new RestClientBuilder.RequestConfigCallback() {
+//                            // 该方法接收一个RequestConfig.Builder对象，对该对象进行修改后然后返回。
+//                            @Override
+//                            public RequestConfig.Builder customizeRequestConfig(
+//                                    RequestConfig.Builder requestConfigBuilder) {
+//                                return requestConfigBuilder.setConnectTimeout(5000 * 1000) // 连接超时（默认为1秒）
+//                                        .setSocketTimeout(6000 * 1000);// 套接字超时（默认为30秒）//更改客户端的超时限制默认30秒现在改为100*1000分钟
+//                            }
+//                        }));// 调整最大重试超时时间（默认为30秒）.setMaxRetryTimeoutMillis(60000);
+//
+//        return highLevelClient;
     }
 
     public static class NullHostNameVerifier implements HostnameVerifier {
