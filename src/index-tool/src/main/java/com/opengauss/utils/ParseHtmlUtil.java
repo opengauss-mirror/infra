@@ -16,10 +16,10 @@ public class ParseHtmlUtil {
     public static String parseHtml(String mdStr) {
         Parser parser = Parser.builder().build();
         Node document = parser.parse(mdStr);
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        String r = Jsoup.parse(renderer.render(document)).text();
 
-        TextContentRenderer textContentRenderer = TextContentRenderer.builder().build();
-        //This is Sparta
-        return textContentRenderer.render(document).replaceAll(lineRegex, "").replaceAll(regex, "");
+        return r.replaceAll(lineRegex, "").replaceAll(regex, "");
 
 
     }
