@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websitesvcconfigmap
+  namespace: website
+data:
+  default.conf: |
+    server {
+       # listen 80 default_server;
+        root /usr/share/nginx/html;  
+        index index.html;   
+        server_name opengauss.org;   
+        
+        server_tokens off;
+        return 301 https://$server_name$request_uri;
+    }
+    server {
+        listen 80;
+        root /usr/share/nginx/html;
+        index index.html;
+
+        server_name 119.8.33.182;
+        server_tokens off;
+        return 301 https://opengauss.org$request_uri;
+
+    }
+    server {
+        listen 443 ssl;
+
+        root /usr/share/nginx/html;
+        index index.html;
+        server_name opengauss.org;
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/fullchain.pem;
+        ssl_certificate_key  /etc/nginx/ssl/privkey.pem;
+        ssl_trusted_certificate /etc/nginx/ssl/chain.pem;
+
+        server_tokens off;
+
+        location /zh {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+                error_page   404  /zh/404.html;
+        }
+        
+        location /en { 
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+                error_page   404  /en/404.html;
+        } 
+
+        location /cla/ {
+                proxy_pass http://bot.opengauss.org:8888/cla;
+        }
+
+        location /search/docs {
+                proxy_pass http://159.138.59.166:32123/docs;
+        }
+
+        location /statistics/ {
+                proxy_pass https://www.openeuler.org/api/;
+        } 
+      
+        location /advisoryCVE/ {
+                proxy_pass https://api.openeuler.org/cve-manager/;
+        }
+
+        location /api-certification/ { 
+                proxy_pass https://ccs.opengauss.org/ccs/base/;
+        }        
+
+        location = /gitee_back/ {
+            break;
+            return 200 $request_uri;
+            proxy_pass http://meeting-service.meetingserver.svc.cluster.local$request_uri;
+        }
+
+        location /calendar/ {
+            proxy_pass http://meeting-service.meetingserver.svc.cluster.local/;
+        }
+
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a    404.
+                try_files $uri $uri/ =404;
+                error_page   404 /zh;
+        }
+    }
