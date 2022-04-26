@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name:  moocstudio-opengauss-backend-ingress
+  namespace:  moocstudio-opengauss-backend
+spec:
+  tls:
+    - hosts:
+        - moocstudio.opengauss.org
+      secretName:  moocstudio-opengauss-backend-tls
+  rules:
+    - host: moocstudio.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName:  moocstudio-opengauss-backend-service
+              servicePort: 80
+            path: /api(/|$)(.*)
