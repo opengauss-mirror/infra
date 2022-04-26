@@ -15,7 +15,7 @@ MAILMAN_CORE_PASSWORD = os.environ.get("MAILMAN_CORE_PASSWORD", "restpass")
 # configure used for http server for mailman core service
 TEMPLATE_FOLDER_PATH = os.environ.get("TEMPLATE_FOLDER_PATH", "templates")
 
-TEMPALTE_URI_PREFIX = 'https://gitee.com/opengauss/infra/raw/src/master/mail/templates'
+TEMPALTE_URI_PREFIX = 'https://gitee.com/opengauss/infra/raw/master/src/mail/templates'
 
 def main():
     # pre-check before handling mailman core service
