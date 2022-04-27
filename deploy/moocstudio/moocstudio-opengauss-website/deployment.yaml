@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moocstudio-opengauss-frontend
+  namespace: moocstudio-opengauss-website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: moocstudio-opengauss-frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: moocstudio-opengauss-frontend
+    spec:
+      containers:
+      - name: moocstudio-opengauss-frontend
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/moocstudio-opengauss-frontend:bb8b208fd89f0eb6f496ccb4ded389c2ef1a3c66
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2000Mi
+          requests:
+            cpu: 2000m
+            memory: 2000Mi
+        

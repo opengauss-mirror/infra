@@ -1,0 +1,12 @@
+resources:
+- ingress.yaml
+- deployment.yaml
+- namespace.yaml
+- service.yaml
+- secret.yaml
+namespace: moocstudio-opengauss-website
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/playground/moocstudio-opengauss-frontend
+  newTag: bb8b208fd89f0eb6f496ccb4ded389c2ef1a3c66
