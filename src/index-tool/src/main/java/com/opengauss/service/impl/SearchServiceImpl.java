@@ -1,13 +1,11 @@
 package com.opengauss.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.opengauss.constant.TypeConstants;
 import com.opengauss.entity.Article;
 import com.opengauss.exception.ServiceException;
 import com.opengauss.repository.ArticleRepository;
 import com.opengauss.repository.TipsRepository;
 import com.opengauss.service.SearchService;
-import com.opengauss.utils.DataFromFileUtil;
 import com.opengauss.utils.IdUtil;
 import com.opengauss.utils.ParseHtmlUtil;
 import com.opengauss.vo.SearchCondition;
@@ -97,57 +95,54 @@ public class SearchServiceImpl implements SearchService {
                 log.error(String.format("%s 文件夹不存在", indexFile.getPath() + File.pathSeparator + version));
                 throw new ServiceException("服务器开小差了");
             }
+
             File versionFile = versionFiles[0];
+
             languageDir = versionFile.listFiles();
         } else {
             languageDir = indexFile.listFiles();
         }
 
-        JSONArray jsonArray = new JSONArray();
+
         for (File languageFile : languageDir) {
+            List<Article> list = new ArrayList<>();
             String lang = languageFile.getName();
             File docFile;
-            if (TypeConstants.BLOGS.equals(type)) {
-                File[] files = languageFile.listFiles(fileName -> "post".equals(fileName.getName()));
-                if (null != files && files.length == 1) {
-                    docFile = files[0];
-                } else {
-                    continue;
-                }
+
+            File[] files = languageFile.listFiles(fileName -> type.equals(fileName.getName()));
+            if (null != files && files.length == 1) {
+                docFile = files[0];
             } else {
-                File[] files = languageFile.listFiles(fileName -> type.equals(fileName.getName()));
-                if (null != files && files.length == 1) {
-                    System.out.println(type + files[0]);
-                    docFile = files[0];
-                } else {
-                    continue;
-                }
+                continue;
             }
+
+
+
             log.info(String.format("===============开始解析%s%s文档=============", type, docFile));
             Collection<File> listFiles = FileUtils.listFiles(docFile, new String[]{"md"}, true);
             for (File mdFile : listFiles) {
                 if (!mdFile.getName().startsWith("_")) {
                     try {
-                        jsonArray.add(DataToMap(basePath, version, type, lang, mdFile));
+                        Article a = DataToMap(basePath, version, type, lang, mdFile);
+                        if (a != null){
+                            list.add(a);
+                        }
                     } catch (Exception e) {
+                        log.info(mdFile.getPath());
                         log.error(e.getMessage());
                     }
                 }
             }
 
             log.info(String.format("===============解析%s%s代码成功，开始更新es=============", type, docFile));
-            List<Article> list = jsonArray.toJavaList(Article.class);
             articleRepository.saveAll(list);
             log.info(String.format("===============更新%s%s数据成功=============", type, docFile));
         }
     }
 
 
-
-
-
-    private Map<String, String> DataToMap(String basePath, String version, String type, String lang, File mdFile) {
-        Map<String, String> data = new HashMap<>();
+    private Article DataToMap(String basePath, String version, String type, String lang, File mdFile) {
+        Article data = new Article();
         String articleName = mdFile.getPath().replace(basePath, "")
                 .replace("\\\\", "/")
                 .replace(".md", "")
@@ -155,22 +150,28 @@ public class SearchServiceImpl implements SearchService {
         if (!TypeConstants.DOCS.equals(articleName)) {
             articleName = articleName.replaceFirst(type + "/", "");
         }
-        data.put("id", IdUtil.getId());
-        data.put("articleName", articleName);
-        data.put("path", type);
+        if (articleName.contains("Developerguide") && articleName.contains("GAUSS-") && articleName.contains("----")) {
+            articleName = articleName.replaceAll("----", "-");
+        }
+        if (TypeConstants.BLOG.equals(type)) {
+            articleName = "post" + articleName.substring(4);
+        }
+        data.setId(IdUtil.getId());
+        data.setArticleName(articleName);
+        data.setPath(articleName);
         try {
-            data.put("textContent", ParseHtmlUtil.parseHtml(FileUtils.readFileToString(mdFile, StandardCharsets.UTF_8)));
+            String[] result = ParseHtmlUtil.parseHtml(FileUtils.readFileToString(mdFile, StandardCharsets.UTF_8), type, mdFile.getName().replaceAll(".md", ""));
+            data.setTextContent(result[0]);
+            data.setTitle(result[2]);
         } catch (IOException e) {
             throw new ServiceException("服务器开小差了");
         }
-        data.put("title", mdFile.getName().replaceAll(".md", ""));
 
-        data.put("type", type);
+        data.setType(type);
 
-        data.put("lang", lang);
+        data.setLang(lang);
 
-        data.put("version", version);
-
+        data.setVersion(version);
         return data;
     }
 
@@ -203,6 +204,7 @@ public class SearchServiceImpl implements SearchService {
         sourceBuilder.highlighter(highlightBuilder);
         sourceBuilder.from(startIndex).size(condition.getPageSize());
         sourceBuilder.timeout(TimeValue.timeValueMinutes(1L));
+//        sourceBuilder.aggregation(AggregationBuilders.terms("data").field("type.keyword"));
         sourceBuilder.aggregation(AggregationBuilders.terms("data").field("type"));
         request.source(sourceBuilder);
         SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);

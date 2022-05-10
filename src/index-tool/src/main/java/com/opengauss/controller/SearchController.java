@@ -1,5 +1,6 @@
 package com.opengauss.controller;
 
+import com.opengauss.constant.TypeConstants;
 import com.opengauss.service.SearchService;
 import com.opengauss.vo.SearchCondition;
 import com.opengauss.vo.SysResult;
@@ -26,7 +27,7 @@ public class SearchController {
     @Value("${update.shell}")
     private String updateShellPath;
 
-    private static final String[] TYPES = {"docs", "blogs", "events", "news"};
+    private static final String[] TYPES = {TypeConstants.DOCS, TypeConstants.BLOG, TypeConstants.EVENTS, TypeConstants.NEWS};
 
     /**
      * 搜索关键词联想
@@ -83,6 +84,7 @@ public class SearchController {
      */
     @Scheduled(cron = "${scheduled.cron}")
     public String scheduledTask() {
+
         Process process;
         try {
             log.info("===============开始拉取仓库资源=================");
@@ -91,11 +93,12 @@ public class SearchController {
             List<String> result = IOUtils.readLines(process.getInputStream(), StandardCharsets.UTF_8);
             log.info(result.toString());
             log.info("===============仓库资源拉取成功=================");
-            for (String type : TYPES) {
-                searchService.refreshDoc(type);
-            }
         } catch (IOException | InterruptedException e) {
             log.error(e.getMessage());
+        }
+
+        for (String type : TYPES) {
+            searchService.refreshDoc(type);
         }
         return "success";
     }
