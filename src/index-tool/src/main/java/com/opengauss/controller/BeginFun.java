@@ -19,7 +19,6 @@ import java.util.List;
 @Component
 @Slf4j
 public class BeginFun implements ApplicationRunner {
-    private static final String[] TYPES = {TypeConstants.DOCS, TypeConstants.BLOG, TypeConstants.EVENTS, TypeConstants.NEWS};
 
     @Autowired
     public SearchService searchService;
@@ -42,8 +41,7 @@ public class BeginFun implements ApplicationRunner {
             log.error(e.getMessage());
         }
 
-        for (String type : TYPES) {
-            searchService.refreshDoc(type);
-        }
+        searchService.refreshDoc();
+
     }
 }

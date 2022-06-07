@@ -3,22 +3,31 @@ if [ -d "/usr/local/docs" ]; then
   rm -rf /usr/local/docs/source/*
   rm -rf /usr/local/docs/target/*
 fi
-mkdir -p /usr/local/docs/source
-mkdir -p /usr/local/docs/target/events/zh/events
-mkdir -p /usr/local/docs/target/events/en/events
-mkdir -p /usr/local/docs/target/news/zh/news
-mkdir -p /usr/local/docs/target/news/en/news
-mkdir -p /usr/local/docs/target/blogs/zh/
-mkdir -p /usr/local/docs/target/blogs/en/
+mkdir -p /usr/local/docs/source/
+mkdir -p /usr/local/docs/target/zh/
+mkdir -p /usr/local/docs/target/en/
+
+
 cd /usr/local/docs/source
 git clone https://gitee.com/opengauss/website.git
-cp -r ./website/content/zh/events/* ../target/events/zh/events
-cp -r ./website/content/en/events/* ../target/events/en/events
-cp -r ./website/content/zh/news/* ../target/news/zh/news
-cp -r ./website/content/en/news/* ../target/news/en/news
 git clone https://gitee.com/opengauss/blog.git
-cp -r ./blog/content/zh/* ../target/blogs/zh
-cp -r ./blog/content/en/* ../target/blogs/en
+
+
+mkdir -p /usr/local/docs/target/zh/events/
+mkdir -p /usr/local/docs/target/zh/news/
+mkdir -p /usr/local/docs/target/zh/post/
+cp -r ./website/content/zh/events/* ../target/zh/events/
+cp -r ./website/content/zh/news/* ../target/zh/news/
+cp -r ./blog/content/zh/post/* ../target/zh/post/
+
+mkdir -p /usr/local/docs/target/en/events/
+mkdir -p /usr/local/docs/target/en/news/
+mkdir -p /usr/local/docs/target/en/post/
+cp -r ./website/content/en/events/* ../target/en/events/
+cp -r ./website/content/en/news/* ../target/en/news/
+cp -r ./blog/content/en/post/* ../target/en/post/
+
+
 git clone https://gitee.com/opengauss/docs.git
 cd ./docs
 versions=(
@@ -34,9 +43,9 @@ for r in $(git branch -r --list "origin/*"); do
   b=${r##*origin/}
   if [[ "${versions[@]}" =~ $b ]]; then
     git checkout $b
-    mkdir -p /usr/local/docs/target/docs/$b/zh/
-    mkdir -p /usr/local/docs/target/docs/$b/en/
-    cp -r ./content/zh/* /usr/local/docs/target/docs/$b/zh/
-    cp -r ./content/en/* /usr/local/docs/target/docs/$b/en/
+    mkdir -p /usr/local/docs/target/zh/docs/$b/docs
+    mkdir -p /usr/local/docs/target/en/docs/$b/docs
+    cp -r ./content/zh/docs/* /usr/local/docs/target/zh/docs/$b/docs/
+    cp -r ./content/en/docs/* /usr/local/docs/target/en/docs/$b/docs/
   fi
 done
