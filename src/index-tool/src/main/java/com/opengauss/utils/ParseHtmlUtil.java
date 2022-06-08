@@ -14,10 +14,9 @@ public class ParseHtmlUtil {
     private static final String lineRegex = "\\s*|\t|\r|\n";
     private static final String regex = "\\+\\+\\+(.*?)\\+\\+\\+";
 
-    public static String[] parseHtml(String mdStr, String type,String fileName) {
+    public static String[] parseHtml(String mdStr, String type) {
 
         String[] result = new String[12];
-        String mdTrim = mdStr.replaceAll(lineRegex, "");
 
         Parser parser = Parser.builder().build();
         Node document = parser.parse(mdStr);
@@ -28,23 +27,17 @@ public class ParseHtmlUtil {
 
         String textContent = "";
         String title = "";
-
+        textContent = Jsoup.parse(r).text();
         if (TypeConstants.DOCS.equals(type)) {
-
-            String m = renderer.render(document);
-            if (m.contains("<h1>")) {
-                title = m.substring(m.indexOf("<h1>") + 4);
-                title = Jsoup.parse(title.substring(0, title.indexOf("</h1>"))).text();
-                textContent = m.substring(m.indexOf("</h1>") + 5);
-                textContent = Jsoup.parse(textContent).text().replaceAll(lineRegex, "").replaceAll(regex, "");
+            if (textContent.contains(" ")) {
+                title = textContent.substring(0, textContent.indexOf(" "));
             } else {
-                title = fileName;
-                textContent = r.replaceAll(lineRegex, "");
+                title = textContent;
             }
 
         } else {
-            textContent = r.replaceAll(lineRegex, "").replaceAll(regex, "");
-            title = getValue(mdTrim, "title=\"\"");
+            textContent = r.replaceAll(regex, "");
+            title = getValue(mdStr, "title");
         }
         result[0] = textContent;
         result[2] = title;
@@ -55,30 +48,36 @@ public class ParseHtmlUtil {
 
 
     public static String getValue(String r, String t) {
+        String result = "";
 
-        String begin = t.substring(0, t.length() - 1);
-        String last = t.substring(t.length()-1);
-
-
-        if (last.equals("\"")) {
-            if (r.contains(begin)) {
-                t = r.substring(r.indexOf(begin) + begin.length());
-                t = t.substring(0, t.indexOf(last));
+        for(int i = 0; i < r.length(); i ++) {
+            if (r.contains(t)) {
+                r = r.substring(r.indexOf(t) + t.length());
+                if (r.substring(0, 4).contains("=")) {
+                    result = r.substring(r.indexOf("=") + 1);
+                    if (t.equals("tags") || t.equals("categories")) {
+                        result = result.substring(result.indexOf("[") + 1);
+                        result = result.substring(0, result.indexOf("]"));
+                        result = result.replaceAll("'", "");
+                        break;
+                    } else {
+                        if (result.substring(0, 3).contains("'")) {
+                            result = result.substring(result.indexOf("'") + 1);
+                            result = result.substring(0, result.indexOf("'"));
+                        } else if (result.substring(0, 3).contains("\"")){
+                            result = result.substring(result.indexOf("\"") + 1);
+                            result = result.substring(0, result.indexOf("\""));
+                        }
+                        break;
+                    }
+                }
+            } else {
+                break;
             }
-
-            return t;
         }
 
-        if (last.equals("]")) {
-            if (r.contains(begin)) {
-                t = r.substring(r.indexOf(begin) + begin.length());
-                t = t.substring(0,  t.indexOf(last));
-                t = t.replaceAll("\"", "").replaceAll("\\s*", "");
-                return t;
-            }
-        }
 
-        return "";
+        return result;
     }
 }
 

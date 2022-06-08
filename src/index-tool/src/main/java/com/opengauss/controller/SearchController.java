@@ -27,8 +27,6 @@ public class SearchController {
     @Value("${update.shell}")
     private String updateShellPath;
 
-    private static final String[] TYPES = {TypeConstants.DOCS, TypeConstants.BLOG, TypeConstants.EVENTS, TypeConstants.NEWS};
-
     /**
      * 搜索关键词联想
      *
@@ -97,9 +95,8 @@ public class SearchController {
             log.error(e.getMessage());
         }
 
-        for (String type : TYPES) {
-            searchService.refreshDoc(type);
-        }
+        searchService.refreshDoc();
+
         return "success";
     }
 

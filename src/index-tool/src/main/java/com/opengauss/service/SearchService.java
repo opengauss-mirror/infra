@@ -10,9 +10,8 @@ public interface SearchService {
     /**
      * 根据索引名称和版本刷新数据
      *
-     * @param type 类型
      */
-    void refreshDoc(String type);
+    void refreshDoc();
 
     /**
      * 根据条件搜索

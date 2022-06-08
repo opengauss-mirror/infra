@@ -56,126 +56,100 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void refreshDoc(String type) {
+    public void refreshDoc() {
 
-        File indexFile = new File(basePath + type);
+        File indexFile = new File(basePath);
         if (!indexFile.exists()) {
             log.error(String.format("%s 文件夹不存在", indexFile.getPath()));
             log.error("服务器开小差了");
             return;
         }
-        log.info(String.format("===============开始执行%s文档解析存储=============", type));
-        articleRepository.deleteByType(type);
-        log.info("删除es - type:" + type);
-
-        log.info(String.format("===============开始解析%s文档=============", type));
-        if (TypeConstants.DOCS.equals(type)) {
-            File file = new File(basePath + type);
-            for (File versionFile : Objects.requireNonNull(file.listFiles())) {
-                readFromFile(basePath, versionFile.getName(), type);
-            }
-        } else {
-            readFromFile(basePath, "", type);
-        }
-
-        log.info("更新数据成功:" + type);
-    }
-
-
-    public void readFromFile(String basePath, String version, String type) {
-        File indexFile = new File(basePath + type);
-        if (!indexFile.exists()) {
-            log.error(String.format("%s 文件夹不存在", indexFile.getPath()));
-            throw new ServiceException("服务器开小差了");
-        }
-        File[] languageDir;
-        if (StringUtils.hasText(version)) {
-            File[] versionFiles = indexFile.listFiles(file -> version.equals(file.getName()));
-            if (null == versionFiles || versionFiles.length == 0) {
-                log.error(String.format("%s 文件夹不存在", indexFile.getPath() + File.pathSeparator + version));
-                throw new ServiceException("服务器开小差了");
-            }
-
-            File versionFile = versionFiles[0];
-
-            languageDir = versionFile.listFiles();
-        } else {
-            languageDir = indexFile.listFiles();
-        }
-
-
+        log.info("开始更新es文档");
+        articleRepository.deleteAll();
+        log.info("删除原数据成功");
+        String lang = "";
+        String type = "";
+        File[] typeDir;
+        File[] languageDir = indexFile.listFiles();
         for (File languageFile : languageDir) {
-            List<Article> list = new ArrayList<>();
-            String lang = languageFile.getName();
-            File docFile;
 
-            File[] files = languageFile.listFiles(fileName -> type.equals(fileName.getName()));
-            if (null != files && files.length == 1) {
-                docFile = files[0];
-            } else {
-                continue;
-            }
+            lang = languageFile.getName();
+
+            typeDir = languageFile.listFiles();
+
+            for (File typeFile : typeDir) {
+                List<Article> list = new ArrayList<>();
+                type = typeFile.getName();
+
+//                if (!TypeConstants.NEWS.equals(type)) {
+//                    continue;
+//                }
 
 
+                Collection<File> listFiles = FileUtils.listFiles(typeFile, new String[]{"md"}, true);
 
-            log.info(String.format("===============开始解析%s%s文档=============", type, docFile));
-            Collection<File> listFiles = FileUtils.listFiles(docFile, new String[]{"md"}, true);
-            for (File mdFile : listFiles) {
-                if (!mdFile.getName().startsWith("_")) {
-                    try {
-                        Article a = DataToMap(basePath, version, type, lang, mdFile);
-                        if (a != null){
-                            list.add(a);
+                for (File mdFile : listFiles) {
+                    if (!mdFile.getName().startsWith("_")) {
+                        try {
+                            Article a = parseMD(lang, type, mdFile);
+                            if (a != null){
+                                list.add(a);
+                            }
+                        } catch (Exception e) {
+                            log.info(mdFile.getPath());
+                            log.error(e.getMessage());
                         }
-                    } catch (Exception e) {
-                        log.info(mdFile.getPath());
-                        log.error(e.getMessage());
                     }
                 }
-            }
 
-            log.info(String.format("===============解析%s%s代码成功，开始更新es=============", type, docFile));
-            articleRepository.saveAll(list);
-            log.info(String.format("===============更新%s%s数据成功=============", type, docFile));
+                articleRepository.saveAll(list);
+            }
         }
+        log.info("更新数据成功");
+
     }
 
 
-    private Article DataToMap(String basePath, String version, String type, String lang, File mdFile) {
+    public Article parseMD(String lang, String type, File mdFile) {
+        if ("post".equals(type)) {
+            type = TypeConstants.BLOGS;
+        }
+
         Article data = new Article();
-        String articleName = mdFile.getPath().replace(basePath, "")
+
+
+        String path = mdFile.getPath().replace(basePath + lang + "/", "")
                 .replace("\\\\", "/")
-                .replace(".md", "")
-                .replace("/" + lang + "/", "/");
-        if (!TypeConstants.DOCS.equals(articleName)) {
-            articleName = articleName.replaceFirst(type + "/", "");
+                .replace(".md", "");
+
+        if (TypeConstants.DOCS.equals(type)) {
+            path = path.replaceFirst(type + "/", "");
         }
-        if (articleName.contains("Developerguide") && articleName.contains("GAUSS-") && articleName.contains("----")) {
-            articleName = articleName.replaceAll("----", "-");
+        if (path.contains("Developerguide") && path.contains("GAUSS-") && path.contains("----")) {
+            path = path.replaceAll("----", "-");
         }
-        if (TypeConstants.BLOG.equals(type)) {
-            articleName = "post" + articleName.substring(4);
-        }
+        data.setLang(lang);
+        data.setType(type);
+
         data.setId(IdUtil.getId());
-        data.setArticleName(articleName);
-        data.setPath(articleName);
+        data.setArticleName(path);
+        data.setPath(path);
+
         try {
-            String[] result = ParseHtmlUtil.parseHtml(FileUtils.readFileToString(mdFile, StandardCharsets.UTF_8), type, mdFile.getName().replaceAll(".md", ""));
+            String[] result = ParseHtmlUtil.parseHtml(FileUtils.readFileToString(mdFile, StandardCharsets.UTF_8), type);
             data.setTextContent(result[0]);
             data.setTitle(result[2]);
         } catch (IOException e) {
             throw new ServiceException("服务器开小差了");
         }
 
-        data.setType(type);
+        if (TypeConstants.DOCS.equals(type)) {
+            String version = path.substring(0, path.indexOf("/"));
+            data.setVersion(version);
+        }
 
-        data.setLang(lang);
-
-        data.setVersion(version);
         return data;
     }
-
-
 
     @Override
     public Map<String, Object> searchByCondition(SearchCondition condition) throws IOException {
