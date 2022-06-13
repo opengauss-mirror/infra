@@ -17,6 +17,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -153,20 +154,25 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Map<String, Object> searchByCondition(SearchCondition condition) throws IOException {
+
         int startIndex = (condition.getPage() - 1) * condition.getPageSize();
         SearchRequest request = new SearchRequest("gauss_articles");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder mustBuilder = QueryBuilders.boolQuery();
-        BoolQueryBuilder shouldBuilder = QueryBuilders.boolQuery();
+
         if (!StringUtils.isEmpty(condition.getLang())) {
-            mustBuilder.must(QueryBuilders.termQuery("lang", condition.getLang()));
+            mustBuilder.filter(QueryBuilders.termQuery("lang", condition.getLang()));
         }
         if (!StringUtils.isEmpty(condition.getType())) {
-            mustBuilder.must(QueryBuilders.termQuery("type", condition.getType()));
+            mustBuilder.filter(QueryBuilders.termQuery("type", condition.getType()));
         }
-        shouldBuilder.should(QueryBuilders.matchPhraseQuery("textContent", condition.getKeyword()));
-        shouldBuilder.should(QueryBuilders.matchPhraseQuery("title", condition.getKeyword()));
-        mustBuilder.must(shouldBuilder);
+
+        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(condition.getKeyword());
+        multiMatchQueryBuilder.type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
+        multiMatchQueryBuilder.field("title", 10);
+        multiMatchQueryBuilder.field("textContent", 1);
+
+        mustBuilder.must(multiMatchQueryBuilder);
         sourceBuilder.query(mustBuilder);
         HighlightBuilder highlightBuilder = new HighlightBuilder()
                 .field("textContent")
@@ -178,7 +184,6 @@ public class SearchServiceImpl implements SearchService {
         sourceBuilder.highlighter(highlightBuilder);
         sourceBuilder.from(startIndex).size(condition.getPageSize());
         sourceBuilder.timeout(TimeValue.timeValueMinutes(1L));
-//        sourceBuilder.aggregation(AggregationBuilders.terms("data").field("type.keyword"));
         sourceBuilder.aggregation(AggregationBuilders.terms("data").field("type"));
         request.source(sourceBuilder);
         SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
