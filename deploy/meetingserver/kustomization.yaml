@@ -5,6 +5,7 @@ resources:
 - secrets.yaml
 - cronjob.yaml
 - pvc.yaml
+- ingress.yaml
 commonLabels:
   app: opengauss-meetingserver
 commonAnnotations:
@@ -16,4 +17,4 @@ namespace: meetingserver
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
   newName: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
-  newTag: 0e8717e12afda552e011ba9aea7f0e0d466dd87e
+  newTag: ff9542cc4fb753303485be21f1a09509524f8d6d
