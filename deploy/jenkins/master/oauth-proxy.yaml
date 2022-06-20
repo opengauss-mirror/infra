@@ -16,26 +16,29 @@ spec:
     spec:
       containers:
         - args:
-            - --provider=gitee
-            - --email-domain=*
-            - --gitee-org=opengauss-cie
-            - --upstream=http://opengauss-jenkins.jenkins.svc.cluster.local
-            - --http-address=0.0.0.0:4180
-            - --cookie-expire=6h0m0s
-            - --set-xauthrequest=true
-            - --reverse-proxy=true
-            # for jenkins job or views and their resource to to loaded
-            - --skip-auth-regex=^/job/
-            - --skip-auth-regex=^/queue/
-            - --skip-auth-regex=^/view/
-            - --skip-auth-regex=^/static/
-            - --skip-auth-regex=^/adjuncts/
-            - --skip-auth-regex=^/images/
-            - --skip-auth-regex=^/blue/
-            - --skip-auth-regex=^/computer/
-            # for webhook to be triggered
-            - --skip-auth-regex=^/gitee-project/
-            - --custom-sign-in-logo=https://openeulerinfrastructure.obs.cn-north-4.myhuaweicloud.com/img/gardener-large.png
+          - --provider=oidc
+          - --email-domain=*
+          - --upstream=http://opengauss-jenkins.jenkins.svc.cluster.local
+          - --http-address=0.0.0.0:4180
+          - --cookie-expire=12h0m0s
+          - --provider-display-name=authing
+          - --skip-auth-regex=^/job/
+          - --skip-auth-regex=^/queue/
+          - --skip-auth-regex=^/view/
+          - --skip-auth-regex=^/static/
+          - --skip-auth-regex=^/adjuncts/
+          - --skip-auth-regex=^/images/
+          - --skip-auth-regex=^/blue/
+          - --skip-auth-regex=^/computer/
+          # for webhook to be triggered
+          - --skip-auth-regex=^/gitee-project/
+          - --insecure-oidc-allow-unverified-email=true
+          - --redirect-url=https://jenkins.opengauss.org/oauth2/callback
+          - --oidc-issuer-url=https://opengauss-jenkins.authing.cn/oidc
+          - --cookie-expire=12h0m0s
+          - --session-cookie-minimal=false
+          - --pass-access-token=true
+          - --cookie-secure=false
           env:
             - name: OAUTH2_PROXY_CLIENT_ID
               valueFrom:
