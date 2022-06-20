@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: opengauss-meeting-server-ingress
+  namespace: meetingserver
+spec:
+  tls:
+    - hosts:
+        - opengauss.org
+      secretName: meeting-server-tls
+  rules:
+    - host: opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: meeting-service
+              servicePort: 80
+            path: /calendar(/|$)(.*)
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: opengauss-meeting-server-www-ingress
+  namespace: meetingserver
+spec:
+  tls:
+    - hosts:
+        - www.opengauss.org
+      secretName: meeting-server-tls
+  rules:
+    - host: www.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: meeting-service
+              servicePort: 80
+            path: /calendar(/|$)(.*)

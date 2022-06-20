@@ -5,6 +5,7 @@ resources:
 - secrets.yaml
 - cronjob.yaml
 - pvc.yaml
+- ingress.yaml
 commonLabels:
   app: opengauss-meetingserver
 commonAnnotations:

@@ -16,6 +16,8 @@ spec:
         app: meeting-server
         component: web-server
     spec:
+      nodeSelector:
+        meeting-server: "true"
       containers:
         - name: meeting-server
           image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
