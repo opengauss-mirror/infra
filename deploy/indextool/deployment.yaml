@@ -10,9 +10,10 @@ metadata:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.indextoolinfod: semver:~1.0
 spec:
+  replicas: 2
   strategy:
     rollingUpdate:
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   selector:
     matchLabels:
@@ -26,7 +27,7 @@ spec:
     spec:
       containers:
       - name: indextoolinfod
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/index-tool:v1.0.5
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool:58898ef560af569881a33d632c2de19ee8df92c7
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
