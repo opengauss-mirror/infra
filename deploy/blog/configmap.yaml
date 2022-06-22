@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blogsvcconfigmap
+  namespace: blog
+data:
+  default.conf: |
+    server {
+        listen 80;
+
+        root /usr/share/nginx/html;
+        index index.html;
+
+        server_tokens off;
+
+        server_name blog.opengauss.org;
+
+        location /zh {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+                error_page   404  /zh/404.html;
+        }
+
+        location /en {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+                error_page   404  /en/404.html;
+        }
+
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+                error_page   404  /zh;
+        }
+    }
