@@ -4,46 +4,39 @@ kind: Deployment
 metadata:
   name: bloginfo
   namespace: blog
-  labels:
-    app: bloginfo
-  annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.bloginfod: semver:~1.0
 spec:
+  replicas: 2
   strategy:
     rollingUpdate:
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   selector:
     matchLabels:
       app: bloginfo
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: "true"
       labels:
         app: bloginfo
     spec:
       containers:
       - name: bloginfod
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/blog:v1.0.20211020182715
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/blog:v1.0.20220621111745
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
           name: http
           protocol: TCP
-        - containerPort: 443
-          name: https
-          protocol: TCP
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
         volumeMounts:
-        - mountPath: /etc/nginx/ssl
-          name: secret-volume
         - mountPath: /etc/nginx/conf.d
           name: configmap-volume
       volumes:
-      - name: secret-volume
-        secret:
-          secretName: blogsvcsecret
       - name: configmap-volume
         configMap:
           name: blogsvcconfigmap

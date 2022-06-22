@@ -1,0 +1,21 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: blog-ingress
+  namespace: blog
+spec:
+  tls:
+    - hosts:
+        - blog.opengauss.org
+      secretName: blog-tls
+  rules:
+    - host: blog.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: blogservice
+              servicePort: 80
+            path: /

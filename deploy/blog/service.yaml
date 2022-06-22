@@ -5,24 +5,12 @@ kind: Service
 metadata:
   name: blogservice
   namespace: blog
-  annotations:
-    kubernetes.io/elb.class: union
-    kubernetes.io/elb.id: 1e503539-8fc5-4e28-848a-9f0306faa099
-    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
 spec:
-  externalTrafficPolicy: Cluster
-  loadBalancerIP: 159.138.27.44
   ports:
     - name: httpport
       protocol: TCP
       port: 80
       targetPort: 80
-      nodePort: 32110
-    - name: httpsport
-      protocol: TCP
-      port: 443
-      targetPort: 443
-      nodePort: 32111
   selector:
     app: bloginfo
-  type: LoadBalancer
+  type: ClusterIP
