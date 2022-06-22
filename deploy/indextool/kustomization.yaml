@@ -1,0 +1,13 @@
+resources:
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- secret.yaml
+- ingress.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: indextool
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool
+  newName: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool
+  newTag: 58898ef560af569881a33d632c2de19ee8df92c7
