@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 @Slf4j
@@ -26,9 +27,14 @@ public class BeginFun implements ApplicationRunner {
     @Value("${update.shell}")
     private String updateShellPath;
 
+
+
+    //定义Lock锁
+    public static ReentrantLock lock = new ReentrantLock();
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        lock.lock();
         Process process;
         try {
             log.info("===============开始拉取仓库资源=================");
@@ -42,6 +48,6 @@ public class BeginFun implements ApplicationRunner {
         }
 
         searchService.refreshDoc();
-
+        lock.unlock();
     }
 }
