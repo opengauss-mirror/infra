@@ -112,20 +112,26 @@ public class SearchServiceImpl implements SearchService {
 
 
     public Article parseMD(String lang, String type, File mdFile) {
-        if ("post".equals(type)) {
-            type = TypeConstants.BLOGS;
-        }
+
 
         Article data = new Article();
 
 
-        String path = mdFile.getPath().replace(basePath + lang + "/", "")
+        String path = mdFile.getPath()
+                .replace("\\", "/")
+                .replace(basePath + lang + "/", "")
                 .replace("\\\\", "/")
                 .replace(".md", "");
 
         if (TypeConstants.DOCS.equals(type)) {
             path = path.replaceFirst(type + "/", "");
         }
+
+        if ("post".equals(type)) {
+            type = TypeConstants.BLOGS;
+            path += "/";
+        }
+
         if (path.contains("Developerguide") && path.contains("GAUSS-") && path.contains("----")) {
             path = path.replaceAll("----", "-");
         }
@@ -133,6 +139,7 @@ public class SearchServiceImpl implements SearchService {
         data.setType(type);
 
         data.setId(IdUtil.getId());
+
         data.setArticleName(path);
         data.setPath(path);
 
