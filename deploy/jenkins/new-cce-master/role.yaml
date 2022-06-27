@@ -1,6 +1,5 @@
 ---
 # Source: jenkins/templates/service-account.yaml
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -34,7 +33,6 @@ rules:
   verbs: ["*"]
 
 ---
-
 # We bind the role to the Jenkins service account. The role binding is created in the namespace
 # where the agents are supposed to run.
 apiVersion: rbac.authorization.k8s.io/v1
@@ -56,5 +54,3 @@ subjects:
 - kind: ServiceAccount
   name: opengauss-jenkins
   namespace: jenkins
-
----

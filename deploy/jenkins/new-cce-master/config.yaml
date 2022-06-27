@@ -1,6 +1,5 @@
 ---
 # Source: jenkins/templates/config.yaml
-
 apiVersion: v1
 kind: ConfigMap
 metadata:

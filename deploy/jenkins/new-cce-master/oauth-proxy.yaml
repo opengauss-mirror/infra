@@ -63,7 +63,6 @@ spec:
               protocol: TCP
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,6 +1,5 @@
 ---
 # Source: jenkins/templates/jenkins-master-deployment.yaml
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,7 +62,6 @@ spec:
           requests:
             cpu: 8000m
             memory: 16000Mi
-
         volumeMounts:
         - mountPath: /tmp
           name: tmp
