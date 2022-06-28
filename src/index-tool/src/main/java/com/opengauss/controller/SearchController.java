@@ -82,7 +82,7 @@ public class SearchController {
      */
     @Scheduled(cron = "${scheduled.cron}")
     public String scheduledTask() {
-
+        BeginFun.lock.lock();
         Process process;
         try {
             log.info("===============开始拉取仓库资源=================");
@@ -96,7 +96,7 @@ public class SearchController {
         }
 
         searchService.refreshDoc();
-
+        BeginFun.lock.unlock();
         return "success";
     }
 
