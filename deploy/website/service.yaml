@@ -1,28 +1,15 @@
-# Config web service
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: websiteservice
   namespace: website
-  annotations:
-    kubernetes.io/elb.class: union
-    kubernetes.io/elb.id: 325c14b8-6072-4b26-892d-f41e94402256
-    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
 spec:
-  externalTrafficPolicy: Cluster
-  loadBalancerIP: 119.8.33.182
   ports:
-    - name: httpport
-      protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 31110
-    - name: httpsport
-      protocol: TCP
-      port: 443
-      targetPort: 443
-      nodePort: 31111
+  - name: http-port
+    protocol: TCP
+    port: 80
+    targetPort: 80
   selector:
     app: websiteinfo
-  type: LoadBalancer
+  type: ClusterIP
