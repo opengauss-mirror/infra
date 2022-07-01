@@ -1,0 +1,15 @@
+resources:
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- secret.yaml
+- configmap.yaml
+- ingress.yaml
+- hpa.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: website
+images:
+- name: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website
+  newName: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website
+  newTag: v1.0.20220701123917

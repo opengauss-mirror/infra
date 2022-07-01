@@ -10,9 +10,10 @@ metadata:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.websiteinfod: semver:~1.0
 spec:
+  replicas: 2
   strategy:
     rollingUpdate:
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   selector:
     matchLabels:
@@ -26,24 +27,16 @@ spec:
     spec:
       containers:
       - name: websiteinfod
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website:v1.0.20210810190104
+        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website:v1.0.20220616202038
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
           name: http
           protocol: TCP
-        - containerPort: 443
-          name: https
-          protocol: TCP
         volumeMounts:
-        - mountPath: /etc/nginx/ssl
-          name: secret-volume
         - mountPath: /etc/nginx/conf.d
           name: configmap-volume
       volumes:
-      - name: secret-volume
-        secret:
-          secretName: websitesvcsecret
       - name: configmap-volume
         configMap:
           name: websitesvcconfigmap

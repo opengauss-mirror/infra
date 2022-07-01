@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: opengauss-website-ingress
+  namespace: website
+spec:
+  tls:
+    - hosts:
+        - opengauss.org
+      secretName: website-tls
+  rules:
+    - host: opengauss.org
+      http:
+        paths:
+        - backend:
+            serviceName: websiteservice
+            servicePort: 80
+          path: /
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: opengauss-website-www-ingress
+  namespace: website
+spec:
+  tls:
+    - hosts:
+        - www.opengauss.org
+      secretName: website-tls
+  rules:
+    - host: www.opengauss.org
+      http:
+        paths:
+        - backend:
+            serviceName: websiteservice
+            servicePort: 80
+          path: /

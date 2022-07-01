@@ -6,36 +6,11 @@ metadata:
 data:
   default.conf: |
     server {
-       # listen 80 default_server;
-        root /usr/share/nginx/html;  
-        index index.html;   
-        server_name opengauss.org;   
-        
-        server_tokens off;
-        return 301 https://$server_name$request_uri;
-    }
-    server {
-        listen 80;
-        root /usr/share/nginx/html;
-        index index.html;
-
-        server_name 119.8.33.182;
-        server_tokens off;
-        add_header X-Frame-Options SAMEORIGIN;
-
-        return 301 https://opengauss.org$request_uri;
-
-    }
-    server {
-        listen 443 ssl;
+        listen 80 ;
 
         root /usr/share/nginx/html;
         index index.html;
         server_name opengauss.org;
-        ssl on;
-        ssl_certificate /etc/nginx/ssl/fullchain.pem;
-        ssl_certificate_key  /etc/nginx/ssl/privkey.pem;
-        ssl_trusted_certificate /etc/nginx/ssl/chain.pem;
 
         server_tokens off;
         add_header X-Frame-Options SAMEORIGIN;
@@ -59,7 +34,7 @@ data:
         }
 
         location /search/docs {
-                proxy_pass http://159.138.59.166:32123/docs;
+                proxy_pass https://indextool.opengauss.org/docs;
         }
 
         location /statistics/ {
