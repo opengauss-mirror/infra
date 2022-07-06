@@ -1,0 +1,104 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: jenkins-backup
+  namespace: jenkins
+spec:
+  schedule: "20 1 * * *"
+  startingDeadlineSeconds: 180
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: bak-jenkins
+            image: swr.cn-north-4.myhuaweicloud.com/openeuler/bak-jenkins:v1.8.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: secret
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: secret
+            - name: git_token
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: git_token
+            - name: huaweiclound_obs_url
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: huaweiclound_obs_url
+            - name: huaweiclound_obs_ak
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: huaweiclound_obs_ak
+            - name: huaweiclound_obs_sk
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: huaweiclound_obs_sk
+            - name: url
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: url
+            - name: username
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: username
+            - name: password
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: password
+            - name: bak_domain
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-backup-secret
+                  key: bak_domain
+            ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          restartPolicy: OnFailure
+
+---
+apiVersion: secrets-manager.tuenti.io/v1alpha1
+kind: SecretDefinition
+metadata:
+  name: jenkins-backup-secret
+  namespace: jenkins
+spec:
+  name: jenkins-backup-secret
+  keysMap:
+    secret:
+      path: secrets/data/opengauss/jenkins2
+      key: secret
+    git_token:
+      path: secrets/data/opengauss/jenkins2
+      key: git_token
+    huaweiclound_obs_url:
+      path: secrets/data/opengauss/jenkins2
+      key: huaweiclound_obs_url
+    huaweiclound_obs_ak:
+      path: secrets/data/opengauss/jenkins2
+      key: huaweiclound_obs_ak
+    huaweiclound_obs_sk:
+      path: secrets/data/opengauss/jenkins2
+      key: huaweiclound_obs_sk
+    url:
+      path: secrets/data/opengauss/jenkins2
+      key: url
+    username:
+      path: secrets/data/opengauss/jenkins2
+      key: username
+    password:
+      path: secrets/data/opengauss/jenkins2
+      key: password
+    bak_domain:
+      path: secrets/data/opengauss/jenkins2
+      key: bak_domain
