@@ -109,6 +109,11 @@ spec:
             secretKeyRef:
               name: moocstudio-opengauss-backend-secrets
               key: run_mode
+        - name: DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: moocstudio-opengauss-backend-secrets
+              key: domain
         ports:
         - containerPort: 8080
           name: http
