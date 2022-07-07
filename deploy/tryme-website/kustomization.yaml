@@ -9,4 +9,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-tryme-website
-  newTag: b8a707a914407acfbe915b3e22d0e6b8289bfd91
+  newTag: 2a3ef81174ef21168e29b7839a8b9b956abfa970
