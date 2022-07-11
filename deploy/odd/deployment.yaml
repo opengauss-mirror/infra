@@ -5,7 +5,7 @@ metadata:
   name: odd-deployment
   namespace: opengauss-odd
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxUnavailable: 1
