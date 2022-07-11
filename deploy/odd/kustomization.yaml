@@ -11,4 +11,4 @@ kind: Kustomization
 namespace: opengauss-odd
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-odd
-  newTag: dd6e1c2ffcede8e3ea41c7ff5248b96d8992950a
+  newTag: f9ef9bad06a9a931358ec1540438ecb5b0512abc
