@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+  namespace: opengauss-odd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: oauth2-proxy
+    spec:
+      containers:
+      - args:
+        - --provider=gitee
+        - --email-domain=*
+        - --proxy-prefix=/oauth2
+        - --skip-validate-email=true
+        - --skip-auth-regex=^/agreement_ch.html
+        - --skip-auth-regex=^/agreement_en.html
+        - --upstream=http://odd-service.opengauss-odd.svc.cluster.local
+        - --http-address=0.0.0.0:4180
+        - --cookie-expire=6h0m0s
+        - --set-xauthrequest=true
+        - --custom-templates-dir=/bin/static/login
+        - --custom-templates-sign-in=gauss.html
+        env:
+        - name: OAUTH2_PROXY_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: client_id
+              name: oauth-secrets
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: client_secret
+              name: oauth-secrets
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: cookie_secret
+              name: oauth-secrets
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy:1091a11b4b3a3ce5895296ed6613b5bd2e14867a
+        imagePullPolicy: Always
+        name: oauth2-proxy
+        ports:
+        - containerPort: 4180
+          protocol: TCP
+
+---
+apiVersion: secrets-manager.tuenti.io/v1alpha1
+kind: SecretDefinition
+metadata:
+  name: oauth-secrets
+  namespace: opengauss-odd
+spec:
+  name: oauth-secrets
+  keysMap:
+    client_id:
+      path: secrets/data/opengauss/odd
+      key: client_id
+    client_secret:
+      path: secrets/data/opengauss/odd
+      key: client_secret
+    cookie_secret:
+      path: secrets/data/opengauss/odd
+      key: cookie_secret
