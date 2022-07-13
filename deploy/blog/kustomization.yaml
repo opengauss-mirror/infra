@@ -10,5 +10,4 @@ kind: Kustomization
 namespace: blog
 images:
 - name: swr.ap-southeast-1.myhuaweicloud.com/opengauss/blog
-  newName: swr.ap-southeast-1.myhuaweicloud.com/opengauss/blog
-  newTag: v1.0.20220621111745
+  newTag: v1.0.20220713152327
