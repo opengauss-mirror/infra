@@ -21,4 +21,4 @@ metadata:
   namespace: opengauss-tryme-website
 spec:
   type: ExternalName
-  externalName: moocstudio-opengauss-backend-service.moocstudio-opengauss-backend.svc.cluster.local
+  externalName: opengauss-tryme-backend-service.opengauss-tryme-backend.svc.cluster.local
