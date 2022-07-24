@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opengauss-tryme-backend-service
+  namespace: opengauss-tryme-backend
+spec:
+  ports:
+    - name: http-port-1
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: opengauss-tryme-backend
+  type: ClusterIP
+
+  
