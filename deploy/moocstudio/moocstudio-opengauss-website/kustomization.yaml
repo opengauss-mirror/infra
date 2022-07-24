@@ -9,6 +9,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/moocstudio-opengauss-frontend
-  newTag: a276907d842f94d00f29b1e257c143c3ae7c233b
+  newTag: a9a25983a077c02364604193d2c2c300262f436c
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/playground/moocstudio-opengauss-frontend
   newTag: bb8b208fd89f0eb6f496ccb4ded389c2ef1a3c66
