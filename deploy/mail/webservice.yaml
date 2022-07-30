@@ -6,11 +6,11 @@ metadata:
   namespace: mail
   annotations:
     kubernetes.io/elb.class: union
-    kubernetes.io/elb.id: a1c49fd8-9ed2-4452-8a5a-0e21c8e75431
+    kubernetes.io/elb.id: 4715883e-0aa8-476c-95c4-79274a10d324
     kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
 spec:
   externalTrafficPolicy: Cluster
-  loadBalancerIP: 159.138.24.25
+  loadBalancerIP: 49.0.246.28
   ports:
   - port: 8000
     name: website-port-uwsgi-http
@@ -176,7 +176,8 @@ spec:
           name: mailman-secret-volume
       volumes:
       - name: mailman-web-volume
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: mailweb-static-share-vol
       - name: mailman-web-configmap-volume
         configMap:
           name: mailman-web-configmap

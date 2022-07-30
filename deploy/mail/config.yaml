@@ -1205,7 +1205,6 @@ data:
     MM3_LISTCHK=MM3_HOME/lists/${local_part}.${domain}
   
   00_local_macros: |
-    CHECK_RCPT_SPF = true
     DKIM_CANON = relaxed
     DKIM_SELECTOR = default
     DKIM_DOMAIN = opengauss.org
@@ -2127,8 +2126,8 @@ data:
         #NOTE: This is the public ip address of the served host
         "opengauss.org",
         #NOTE: this can be removed if domain name finally get used.
-        "159.138.24.25",
-        "159.138.9.224",
+        "49.0.246.28",
+        "119.8.40.18",
         "mailweb.opengauss.org",
         "mail.opengauss.org",
         "mailman-web",

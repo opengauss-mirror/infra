@@ -13,3 +13,18 @@ spec:
       storage: 500Gi
   storageClassName: nfs-rw
   volumeMode: Filesystem
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mailweb-static-vol
+  namespace: mail
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: csi-disk
+  volumeMode: Filesystem

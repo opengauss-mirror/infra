@@ -6,12 +6,12 @@ metadata:
   namespace: mail
   annotations:
     kubernetes.io/elb.class: union
-    kubernetes.io/elb.id: a195fd7a-ad9a-4130-8745-de15f47d36d6
+    kubernetes.io/elb.id: 900add1d-4887-4cd9-989f-14824f3d68a3
     kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
 spec:
   #We need set this into 'Local' since we need get the client IP for relay excluding.
   externalTrafficPolicy: Local
-  loadBalancerIP: 159.138.9.224
+  loadBalancerIP: 119.8.40.18
   ports:
   - port: 25
     name: exim4-port
@@ -24,7 +24,7 @@ spec:
 # StatefulSet for exim4 services
 ---
 kind: StatefulSet
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: mailman-exim4
   namespace: mail
@@ -50,7 +50,7 @@ spec:
       containers:
       - name: mailman-exim4
           #NOTE: This image is directly built from our dockerfile located in exim4 folder
-        image: swr.ap-southeast-1.myhuaweicloud.com/opensourceway/mailman-exim4:45a83427f0bbe7ac4d2bcc0e1e4d8c1b097fbf8d
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:v4.92
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
