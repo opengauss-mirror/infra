@@ -177,7 +177,7 @@ spec:
       volumes:
       - name: mailman-web-volume
         persistentVolumeClaim:
-          claimName: mailweb-static-vol
+          claimName: mailweb-static-share-vol
       - name: mailman-web-configmap-volume
         configMap:
           name: mailman-web-configmap
