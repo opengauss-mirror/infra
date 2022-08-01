@@ -114,6 +114,11 @@ spec:
             secretKeyRef:
               name: opengauss-tryme-backend-secrets
               key: domain
+        - name: TOKEN_KEY
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-tryme-backend-secrets
+              key: token_key
         ports:
         - containerPort: 8080
           name: http
