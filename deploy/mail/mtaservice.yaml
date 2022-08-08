@@ -50,7 +50,7 @@ spec:
       containers:
       - name: mailman-exim4
           #NOTE: This image is directly built from our dockerfile located in exim4 folder
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:v4.92
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:b02f9e275d30797cbf061ddc0a42c867c89ce6fb1659169666
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
@@ -99,6 +99,7 @@ spec:
         - -c
         - |
           mkdir -p /var/log/exim4
+          chown -R Debian-exim:Debian-exim /var/log/exim4
           chown root:Debian-exim /etc/exim4/passwd /etc/exim4/exim.crt /etc/exim4/exim.key /etc/exim4/dkim/opengauss.key
           chmod 640 /etc/exim4/passwd /etc/exim4/exim.crt /etc/exim4/exim.key /etc/exim4/dkim/opengauss.key
           mkdir -p /opt/mailman/exim_log
