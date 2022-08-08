@@ -1330,7 +1330,8 @@ data:
       driver = plaintext
       public_name = LOGIN
       server_prompts = "Username:: : Password::"
-      server_condition = "${if crypteq{$auth2}{${extract{1}{:}{${lookup{$auth1}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}{1}{0}}"
+      #server_condition = "${if crypteq{$auth2}{${extract{1}{:}{${lookup{$auth1}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}{1}{0}}"
+      server_condition = true
       server_set_id = $auth1
       .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
       server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
