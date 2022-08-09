@@ -2114,6 +2114,8 @@ data:
     mailman_ip_address = socket.gethostbyname(os.environ.get('MAILMAN_HOST_IP')).split('.')
     mailman_ip_cidr = "{0}.{1}.0.0/16".format(mailman_ip_address[0], mailman_ip_address[1])
     MAILMAN_ARCHIVER_FROM = [str(ip) for ip in ipaddress.IPv4Network(mailman_ip_cidr)]
+    MAILMAN_ARCHIVER_FROM.append(os.environ.get("MAILMAN_HOST_IP", "mailman-core-0.mail-suit-service.mail.svc.cluster.local"))
+    MAILMAN_ARCHIVER_FROM.append("192.168.0.33")
 
     SERVICE_IP = socket.gethostbyname("mailweb.opengauss.org")
 
@@ -2123,7 +2125,6 @@ data:
         "192.168.0.164",
         "mailman-core-0.mail-suit-service.mail.svc.cluster.local",
         "mailman-web-0.mail-suit-service.mail.svc.cluster.local",
-        "mailman-web-service.mail.svc.cluster.local",
         #NOTE: This is the public ip address of the served host
         "opengauss.org",
         #NOTE: this can be removed if domain name finally get used.
@@ -2132,6 +2133,7 @@ data:
         "mailweb.opengauss.org",
         "mail.opengauss.org",
         "mailman-web",
+        "mailman-web-service.mail.svc.cluster.local:8000",
         SERVICE_IP,
         os.environ.get('SERVE_FROM_DOMAIN'),
         os.environ.get('DJANGO_ALLOWED_HOSTS'),
