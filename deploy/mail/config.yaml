@@ -2110,6 +2110,7 @@ data:
     EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
     EMAIL_PORT = 25
+    MAILMAN_ARCHIVER_FROM.append("192.168.0.33")
     
     mailman_ip_address = socket.gethostbyname(os.environ.get('MAILMAN_HOST_IP')).split('.')
     mailman_ip_cidr = "{0}.{1}.0.0/16".format(mailman_ip_address[0], mailman_ip_address[1])
@@ -2123,7 +2124,6 @@ data:
         "192.168.0.164",
         "mailman-core-0.mail-suit-service.mail.svc.cluster.local",
         "mailman-web-0.mail-suit-service.mail.svc.cluster.local",
-        "mailman-web-service.mail.svc.cluster.local",
         #NOTE: This is the public ip address of the served host
         "opengauss.org",
         #NOTE: this can be removed if domain name finally get used.
@@ -2132,6 +2132,7 @@ data:
         "mailweb.opengauss.org",
         "mail.opengauss.org",
         "mailman-web",
+        "mailman-web-service.mail.svc.cluster.local:8000",
         SERVICE_IP,
         os.environ.get('SERVE_FROM_DOMAIN'),
         os.environ.get('DJANGO_ALLOWED_HOSTS'),
