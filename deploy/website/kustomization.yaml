@@ -11,4 +11,4 @@ kind: Kustomization
 namespace: website
 images:
 - name: swr.ap-southeast-1.myhuaweicloud.com/opengauss/website
-  newTag: v1.0.20220902081508
+  newTag: v1.0.20220903081501
