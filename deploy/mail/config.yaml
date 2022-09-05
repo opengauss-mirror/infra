@@ -1212,7 +1212,13 @@ data:
     DKIM_PRIVATE_KEY=${if exists{DKIM_FILE}{DKIM_FILE}{0}}
     MAIN_LOG_SELECTOR = +subject +deliver_time +received_sender +return_path_on_delivery +sender_on_delivery +unknown_in_list +smtp_protocol_error +smtp_syntax_error +tls_certificate_verified +tls_peerdn -host_lookup_failed
     MAIN_TLS_ENABLE = yes
+    MAIN_TLS_CERTIFICATE = ${if exists{/etc/exim4/ssl_pool/${tls_sni}.crt}{/etc/exim4/ssl_pool/${tls_sni}.crt}{/etc/exim4/ssl_pool/opengauss.org.crt}}
+    MAIN_TLS_PRIVATEKEY = ${if exists{/etc/exim4/ssl_pool/${tls_sni}.key}{/etc/exim4/ssl_pool//${tls_sni}.key}{/etc/exim4/ssl_pool/opengauss.org.key}}
     AUTH_SERVER_ALLOW_NOTLS_PASSWORDS = true
+    daemon_smtp_ports = 25 : 465
+    tls_on_connect_ports = 465
+    MAIN_TLS_ADVERTISE_HOSTS=*
+    IGNORE_SMTP_LINE_LENGTH_LIMIT=true
 
   55_mm3_transport: |
     # Place this file at
