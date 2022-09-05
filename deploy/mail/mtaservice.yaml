@@ -17,6 +17,10 @@ spec:
     name: exim4-port
     targetPort: 25
     protocol: TCP
+  - port: 465
+    name: exim4-port-2
+    targetPort: 465
+    protocol: TCP
   selector:
     component: mail-exim4-service
   type: LoadBalancer
@@ -50,7 +54,7 @@ spec:
       containers:
       - name: mailman-exim4
           #NOTE: This image is directly built from our dockerfile located in exim4 folder
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:v4.92
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:f3eb7bf91779f809b519e7ece529f6ad8b0560091660290056
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
@@ -89,6 +93,12 @@ spec:
         - name: mailman-secrets
           mountPath: /etc/exim4/dkim/opengauss.key
           subPath: dkim_key
+        - name: exim4-tls-secret
+          mountPath: /etc/exim4/ssl_pool/opengauss.org.crt
+          subPath: opengauss_org_crt
+        - name: exim4-tls-secret
+          mountPath: /etc/exim4/ssl_pool/opengauss.org.key
+          subPath: opengauss_org_key
           # NOTE: since we added new configuration files we need reload exim4 and start up
           # 1. update password  and key file mode
           # 2. update the log folder permission
@@ -120,4 +130,7 @@ spec:
       - name: mailman-cert-secrets
         secret:
           secretName: mailman-cert-secrets
+      - name: exim4-tls-secret
+        secret:
+          secretName: mailman-tls-secrets
 
