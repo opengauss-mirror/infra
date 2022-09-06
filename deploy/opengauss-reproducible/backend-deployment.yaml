@@ -1,0 +1,30 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: backend-deployment
+  namespace: opengauss-reproducible
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-backend:c018a5375b805e264b9cf67b8dc0b3998abc47aa
+        resources:
+          requests:
+            cpu: 500m
+            memory: 500Mi
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
