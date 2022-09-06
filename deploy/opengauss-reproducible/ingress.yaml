@@ -1,0 +1,45 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: opengauss-reproducible-ingress
+  namespace: opengauss-reproducible
+spec:
+  tls:
+  - hosts:
+      - reproducible-builds.opengauss.org
+    secretName: opengauss-reproducible-tls
+  rules:
+    - host: reproducible-builds.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: website-service
+              servicePort: 80
+            path: /
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: opengauss-reproducible-server-ingress
+  namespace: opengauss-reproducible
+spec:
+  tls:
+  - hosts:
+      - reproducible-builds.opengauss.org
+    secretName: opengauss-reproducible-server-tls
+  rules:
+    - host: reproducible-builds.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: backend-service
+              servicePort: 80
+            path: /api

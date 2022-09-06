@@ -1,0 +1,17 @@
+resources:
+- namespace.yaml
+- website-deployment.yaml
+- backend-deployment.yaml
+- service.yaml
+- ingress.yaml
+commonAnnotations:
+  email: 747802914@qq.com
+  owner: liuyang
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: opengauss-reproducible
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-website
+  newTag: 3d6760888fce8a6e89bee5a38046251c921cb8c6
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-backend
+  newTag: c018a5375b805e264b9cf67b8dc0b3998abc47aa
