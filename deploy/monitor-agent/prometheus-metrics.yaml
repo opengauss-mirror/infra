@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus
+  namespace: monitor-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: prometheus
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/monitor/prometheus:v2.38.0
+        imagePullPolicy: IfNotPresent
+        command:
+          - "/bin/prometheus"
+        args:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+          - "--storage.tsdb.path=/prometheus"
+          - "--storage.tsdb.retention=1d"
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1000Mi
+          limits:
+            cpu: 200m
+            memory: 1000Mi
+        volumeMounts:
+        - mountPath: /prometheus
+          name: static-data
+        - mountPath: /etc/prometheus/
+          name: prometheus-config
+      volumes:
+      - name: static-data
+        emptyDir: {}
+      - name: prometheus-config
+        configMap:
+          name: prometheus-configmap
+
+
+
