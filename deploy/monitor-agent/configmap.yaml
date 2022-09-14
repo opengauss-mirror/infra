@@ -10,7 +10,7 @@ data:
       scrape_interval:     60s
       evaluation_interval: 60s
       external_labels:
-        cluster: opengauss-cce-hk-x86-new-cluster
+        cluster: opengauss-cce
     
     scrape_configs:
       - job_name: 'opengauss-cce-hk-x86-new-cluster'
