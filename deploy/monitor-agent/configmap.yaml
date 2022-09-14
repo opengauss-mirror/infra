@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-configmap
+  namespace: monitor-agent
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval:     60s
+      evaluation_interval: 60s
+      external_labels:
+        cluster: opengauss-cce
+    
+    scrape_configs:
+      - job_name: 'opengauss-cce-hk-x86-new-cluster'
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          - target_label: __address__
+            replacement: kubernetes.default.svc:443
+          - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
+            replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+            target_label: __metrics_path__
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - source_labels: [__meta_kubernetes_node_name]
+            action: replace
+            target_label: node
+          - source_labels: [__meta_kubernetes_node_label_node]
+            action: replace
+            target_label: node_name
+    remote_write:
+      - url: "http://k8s-exporter-service.monitor-agent.svc.cluster.local:9201/write"
