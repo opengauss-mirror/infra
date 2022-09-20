@@ -1,4 +1,22 @@
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-agent-service
+  namespace: monitor-agent
+  labels:
+    app: prometheus
+spec:
+  ports:
+    - name: web
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: prometheus
+  type: ClusterIP
+
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
