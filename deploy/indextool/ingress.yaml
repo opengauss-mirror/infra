@@ -18,3 +18,26 @@ spec:
             serviceName: indextoolservice
             servicePort: 8080
           path: /
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: doc-search-ingress
+  namespace: indextool
+spec:
+  tls:
+    - hosts:
+        - doc-search.opengauss.org
+      secretName: doc-search-tls
+  rules:
+    - host: doc-search.opengauss.org
+      http:
+        paths:
+        - backend:
+            serviceName: doc-search-service
+            servicePort: 80
+          path: /

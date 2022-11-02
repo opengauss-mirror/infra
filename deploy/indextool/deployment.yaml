@@ -41,3 +41,83 @@ spec:
       - name: configmap-volume
         configMap:
           name: indextoolconfigmap
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: doc-search
+  namespace: indextool
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: doc-search
+  template:
+    metadata:
+      labels:
+        app: doc-search
+    spec:
+      containers:
+      - name: doc-search
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/doc-search:3ec3f143b2cb567b5929d6e01a8147aa3befb8a3
+        resources:
+          requests:
+            cpu: 500m
+            memory: 500Mi
+          limits:
+            cpu: 1000m
+            memory: 3000Mi
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 5
+        env:
+        - name: eshost
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: host
+        - name: esusername
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: username
+        - name: espassword
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: password
+        - name: esport
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: port
+        - name: searchsystem
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: system
+        - name: depp
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: depp
+
