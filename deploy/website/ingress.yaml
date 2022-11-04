@@ -3,6 +3,12 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/server-snippet: |
+      rewrite ^/zh/docs/(.*)                              https://docs.opengauss.org/zh/docs/$1 redirect;
+      rewrite ^/zh/blogs/blogs.html$                      /zh/blogs/ redirect;
+      rewrite ^/zh/video.html$                            /zh/video/ redirect;
+      rewrite ^/zh/security-advisories.html$              /zh/security-advisories/ redirect;
+      rewrite ^/zh/cve.html$                              /zh/cve/ redirect;
   name: opengauss-website-ingress
   namespace: website
 spec:
@@ -25,6 +31,12 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/server-snippet: |
+      rewrite ^/zh/docs/(.*)                              https://docs.opengauss.org/zh/docs/$1 redirect;
+      rewrite ^/zh/blogs/blogs.html$                      /zh/blogs/ redirect;
+      rewrite ^/zh/video.html$                            /zh/video/ redirect;
+      rewrite ^/zh/security-advisories.html$              /zh/security-advisories/ redirect;
+      rewrite ^/zh/cve.html$                              /zh/cve/ redirect;
   name: opengauss-website-www-ingress
   namespace: website
 spec:
