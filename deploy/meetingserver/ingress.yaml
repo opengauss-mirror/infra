@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   name: opengauss-meeting-server-ingress
   namespace: meetingserver
@@ -25,6 +26,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   name: opengauss-meeting-server-www-ingress
   namespace: meetingserver

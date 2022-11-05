@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   name: odd-ingress
   namespace: opengauss-odd
 spec:

@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/server-snippet: |
       rewrite ^/zh/docs/(.*)                              https://docs.opengauss.org/zh/docs/$1 redirect;
       rewrite ^/zh/blogs/blogs.html                       /zh/blogs/ redirect;
@@ -15,7 +16,7 @@ spec:
   tls:
     - hosts:
         - opengauss.org
-      secretName: website-tls
+      secretName: website-opengauss-org-tls
   rules:
     - host: opengauss.org
       http:
@@ -31,6 +32,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/server-snippet: |
       rewrite ^/zh/docs/(.*)                              https://docs.opengauss.org/zh/docs/$1 redirect;
       rewrite ^/zh/blogs/blogs.html                       /zh/blogs/ redirect;

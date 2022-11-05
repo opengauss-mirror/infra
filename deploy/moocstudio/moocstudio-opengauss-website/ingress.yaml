@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   name: moocstudio-opengauss-frontend-ingress
   namespace: moocstudio-opengauss-website
 spec:

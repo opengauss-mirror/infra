@@ -2,7 +2,6 @@ resources:
 - namespace.yaml
 - deployment.yaml
 - service.yaml
-- secret.yaml
 - configmap.yaml
 - ingress.yaml
 - hpa.yaml
