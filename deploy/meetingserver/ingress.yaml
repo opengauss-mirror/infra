@@ -34,7 +34,7 @@ spec:
   tls:
     - hosts:
         - www.opengauss.org
-      secretName: meeting-server-tls
+      secretName: meeting-server-www-tls
   rules:
     - host: www.opengauss.org
       http:
