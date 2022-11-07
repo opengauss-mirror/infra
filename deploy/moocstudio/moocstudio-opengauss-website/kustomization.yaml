@@ -3,7 +3,6 @@ resources:
 - deployment.yaml
 - namespace.yaml
 - service.yaml
-- secret.yaml
 namespace: moocstudio-opengauss-website
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
