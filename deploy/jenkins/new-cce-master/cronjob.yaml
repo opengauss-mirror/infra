@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: bak-jenkins
-            image: swr.cn-north-4.myhuaweicloud.com/openeuler/bak-jenkins:0be18a22a74d58443833698a04a05e18a321f399
+            image: swr.cn-north-4.myhuaweicloud.com/openeuler/bak-jenkins:v1.8.0
             imagePullPolicy: IfNotPresent
             env:
             - name: secret
