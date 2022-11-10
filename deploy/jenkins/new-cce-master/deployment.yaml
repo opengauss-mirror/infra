@@ -41,7 +41,7 @@ spec:
       serviceAccountName: "opengauss-jenkins"
       initContainers:
       - name: "copy-default-config"
-        image: "jenkins/jenkins:2.289.2"
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/jenkins:lts20221101-2.3321
         imagePullPolicy: "Always"
         command: ["sh", "/var/jenkins_config/apply_config.sh"]
         env:
@@ -77,7 +77,7 @@ spec:
           name: plugin-dir
       containers:
       - name: jenkins
-        image: "jenkins/jenkins:2.289.2"
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/jenkins:lts20221101-2.3321
         imagePullPolicy: "Always"
         args: ["--argumentsRealm.passwd.$(ADMIN_USER)=$(ADMIN_PASSWORD)", "--argumentsRealm.roles.$(ADMIN_USER)=admin"]
         env:
