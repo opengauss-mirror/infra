@@ -14,4 +14,4 @@ images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-backend
   newTag: c018a5375b805e264b9cf67b8dc0b3998abc47aa
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-website
-  newTag: d3337f5f9f28aff6664adb6149672d687f8e83bd
+  newTag: aac25ae3a625eb0339d5118571906c1f60e211fd
