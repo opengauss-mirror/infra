@@ -8,8 +8,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: indextool
 images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/doc-search
+  newTag: 88ab267671ef35f9be10febbda0b526eea909009
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool
   newName: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool
   newTag: 58898ef560af569881a33d632c2de19ee8df92c7
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/doc-search
-  newTag: 3ec3f143b2cb567b5929d6e01a8147aa3befb8a3
