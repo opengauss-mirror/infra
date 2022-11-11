@@ -9,7 +9,7 @@ kind: Kustomization
 namespace: indextool
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/doc-search
-  newTag: 99d5c4dc577b59393b5625ff078d5675c299f52f
+  newTag: b5106c94dab999d3b4070ae4b06825cc389d2cf4
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool
   newName: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/index-tool
   newTag: 58898ef560af569881a33d632c2de19ee8df92c7
