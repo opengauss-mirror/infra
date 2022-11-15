@@ -12,6 +12,7 @@ metadata:
       rewrite ^/zh/cve.html$                              /zh/cve/ redirect;
       rewrite ^/zh/summit.html                            /zh/summit/summit2022/  permanent;
       rewrite ^/zh/summit2021.html                        /zh/summit/summit2021/  permanent;
+      rewrite ^/zh/summit/$                               /zh/summit/summit2022/  permanent;
   name: opengauss-website-ingress
   namespace: website
 spec:
@@ -41,6 +42,9 @@ metadata:
       rewrite ^/zh/video.html$                            /zh/video/ redirect;
       rewrite ^/zh/security-advisories.html$              /zh/security-advisories/ redirect;
       rewrite ^/zh/cve.html$                              /zh/cve/ redirect;
+      rewrite ^/zh/summit.html                            /zh/summit/summit2022/  permanent;
+      rewrite ^/zh/summit2021.html                        /zh/summit/summit2021/  permanent;
+      rewrite ^/zh/summit/$                               /zh/summit/summit2022/  permanent;
   name: opengauss-website-www-ingress
   namespace: website
 spec:
