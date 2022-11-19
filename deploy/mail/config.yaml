@@ -1219,6 +1219,7 @@ data:
     tls_on_connect_ports = 465
     MAIN_TLS_ADVERTISE_HOSTS=*
     IGNORE_SMTP_LINE_LENGTH_LIMIT=true
+    MAIN_HARDCODE_PRIMARY_HOSTNAME = opengauss.org
 
   55_mm3_transport: |
     # Place this file at

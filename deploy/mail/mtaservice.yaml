@@ -54,7 +54,7 @@ spec:
       containers:
       - name: mailman-exim4
           #NOTE: This image is directly built from our dockerfile located in exim4 folder
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:f3eb7bf91779f809b519e7ece529f6ad8b0560091660290056
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim4-build:20985c29f3070ef5875b0d49bbb17672a73aced41668766284
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /etc/exim4/conf.d/main/25_mm3_macros
