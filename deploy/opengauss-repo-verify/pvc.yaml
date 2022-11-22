@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: opengauss-data-volume
+  namespace: opengauss-repo-verify
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: csi-disk-sas
+  resources:
+    requests:
+      storage: 10Gi

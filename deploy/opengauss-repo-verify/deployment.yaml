@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-verification-deployment
+  namespace: opengauss-repo-verify
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: post-verification
+  template:
+    metadata:
+      labels:
+        app: post-verification
+    spec:
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      nodeSelector:
+        post-verify: "true"
+      containers:
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-repo-verify:v1.0.20221122095353
+        imagePullPolicy: Always
+        name: post-verification
+        env:
+        - name: ak
+          valueFrom:
+            secretKeyRef:
+              key: ak
+              name: post-verification-secrets
+        - name: sk
+          valueFrom:
+            secretKeyRef:
+              key: sk
+              name: post-verification-secrets
+        - name: endPoint
+          valueFrom:
+            secretKeyRef:
+              key: endpoint
+              name: post-verification-secrets
+        - name: bucketName
+          valueFrom:
+            secretKeyRef:
+              key: bucketname
+              name: post-verification-secrets
+        livenessProbe:
+          httpGet:
+            path: /publish/heartbeat
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /publish/heartbeat
+            port: 8080
+          initialDelaySeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+          limits:
+            cpu: 1000m
+            memory: 3000Mi
+        volumeMounts:
+        - mountPath: /var/log
+          name: log-data-volume
+      volumes:
+      - name: log-data-volume
+        persistentVolumeClaim:
+          claimName: opengauss-data-volume
