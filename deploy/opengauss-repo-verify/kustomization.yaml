@@ -1,0 +1,12 @@
+resources:
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- secret.yaml
+- pvc.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: opengauss-repo-verify
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-repo-verify
+  newTag: v1.0.20221122095353
