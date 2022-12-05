@@ -39,6 +39,12 @@ spec:
         - mountPath: /usr/lib/python3.6/email/quoprimime.py
           subPath: quoprimime.py
           name: mailman-core-config-volume
+        - mountPath: /usr/lib/python3.6/site-packages/mailman/mta/base.py
+          name: mailman-core-base-py
+          subPath: base.py
+        - mountPath: /opt/core-debug/docker-entrypoint.sh
+          subPath: docker-entrypoint.sh
+          name: entry-point-config
         env:
         - name: DATABASE_TYPE
           value: postgres
@@ -102,12 +108,20 @@ spec:
         - |
           export DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_IP}:${POSTGRES_PORT}/mailmandb
           sed -i "s/charset: us-ascii/charset: utf-8/g" /usr/lib/python3.6/site-packages/mailman/config/schema.cfg;
+          cp /opt/core-debug/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh;
+          chmod +x /usr/local/bin/docker-entrypoint.sh;
           exec docker-entrypoint.sh master --force
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
       volumes:
       - name: mailman-core-config-volume
         configMap:
           name: mailman-core-configmap
+      - name: mailman-core-base-py
+        configMap:
+          name: mailman-core-base-py-configmap
+      - name: entry-point-config
+        configMap:
+          name: core-entrypoint-configmap
       - name: mailman-core-volume
         persistentVolumeClaim:
           claimName: config-vol
