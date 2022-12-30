@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/server-snippet: |
+      rewrite ^/zh/agreement_ch.html$       /agreement_ch.html redirect;
+      rewrite ^/zh/2022/agreement_ch.html$  /agreement_ch.html redirect;
+      rewrite ^/en                          /zh redirect;
+  name: opengauss-summary-ingress
+  namespace: opengauss-summary
+spec:
+  rules:
+  - host: summary.opengauss.org
+    http:
+      paths:
+      - backend:
+          serviceName: opengauss-oauth2-proxy
+          servicePort: 4180
+        path: /
+  tls:
+  - hosts:
+    - summary.opengauss.org
+    secretName: opengauss-summary-tls
