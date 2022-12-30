@@ -13,6 +13,7 @@ metadata:
       rewrite ^/zh/summit.html                            /zh/summit/summit2022/  permanent;
       rewrite ^/zh/summit2021.html                        /zh/summit/summit2021/  permanent;
       rewrite ^/zh/summit/$                               /zh/summit/summit2022/  permanent;
+      rewrite ^/zh/privacyPolicy.html$                    /zh/privacyPolicy/      permanent;
   name: opengauss-website-ingress
   namespace: website
 spec:
