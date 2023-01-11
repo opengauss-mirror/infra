@@ -10,6 +10,6 @@ kind: Kustomization
 namespace: monitor-agent
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/monitor/k8s_exporter
-  newTag: v1.0.7
+  newTag: v1.0.8
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/monitor/prometheus
   newTag: v2.38.0
