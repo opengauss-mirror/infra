@@ -39,6 +39,12 @@ spec:
       - name: k8s-exporter
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/monitor/k8s_exporter:v1.0.2
         imagePullPolicy: IfNotPresent
+        env:
+        - name: K8S_VERSION
+          valueFrom:
+            secretKeyRef:
+              key: k8s_version
+              name: k8s-exporter-secrets
         ports:
         - containerPort: 9201
           protocol: TCP
