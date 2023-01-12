@@ -22,59 +22,22 @@ spec:
     spec:
       containers:
       - name: mailman-core
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/mail-core:v1.0.2020031900
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-core-new-build:291336826605a3042b214075bb9037a52f97058c1673253323
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
         - mountPath: /opt/mailman/
           name: mailman-core-volume
-        - mountPath: /usr/lib/python3.6/site-packages/mailman/runners/command.py
-          name: mailman-core-config-volume
-          subPath: command.py
-        - mountPath: /usr/lib/python3.6/email/base64mime.py
-          subPath: base64mime.py
-          name: mailman-core-config-volume
-        - mountPath: /usr/lib/python3.6/site-packages/mailman/app/subscriptions.py
-          subPath: subscriptions.py
-          name: mailman-core-config-volume
-        - mountPath: /usr/lib/python3.6/email/quoprimime.py
-          subPath: quoprimime.py
-          name: mailman-core-config-volume
-        - mountPath: /usr/lib/python3.6/site-packages/mailman/mta/base.py
-          name: mailman-core-base-py
-          subPath: base.py
-        - mountPath: /opt/core-debug/docker-entrypoint.sh
-          subPath: docker-entrypoint.sh
-          name: entry-point-config
         env:
         - name: DATABASE_TYPE
-          value: postgres
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: database_type
         - name: DATABASE_CLASS
-          value: mailman.database.postgresql.PostgreSQLDatabase
-        - name: HYPERKITTY_API_KEY
           valueFrom:
             secretKeyRef:
               name: mailman-secrets
-              key: hyperkitty_api_key
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_password
-        - name: POSTGRES_IP
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_ip
-        - name: POSTGRES_PORT
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_port
+              key: database_class
         - name: MAILMAN_REST_USER
           valueFrom:
             secretKeyRef:
@@ -85,8 +48,12 @@ spec:
             secretKeyRef:
               name: mailman-secrets
               key: mailman_core_password
+        - name: HYPERKITTY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: hyperkitty_api_key
         - name: HYPERKITTY_URL
-            # NOTE: Please update the HYPERKITTY_URL
           value: http://mailman-web-service.mail.svc.cluster.local:8000/hyperkitty
         - name: SMTP_HOST
           value: mailman-exim4-service.mail.svc.cluster.local
@@ -100,28 +67,32 @@ spec:
             secretKeyRef:
               name: mailman-secrets
               key: exim4_credential_password
-          # Sed command is used here to force change default charsets to UTF-8
-          # related issue: https://gitlab.com/mailman/postorius/issues/325
-        command:
-        - /bin/sh
-        - -c
-        - |
-          export DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_IP}:${POSTGRES_PORT}/mailmandb
-          sed -i "s/charset: us-ascii/charset: utf-8/g" /usr/lib/python3.6/site-packages/mailman/config/schema.cfg;
-          cp /opt/core-debug/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh;
-          chmod +x /usr/local/bin/docker-entrypoint.sh;
-          exec docker-entrypoint.sh master --force
-      #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
+        - name: MM_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailcore_mm_hostname
+        - name: MAILMAN_REST_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailcore_rest_port
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailcore_database_url
+        - name: MTA
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailcore_mta
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailcore_smtp_port
       volumes:
-      - name: mailman-core-config-volume
-        configMap:
-          name: mailman-core-configmap
-      - name: mailman-core-base-py
-        configMap:
-          name: mailman-core-base-py-configmap
-      - name: entry-point-config
-        configMap:
-          name: core-entrypoint-configmap
       - name: mailman-core-volume
         persistentVolumeClaim:
           claimName: config-vol

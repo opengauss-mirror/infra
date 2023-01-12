@@ -18,6 +18,20 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: exim-log-data
+  namespace: mail
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: csi-disk-sas
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: mailweb-static-vol
   namespace: mail
 spec:

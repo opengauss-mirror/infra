@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/server-snippet: |
+      rewrite ^/$ https://mailweb.opengauss.org/postorius/lists/;
+      location ^~ /admin {
+        deny all;
+      }
+    nginx.ingress.kubernetes.io/custom-http-errors: "500"
+  name: mailweb-ingress
+spec:
+  tls:
+    - hosts:
+        - mailweb.opengauss.org
+      secretName: opengauss-mailweb-tls
+  rules:
+    - host: mailweb.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: mailman-web-service
+              servicePort: 80
+            path: /
