@@ -20,10 +20,6 @@ spec:
     name: website-port-http
     targetPort: 80
     protocol: TCP
-  - port: 443
-    name: website-port-https
-    targetPort: 443
-    protocol: TCP
   selector:
     component: mail-web-service
   type: LoadBalancer
@@ -56,54 +52,34 @@ spec:
       hostname: mailman-web
       containers:
       - name: mailman-web
-          # We modified the mail-web image to add static folder.
-        image: swr.ap-southeast-1.myhuaweicloud.com/opengauss/mail-web:v1.0.2020042802
-        imagePullPolicy: "IfNotPresent"
-        volumeMounts:
-        - mountPath: /opt/mailman-web-config
-          name: mailman-web-configmap-volume
-        - mountPath: /etc/nginx/ssl
-          name: mailman-secret-volume
-        - mountPath: /opt/mailman-web-data
-          name: mailman-web-volume
-        - mountPath: /usr/lib/python3.6/site-packages/postorius/templates/postorius/lists/summary.html
-          name: mailman-webpage-hack-volume
-          subPath: summary.html
-        - mountPath: /usr/lib/python3.6/site-packages/postorius/forms/list_forms.py
-          name: mailman-webpage-hack-volume
-          subPath: list_forms.py
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-web-new-build:291336826605a3042b214075bb9037a52f97058c1673252910
+        imagePullPolicy: "Always"
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          tcpSocket:
+            port: 8000
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          tcpSocket:
+            port: 8000
+          timeoutSeconds: 1
         env:
         - name: PRIVACY_LINK
-          value: https://opengauss.org/en/privacyPolicy.html
+          value: https://opengauss.org/en/privacyPolicy/
         - name: CONDUCT_LINK
           value: https://gitee.com/opengauss/community/blob/master/code-of-conduct.en.md
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_password
-        - name: POSTGRES_IP
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_ip
-        - name: POSTGRES_PORT
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: postgres_port
         - name: DATABASE_TYPE
-          value: postgres
-        - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
               name: mailman-secrets
-              key: postgres_url
+              key: database_type
         - name: HYPERKITTY_API_KEY
           valueFrom:
             secretKeyRef:
@@ -114,15 +90,22 @@ spec:
             secretKeyRef:
               name: mailman-secrets
               key: secret_key
-        - name: UWSGI_STATIC_MAP
-            # NOTE: This static folder has been added into docker image located at /opt/mailman-web/static
-          value: /static=/opt/mailman-web-data/static
         - name: MAILMAN_REST_URL
           value: http://mailman-core-0.mail-suit-service.mail.svc.cluster.local:8001
         - name: MAILMAN_HOST_IP
           value: mailman-core-0.mail-suit-service.mail.svc.cluster.local
         - name: MAILMAN_ADMIN_USER
           value: opengauss
+        - name: MAILMAN_REST_USER
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailman_core_user
+        - name: MAILMAN_REST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailman_core_password
         - name: MAILMAN_ADMIN_EMAIL
           valueFrom:
             secretKeyRef:
@@ -138,52 +121,59 @@ spec:
             secretKeyRef:
               name: mailman-secrets
               key: exim4_credential_password
-        - name: MAILMAN_REST_USER
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: mailman_core_user
-        - name: MAILMAN_REST_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mailman-secrets
-              key: mailman_core_password
             #NOTE: this is the domain name that mailman web will serve
         - name: SERVE_FROM_DOMAIN
           value: mailweb.opengauss.org
-          #NOTE: Command is overwritten for the purpose of copy config file into dest folder
-        command:
-        - /bin/sh
-        - -c
-        - |
-          cp /opt/mailman-web-config/settings_local.py /opt/mailman-web-data;
-          cp /opt/mailman-web-config/base.html /usr/lib/python3.6/site-packages/postorius/templates/postorius;
-          #disable signup page for mailman web hyperkitty
-          cp /opt/mailman-web-config/base2.html /usr/lib/python3.6/site-packages/hyperkitty/templates/hyperkitty/base.html
-          cp /opt/mailman-web-config/email.py /usr/lib/python3.6/site-packages/hyperkitty/models/email.py
-          exec docker-entrypoint.sh uwsgi --ini /opt/mailman-web/uwsgi.ini;
-      #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
-      - image: swr.ap-southeast-1.myhuaweicloud.com/opensourceway/nginx:1.20.0
+        - name: SMTP_HOST
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_smtp_host
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_smtp_port
+        - name: DJANGO_ALLOWED_HOSTS
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_django_allowed_hosts
+        - name: POSTORIUS_TEMPLATE_BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_postorius_template_base_url
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_database_url
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 2000Mi
+          limits:
+            cpu: 2000m
+            memory: 4000Mi
+        volumeMounts:
+        - mountPath: /opt/mailman-web-static
+          name: mailman-web-volume
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/nginx:latest
         imagePullPolicy: IfNotPresent
         name: nginx-web
         volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: mailman-nginx-configmap-volume
+          subPath: nginx.conf
         - mountPath: /etc/nginx/conf.d/default.conf
-          name: mailman-web-configmap-volume
+          name: mailman-nginx-configmap-volume
           subPath: default.conf
-        - mountPath: /opt/mailman-web-data
+        - mountPath: /opt/mailman-web-static
           name: mailman-web-volume
-        - mountPath: /etc/nginx/ssl
-          name: mailman-secret-volume
       volumes:
       - name: mailman-web-volume
-        persistentVolumeClaim:
-          claimName: pvc-mailweb-static-vol
-      - name: mailman-web-configmap-volume
+        emptyDir: {}
+      - name: mailman-nginx-configmap-volume
         configMap:
-          name: mailman-web-configmap
-      - name: mailman-secret-volume
-        secret:
-          secretName: mailman-cert-secrets
-      - name: mailman-webpage-hack-volume
-        configMap:
-          name: mailman-webpage-hack
+          name: mailman-nginx-configmap
