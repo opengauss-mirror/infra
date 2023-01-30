@@ -4,6 +4,7 @@ resources:
 - backend-deployment.yaml
 - service.yaml
 - ingress.yaml
+- secret.yaml
 commonAnnotations:
   email: 747802914@qq.com
   owner: liuyang
