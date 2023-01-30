@@ -28,3 +28,14 @@ spec:
           limits:
             cpu: 1000m
             memory: 1000Mi
+        env:
+        - name: HOST_USER
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-reproducible-secret
+              key: host_user
+        - name: HOST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-reproducible-secret
+              key: host_password
