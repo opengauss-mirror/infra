@@ -52,7 +52,7 @@ spec:
       hostname: mailman-web
       containers:
       - name: mailman-web
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-web-new-build:291336826605a3042b214075bb9037a52f97058c1673252910
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-web-new-build:84ad2d1f1301fa782d9a3de0310fcc6a1ef245701675127684
         imagePullPolicy: "Always"
         livenessProbe:
           failureThreshold: 3
@@ -123,7 +123,15 @@ spec:
               key: exim4_credential_password
             #NOTE: this is the domain name that mailman web will serve
         - name: SERVE_FROM_DOMAIN
-          value: mailweb.opengauss.org
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_server_from_domain
+        - name: SERVE_WEB_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_server_web_domain
         - name: SMTP_HOST
           valueFrom:
             secretKeyRef:
