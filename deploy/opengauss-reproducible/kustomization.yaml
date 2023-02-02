@@ -13,6 +13,6 @@ kind: Kustomization
 namespace: opengauss-reproducible
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-backend
-  newTag: 74a6fe88adf60e5804b73aa1e47497c3554a516a
+  newTag: b15f4376753c3b1700cf2e6ea8e20dd975bb2d76
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-reproducible-website
   newTag: 5bfd91be39722c32acf246173ec81c0df310386f
