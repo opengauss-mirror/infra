@@ -9,6 +9,7 @@ resources:
 - storage.yaml
 - suiteservice.yaml
 - webservice.yaml
+- scan_subscribe_pending.yaml
 namespace: mail
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

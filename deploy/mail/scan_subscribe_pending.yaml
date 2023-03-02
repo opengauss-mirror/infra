@@ -1,0 +1,41 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: scan-subscribe-pending-cronjob
+  namespace: mail
+spec:
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 180
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: scan-subscribe-pending
+            image: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/clean-pending-subscription:40a25d874578ed932f4152680f2e12aa871690971677647750
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 1000Mi
+              requests:
+                cpu: 500m
+                memory: 500Mi
+            env:
+            - name: mailman_url
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: mailman-api-url
+            - name: mailman_username
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: mailman_core_user
+            - name: mailman_password
+              valueFrom:
+                secretKeyRef:
+                  name: mailman-secrets
+                  key: mailman_core_password
