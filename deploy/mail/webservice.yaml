@@ -157,6 +157,21 @@ spec:
             secretKeyRef:
               name: mailman-secrets
               key: mailweb_database_url
+        - name: redis_ip
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_redis_ip
+        - name: redis_port
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_redis_port
+        - name: redis_password
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: mailweb_redis_password
         resources:
           requests:
             cpu: 1000m
