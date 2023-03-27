@@ -1,0 +1,18 @@
+resources:
+- deployment.yaml
+- ingress.yaml
+- namespace.yaml
+- oauth-proxy.yaml
+- role.yaml
+- secrets.yaml
+- pvc.yaml
+- service.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: opengauss-cn4-cce-x86
+  kubernetes.ops.email: 747802914@qq.com
+  kubernetes.ops.os.base: debian
+  kubernetes.ops.owner: liuyang
+  kubernetes.ops.region: beijing
+namespace: jenkins
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
