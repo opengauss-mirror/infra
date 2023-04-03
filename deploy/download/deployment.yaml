@@ -22,10 +22,10 @@ spec:
         volumeMounts:
         - mountPath: /repo/opengauss
           name: data-volume
-        - mountPath: /etc/nginx/conf/nginx.conf
+        - mountPath: /etc/nginx/nginx.conf
           name: repo-configmap
           subPath: nginx.conf
-        - mountPath: /etc/nginx/conf/conf.d/default.conf
+        - mountPath: /etc/nginx/conf/default.conf
           name: repo-configmap
           subPath: default.conf
         resources:
