@@ -9,12 +9,11 @@ resources:
 commonLabels:
   app: opengauss-meetingserver
 commonAnnotations:
+  email: 469227928@qq.com
   owner: liuqi
-  email: "469227928@qq.com"
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: meetingserver
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
-  newName: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
-  newTag: ff9542cc4fb753303485be21f1a09509524f8d6d
+  newTag: 8d14fac20935273d5807dee1409e9aeff4d0805e
