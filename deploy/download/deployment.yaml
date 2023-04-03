@@ -25,7 +25,7 @@ spec:
         - mountPath: /etc/nginx/nginx.conf
           name: repo-configmap
           subPath: nginx.conf
-        - mountPath: /etc/nginx/conf/default.conf
+        - mountPath: /etc/nginx/conf.d/default.conf
           name: repo-configmap
           subPath: default.conf
         resources:
