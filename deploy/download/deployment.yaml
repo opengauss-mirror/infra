@@ -1,0 +1,69 @@
+# Deployment for repo service
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: repo-server
+  namespace: download
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: repo
+  template:
+    metadata:
+      labels:
+        app: repo
+    spec:
+      containers:
+      - name: repo-nginx
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/nginx-fancyindex:v1.0.1
+        volumeMounts:
+        - mountPath: /repo/opengauss
+          name: data-volume
+        - mountPath: /etc/nginx/conf/nginx.conf
+          name: repo-configmap
+          subPath: nginx.conf
+        - mountPath: /etc/nginx/conf/conf.d/default.conf
+          name: repo-configmap
+          subPath: default.conf
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+          limits:
+            cpu: 2000m
+            memory: 2000Mi
+        env:
+        - name: TZ
+          value: Asia/Shanghai
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 80
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 80
+          timeoutSeconds: 5
+        command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /repo/opengauss
+            exec nginx -g "daemon off;"
+      volumes:
+      - name: repo-configmap
+        configMap:
+          name: repo-configmap
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: opengauss-data-volume

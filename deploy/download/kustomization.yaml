@@ -1,0 +1,16 @@
+resources:
+- configmap.yaml
+- pvc.yaml
+- namespace.yaml
+- deployment.yaml
+- ingress.yaml
+- service.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: opengauss-hk-cluster
+  kubernetes.ops.email: 747802914@qq.com
+  kubernetes.ops.os.base: openeuler
+  kubernetes.ops.owner: liuyang
+  kubernetes.ops.region: hk
+namespace: download
+
+
