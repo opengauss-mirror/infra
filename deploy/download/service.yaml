@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: repo-service
+  namespace: download
+spec:
+  ports:
+  - name: http-port
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: repo
+  type: ClusterIP

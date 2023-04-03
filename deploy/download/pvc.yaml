@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    csi.storage.k8s.io/fstype: obsfs
+    everest.io/obs-volume-type: STANDARD
+    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner
+  name: opengauss-data-volume
+  namespace: download
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: csi-obs
+  volumeMode: Filesystem
+  volumeName: pv-obs-opengauss-test-user-access

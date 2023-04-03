@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: repo-ingress
+  namespace: download
+spec:
+  tls:
+    - hosts:
+        - download.opengauss.org
+      secretName: download-tls
+  rules:
+    - host: download.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: repo-service
+              servicePort: 80
+            path: /
