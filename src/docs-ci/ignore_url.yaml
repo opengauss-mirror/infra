@@ -1,0 +1,128 @@
+- path: docs/content/zh/docs/AIFeatureGuide/service子命令.md
+  url:
+    - https://127.0.0.1:9187
+- path: docs/content/zh/docs/DataMigrationGuide/数据校验.md
+  url:
+    - http://localhost:8081
+    - http://127.0.0.1:9000
+    - http://127.0.0.1:9001
+    - http://127.0.0.1:9002
+- path: docs/content/docs-lite/zh/docs/DatabaseReference/安全配置.md
+  url:
+    - https://127.0.0.1
+- path: docs/content/zh/docs/SQLReference/解析器.md
+  url:
+    - http://example.com/stuff/index.html
+- path: docs/content/docs-lite/en/docs/DataBaseReference/security-configuration.md
+  url:
+    - https://127.0.0.1
+- path: docs/content/docs-lite/zh/docs/SQLReference/解析器.md
+  url:
+    - http://example.com/stuff/index.html
+- path: docs/content/zh/docs/ToolandCommandReference/kdestroy.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/zh/docs/ToolandCommandReference/kadmin-local.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/zh/docs/ToolandCommandReference/klist.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/zh/docs/ToolandCommandReference/kdb5_util.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/zh/docs/ToolandCommandReference/krb5kdc.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/zh/docs/ToolandCommandReference/kinit.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/docs-lite/en/docs/SQLReference/parser.md
+  url:
+    - http://example.com/stuff/index.html
+- path: docs/content/zh/docs/ToolandCommandReference/特性介绍.md
+  url:
+    - http://ip:port/CMRestAPI/keyword
+    - http://ip:port/CMRestAPI/ClusterStatus
+    - http://ip:port/CMRestAPI/MasterInfo
+    - http://ip:port/CMRestAPI
+    - http://ip:port/CMRestAPI/RecvAddr
+    - http://ip:port/CMRestAPI/NodeStatus
+- path: docs/content/docs-lite/en/docs/AboutopenGauss/preparations.md
+  url:
+    - https://opengauss.obs.cn-south-1.myhuaweicloud.com/3.0.0/openGauss-third
+- path: docs/content/zh/docs/AIFeatureGuide/DBMind部署.md
+  url:
+    - http://localhost:9187/metrics
+- path: docs/content/en/docs/AIFeatureGuide/service.md
+  url:
+    - https://127.0.0.1:9187
+- path: docs/content/en/docs/SQLReference/parser.md
+  url:
+    - http://example.com/stuff/index.html
+- path: docs/content/zh/docs/PerformanceTuningGuide/测试MOT-TPCC性能.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/zh/docs/DatabaseAdministrationGuide/MOT样例TPC-C基准.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/en/docs/ToolandCommandReference/kdestroy.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/en/docs/ToolandCommandReference/krb5kdc.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/en/docs/ToolandCommandReference/kadmin-local.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/en/docs/ToolandCommandReference/klist.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/en/docs/ToolandCommandReference/kinit.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/en/docs/ToolandCommandReference/kdb5_util.md
+  url:
+    - https://web.mit.edu/kerberos/krb5-1.17/doc/admin/admin
+- path: docs/content/en/docs/DataMigrationGuide/data-check.md
+  url:
+    - https://opengauss.obs.cn-south-1.myhuaweicloud.com/latest/tools/openGauss-datachecker-performance-5.0.0.tar.gz
+- path: docs/content/en/docs/DataMigrationGuide/full-migration.md
+  url:
+    - https://opengauss.obs.cn-south-1.myhuaweicloud.com/latest/chameleon/chameleon-1.0.0-py3-none-any.whl
+- path: docs/content/docs-lite/zh/docs/DatabaseAdministrationGuide/MOT样例TPC-C基准.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/docs-lite/zh/docs/PerformanceTuningGuide/测试MOT-TPCC性能.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/docs-lite/en/docs/PerformanceTuningGuide/testing-mot-tpcc-performance.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/en/docs/PerformanceTuningGuide/testing-mot-tpc-c-performance.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/en/docs/DatabaseAdministrationGuide/mot-sample-tpc-c-benchmark.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/docs-lite/en/docs/DatabaseAdministrationGuide/mot-sample-tpc-c-benchmark.md
+  url:
+    - https://osdn.net/frs/g
+- path: docs/content/zh/docs/ExtensionReference/PostGIS安装.md
+  url:
+    - https://gitee.com/opengauss/openGauss-third
+- path: docs/content/en/docs/ExtensionReference/installing-postgis.md
+  url:
+    - https://gitee.com/opengauss/openGauss-third
+- path: docs/content/docs-lite/zh/docs/ReleaseNotes/源代码.md
+  url:
+    - https://gitee.com/opengauss/openGauss-third
+- path: docs/content/docs-lite/en/docs/Releasenotes/source-code.md
+  url:
+    - https://gitee.com/opengauss/openGauss-third
+- path: docs/content/zh/docs/ReleaseNotes/源代码.md
+  url:
+    - https://gitee.com/opengauss/openGauss-third
+- path: docs/content/en/docs/ReleaseNotes/source-code.md
+  url:
+    - https://gitee.com/opengauss/openGauss-third
