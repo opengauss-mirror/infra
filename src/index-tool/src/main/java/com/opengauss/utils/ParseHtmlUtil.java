@@ -6,7 +6,6 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.text.TextContentRenderer;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 import org.pegdown.PegDownProcessor;
 
 
