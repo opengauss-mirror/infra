@@ -32,6 +32,7 @@ data:
     DKIM_FILE = /etc/exim/dkim/opengauss.key
     DKIM_PRIVATE_KEY=${if exists{DKIM_FILE}{DKIM_FILE}{0}}
     MAIN_LOG_SELECTOR = +subject +deliver_time +received_sender +return_path_on_delivery +sender_on_delivery +unknown_in_list +smtp_protocol_error +smtp_syntax_error +tls_certificate_verified +tls_peerdn -host_lookup_failed
+    CHECK_RCPT_SPF = yes
     MAIN_TLS_ENABLE = yes
     MAIN_TLS_CERTIFICATE = ${if exists{/etc/exim/ssl_pool/${tls_sni}.crt}{/etc/exim/ssl_pool/${tls_sni}.crt}{/etc/exim/ssl_pool/opengauss.org.crt}}
     MAIN_TLS_PRIVATEKEY = ${if exists{/etc/exim/ssl_pool/${tls_sni}.key}{/etc/exim/ssl_pool//${tls_sni}.key}{/etc/exim/ssl_pool/opengauss.org.key}}
@@ -396,38 +397,41 @@ data:
       .endif
 
       .ifdef CHECK_RCPT_SPF
-      deny
-        message = [SPF] $sender_host_address is not allowed to send mail from \
-                  ${if def:sender_address_domain {$sender_address_domain}{$sender_helo_name}}.
-        log_message = SPF check failed.
-        !acl = acl_local_deny_exceptions
-        condition = ${run{/usr/bin/spfquery.mail-spf-perl --ip \
-                      ${quote:$sender_host_address} --identity \
+      deny spf = fail : softfail
+          message = SPF validation failed: \
+                  $sender_host_address is not allowed to send mail from \
+                  ${if def:sender_address_domain \
+                      {$sender_address_domain}{$sender_helo_name}}
+          log_message = SPF validation failed\
+                  ${if eq{$spf_result}{softfail} { (softfail)}{}}: \
+                  $sender_host_address is not allowed to send mail from \
+                  ${if def:sender_address_domain \
+                      {$sender_address_domain}{$sender_helo_name}}
+      deny spf = permerror
+              message = SPF validation failed: \
+                      syntax error in SPF record(s) for \
                       ${if def:sender_address_domain \
-                          {--scope mfrom  --identity ${quote:$sender_address}}\
-                          {--scope helo --identity ${quote:$sender_helo_name}}}}\
-                      {no}{${if eq {$runrc}{1}{yes}{no}}}}
-
-      defer
-        message = Temporary DNS error while checking SPF record.  Try again later.
-        !acl = acl_local_deny_exceptions
-        condition = ${if eq {$runrc}{5}{yes}{no}}
-
-      warn
-        condition = ${if <={$runrc}{6}{yes}{no}}
-        add_header = Received-SPF: ${if eq {$runrc}{0}{pass}\
-                                    {${if eq {$runrc}{2}{softfail}\
-                                    {${if eq {$runrc}{3}{neutral}\
-              {${if eq {$runrc}{4}{permerror}\
-              {${if eq {$runrc}{6}{none}{error}}}}}}}}}\
-            } client-ip=$sender_host_address; \
-            ${if def:sender_address_domain \
-              {envelope-from=${sender_address}; }{}}\
-            helo=$sender_helo_name
-
-      warn
-        log_message = Unexpected error in SPF check.
-        condition = ${if >{$runrc}{6}{yes}{no}}
+                          {$sender_address_domain}{$sender_helo_name}}
+              log_message = SPF validation failed (permerror): \
+                      syntax error in SPF record(s) for \
+                      ${if def:sender_address_domain \
+                          {$sender_address_domain}{$sender_helo_name}}
+      defer spf = temperror
+              message = temporary error during SPF validation; \
+                      please try again later
+              log_message = SPF validation failed temporary; deferred
+      # Log SPF none/neutral result
+      warn spf = none : neutral
+              log_message = SPF validation none/neutral
+      # Use the lack of reverse DNS to trigger greylisting. Some people
+      # even reject for it but that would be a little excessive.
+      warn condition = ${if eq{$sender_host_name}{} {1}}
+           set acl_m_greylistreasons = Host $sender_host_address \
+               lacks reverse DNS\n$acl_m_greylistreasons
+      accept
+              # Add an SPF-Received header to the message
+              add_header = :at_start: $spf_received
+              logwrite = SPF validation passed
       .endif
 
       .ifdef CHECK_RCPT_IP_DNSBLS
