@@ -1,0 +1,52 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: website
+  namespace: opengauss-easyeditor
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: website
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/easyeditor/opengauss-website:v1.0.20230519152204
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 80
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 80
+          timeoutSeconds: 5
+        
+      
+
