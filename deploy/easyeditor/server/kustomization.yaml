@@ -1,0 +1,14 @@
+resources:
+- deployment.yaml
+- service.yaml
+- secret.yaml
+- ingress.yaml
+commonAnnotations:
+  kubernetes.ops.cluster: opengauss-hk-cluster
+  kubernetes.ops.email: jun.zhongjun2@gmail.com
+  kubernetes.ops.os.base: ubuntu
+  kubernetes.ops.owner: zhongjun
+  kubernetes.ops.region: hk
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: opengauss-easyeditor
