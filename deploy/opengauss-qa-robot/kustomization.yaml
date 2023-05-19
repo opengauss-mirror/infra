@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-hk-cluster
-  kubernetes.ops.email: ''
+  kubernetes.ops.email: ""
   kubernetes.ops.os.base: debian
   kubernetes.ops.owner: muyuying
   kubernetes.ops.region: hk
@@ -12,3 +12,6 @@ resources:
 - website-ingress.yaml
 - website-service.yaml
 - website-deployment.yaml
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-qa-robot
+  newTag: gauss-13da83
