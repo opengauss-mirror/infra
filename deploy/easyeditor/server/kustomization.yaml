@@ -12,3 +12,6 @@ commonAnnotations:
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: opengauss-easyeditor
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/easyeditor/opengauss-server
+  newTag: v1.0.20230522110112
