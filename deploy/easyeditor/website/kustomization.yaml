@@ -13,4 +13,4 @@ kind: Kustomization
 namespace: opengauss-easyeditor
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/easyeditor/opengauss-website
-  newTag: v1.0.20230522163617
+  newTag: v1.0.20230522164521
