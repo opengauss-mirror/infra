@@ -120,4 +120,24 @@ spec:
             secretKeyRef:
               name: doc-search-secrets
               key: depp
+        - name: teshost
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: teshost
+        - name: tesusername
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: tesusername
+        - name: tespassword
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: tespassword
+        - name: tesport
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: tesport
 
