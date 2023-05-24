@@ -10,7 +10,7 @@ metadata:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.websiteinfod: semver:~1.0
 spec:
-  replicas: 2
+  replicas: 4
   strategy:
     rollingUpdate:
       maxUnavailable: 1
