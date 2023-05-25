@@ -14,4 +14,4 @@ resources:
 - website-deployment.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-qa-robot
-  newTag: gauss-bb4ab5
+  newTag: gauss-b61165
