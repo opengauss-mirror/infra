@@ -34,7 +34,7 @@ spec:
           # for webhook to be triggered
           - --skip-auth-regex=^/gitee-project/
           - --insecure-oidc-allow-unverified-email=true
-          - --redirect-url=https://jenkins2.opengauss.org/oauth2/callback
+          - --redirect-url=https://jenkins.opengauss.test.osinfra.cn/oauth2/callback
           - --oidc-issuer-url=https://opengauss-jenkins2.authing.cn/oidc
           - --session-cookie-minimal=false
           - --pass-access-token=true
