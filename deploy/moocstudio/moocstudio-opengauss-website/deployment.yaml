@@ -5,7 +5,7 @@ metadata:
   name: moocstudio-opengauss-frontend
   namespace: moocstudio-opengauss-website
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: moocstudio-opengauss-frontend
