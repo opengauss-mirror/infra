@@ -4,7 +4,7 @@ metadata:
   name: moocstudio-opengauss-backend
   namespace: moocstudio-opengauss-backend
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     rollingUpdate:
       maxUnavailable: 1
