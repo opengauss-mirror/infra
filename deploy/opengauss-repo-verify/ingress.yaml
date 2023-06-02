@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/whitelist-source-range: 121.37.228.245,139.159.203.30,139.9.203.63
+  name: opengauss-publish-ingress
+  namespace: opengauss-repo-verify
+spec:
+  tls:
+  - hosts:
+      - publish.opengauss.org
+    secretName: opengauss-publish-tls
+  rules:
+    - host: publish.opengauss.org
+      http:
+        paths:
+          - backend:
+              serviceName: post-verification-service
+              servicePort: 8080
+            path: /

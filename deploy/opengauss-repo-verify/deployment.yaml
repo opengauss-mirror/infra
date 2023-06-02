@@ -49,6 +49,11 @@ spec:
             secretKeyRef:
               key: bucketname
               name: post-verification-secrets
+        - name: accessToken
+          valueFrom:
+            secretKeyRef:
+              key: accessToken
+              name: post-verification-secrets
         livenessProbe:
           httpGet:
             path: /publish/heartbeat
