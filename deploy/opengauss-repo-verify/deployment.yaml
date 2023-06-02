@@ -54,6 +54,11 @@ spec:
             secretKeyRef:
               key: accessToken
               name: post-verification-secrets
+        - name: jasypt.encryptor.password
+          valueFrom:
+            secretKeyRef:
+              key: jasypt.encryptor.password
+              name: post-verification-secrets
         livenessProbe:
           httpGet:
             path: /publish/heartbeat
