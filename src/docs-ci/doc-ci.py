@@ -71,8 +71,10 @@ def parse_pr_info(content):
             for ignore_file in Config.ignore_file_suffix:
                 if ignore_file in path:
                     break
-            else:
-                url_list.extend(extract_url(content_temp))
+            for line in content_temp.split("\n"):
+                if line.startswith(r"@@"):
+                    continue
+                url_list.extend(extract_url(line))
     return list(set(url_list))
 
 
@@ -109,7 +111,6 @@ def worker(pr_id):
         url = Config.pr_info_url.format(pr_id)
         pr_content = request_pr_info(url)
         url_list = parse_pr_info(pr_content)
-        print("check url:{}".format(url_list))
         failed_list = check_url(url_list)
         return failed_list
     except Exception as e:
@@ -117,9 +118,9 @@ def worker(pr_id):
 
 
 def print_content(failed_list):
-    print("----------------2.start to output lose efficacy-----------------")
+    print("----------------2.Start checking your pr for invalid links-----------------")
     for url in failed_list:
-        content = "check dead_link, the url is：{}\n".format(url)
+        content = "Check that your pr contains invalid links：{}\n".format(url)
         print(content)
 
 
