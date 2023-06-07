@@ -5,7 +5,7 @@ metadata:
   name: server
   namespace: opengauss-easyeditor
 spec:
-  replicas: 2
+  replicas: 0
   strategy:
     rollingUpdate:
       maxSurge: 1
