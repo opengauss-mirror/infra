@@ -74,6 +74,8 @@ def parse_pr_info(content):
             for line in content_temp.split("\n"):
                 if line.startswith(r"@@"):
                     continue
+                elif line.startswith(r"-"):
+                    continue
                 url_list.extend(extract_url(line))
     return list(set(url_list))
 
