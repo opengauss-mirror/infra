@@ -26,7 +26,7 @@ spec:
       serviceAccountName: "opengauss-jenkins"
       containers:
       - name: jenkins
-        image: swr.cn-north-4.myhuaweicloud.com/openeuler/jenkins:2.361.4-lts-jdk11
+        image: swr.cn-north-4.myhuaweicloud.com/openeuler/jenkins:2.395-jdk11
         imagePullPolicy: "Always"
         args: ["--argumentsRealm.passwd.$(ADMIN_USER)=$(ADMIN_PASSWORD)", "--argumentsRealm.roles.$(ADMIN_USER)=admin"]
         env:
