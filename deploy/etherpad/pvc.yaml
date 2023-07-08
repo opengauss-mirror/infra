@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    everest.io/disk-volume-type: GPSSD
+    everest.io/enterprise-project-id: "0"
+    pv.kubernetes.io/bind-completed: "yes"
+    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner
+  labels:
+    failure-domain.beta.kubernetes.io/region: ap-southeast-1
+    failure-domain.beta.kubernetes.io/zone: ap-southeast-1a
+  name: ether-data-vol
+  namespace: opengauss-etherpad
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: csi-disk
+  volumeMode: Filesystem
+  volumeName: pv-evs-opengauss-etherpad
