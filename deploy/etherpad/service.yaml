@@ -1,24 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: etherpad
-  namespace: etherpad
-  annotations:
-    kubernetes.io/elb.class: union
-    kubernetes.io/elb.id: dc566799-1185-43dd-a436-98bbac186495
-    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
+  name: etherpad-lite
+  namespace: opengauss-etherpad
 spec:
-  externalTrafficPolicy: Cluster
-  loadBalancerIP: 159.138.47.196
   ports:
-  - port: 80
-    name: etherpad-http
-    targetPort: 80
+  - name: ether-http
+    port: 80
     protocol: TCP
-  - port: 443 
-    name: etherpad-https
-    targetPort: 443 
-    protocol: TCP
+    targetPort: 9001
   selector:
-    app: etherpad
-  type: LoadBalancer
+    app: control-etherpad
+  sessionAffinity: None
+  type: ClusterIP
