@@ -160,6 +160,21 @@ spec:
                 secretKeyRef:
                   key: query_token
                   name: meeting-server-secrets
+            - name: ZOOM_ACCOUNT_FIRST
+              valueFrom:
+                secretKeyRef:
+                  key: ZOOM_ACCOUNT_FIRST
+                  name: meeting-server-secrets
+            - name: ZOOM_ACCOUNT_SECOND
+              valueFrom:
+                secretKeyRef:
+                  key: ZOOM_ACCOUNT_SECOND
+                  name: meeting-server-secrets
+            - name: SMTP_SENDER
+              valueFrom:
+                secretKeyRef:
+                  key: SMTP_SENDER
+                  name: meeting-server-secrets
           command:
             - /bin/sh
             - -c
