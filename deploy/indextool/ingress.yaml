@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/limit-rps: "5"
   name: indextool-ingress
   namespace: indextool
 spec:
