@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opengauss-deployment
+  namespace: opengauss-datastat
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: opengauss
+  template:
+    metadata:
+      labels:
+        app: opengauss
+    spec:
+      containers:
+      - name: opengauss
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/datastat/opengauss:a5127b21a3effdae4612c5683283d7227758e350
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: datastat-nginx-volume
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: opengauss-configmap
+        name: datastat-nginx-volume
