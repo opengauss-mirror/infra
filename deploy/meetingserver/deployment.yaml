@@ -175,6 +175,26 @@ spec:
                 secretKeyRef:
                   key: SMTP_SENDER
                   name: meeting-server-secrets
+            - name: XARMOR_BACKEND_URL
+              valueFrom:
+                secretKeyRef:
+                  key: xarmor_backend_url
+                  name: meeting-server-secrets
+            - name: XARMOR_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: xarmor_tenant_id
+                  name: meeting-server-secrets
+            - name: XARMOR_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  key: xarmor_app_id
+                  name: meeting-server-secrets
+            - name: XARMOR_APP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: xarmor_app_token
+                  name: meeting-server-secrets
           command:
             - /bin/sh
             - -c
