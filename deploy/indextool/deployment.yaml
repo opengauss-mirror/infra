@@ -160,4 +160,6 @@ spec:
             secretKeyRef:
               name: doc-search-secrets
               key: xarmor_app_token
+        - name: APPLICATION_PATH
+          value: "/EaseSearch/target/classes/application.yml"
 
