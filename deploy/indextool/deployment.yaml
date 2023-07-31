@@ -140,22 +140,22 @@ spec:
             secretKeyRef:
               name: doc-search-secrets
               key: tesport
-        - name: XARMOR_BACKEND_URL
+        - name: X_ARMOR_BACKEND_BACKEND_URL
           valueFrom:
             secretKeyRef:
               name: doc-search-secrets
               key: xarmor_backend_url
-        - name: XARMOR_TENANT_ID
+        - name: X_ARMOR_BACKEND_TENANT_ID
           valueFrom:
             secretKeyRef:
               name: doc-search-secrets
               key: xarmor_tenant_id
-        - name: XARMOR_APP_ID
+        - name: X_ARMOR_BACKEND_APP_ID
           valueFrom:
             secretKeyRef:
               name: doc-search-secrets
               key: xarmor_app_id
-        - name: XARMOR_APP_TOKEN
+        - name: X_ARMOR_BACKEND_APP_TOKEN
           valueFrom:
             secretKeyRef:
               name: doc-search-secrets
