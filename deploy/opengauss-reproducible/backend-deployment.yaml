@@ -39,3 +39,23 @@ spec:
             secretKeyRef:
               name: opengauss-reproducible-secret
               key: host_password
+        - name: X_ARMOR_BACKEND_BACKEND_URL
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-reproducible-secret
+              key: xarmor_backend_url
+        - name: X_ARMOR_BACKEND_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-reproducible-secret
+              key: xarmor_tenant_id
+        - name: X_ARMOR_BACKEND_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-reproducible-secret
+              key: xarmor_app_id
+        - name: X_ARMOR_BACKEND_APP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: opengauss-reproducible-secret
+              key: xarmor_app_token
