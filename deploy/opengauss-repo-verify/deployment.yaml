@@ -59,6 +59,26 @@ spec:
             secretKeyRef:
               key: jasypt.encryptor.password
               name: post-verification-secrets
+        - name: X_ARMOR_BACKEND_BACKEND_URL
+          valueFrom:
+            secretKeyRef:
+              key: xarmor_backend_url
+              name: post-verification-secrets
+        - name: X_ARMOR_BACKEND_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              key: xarmor_tenant_id
+              name: post-verification-secrets
+        - name: X_ARMOR_BACKEND_APP_ID
+          valueFrom:
+            secretKeyRef:
+              key: xarmor_app_id
+              name: post-verification-secrets
+        - name: X_ARMOR_BACKEND_APP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: xarmor_app_token
+              name: post-verification-secrets
         livenessProbe:
           httpGet:
             path: /publish/heartbeat
