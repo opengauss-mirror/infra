@@ -5,7 +5,7 @@ metadata:
   name: opengauss-tryme-website
   namespace: opengauss-tryme-website
 spec:
-  replicas: 2
+  replicas: 0
   strategy:
     rollingUpdate:
       maxUnavailable: 1
