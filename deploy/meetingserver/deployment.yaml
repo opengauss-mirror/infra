@@ -12,12 +12,27 @@ spec:
       component: web-server
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'opengauss-meeting'
+        vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
+          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+          {{ .Data.data.config }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-xarmor_pyrasp.ini: 'internal/data/opengauss/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-xarmor_pyrasp.ini: |  
+          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+          {{ .Data.data.rasp }}
+          {{- end }}
       labels:
         app: meeting-server
         component: web-server
     spec:
       nodeSelector:
         meeting-server: "true"
+      serviceAccountName: opengauss-meeting
       containers:
         - name: meeting-server
           image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
@@ -31,175 +46,15 @@ spec:
               cpu: 2000m
               memory: 2000Mi
           env:
-            - name: ZOOM_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: zoom_token
-                  name: meeting-server-secrets
-            - name: GITEE_OAUTH_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  key: gitee_oauth_client_id
-                  name: meeting-server-secrets
-            - name: GITEE_OAUTH_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: gitee_oauth_client_secret
-                  name: meeting-server-secrets
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: secret_key
-                  name: meeting-server-secrets
-            - name: GMAIL_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: gmail_username
-                  name: meeting-server-secrets
-            - name: GMAIL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: gmail_password
-                  name: meeting-server-secrets
-            - name: SMTP_SERVER_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: smtp_server_host
-                  name: meeting-server-secrets
-            - name: BILI_UID
-              valueFrom:
-                secretKeyRef:
-                  key: bili_uid
-                  name: meeting-server-secrets
-            - name: SESSDATA
-              valueFrom:
-                secretKeyRef:
-                  key: sessdata
-                  name: meeting-server-secrets
-            - name: BILI_JCT
-              valueFrom:
-                secretKeyRef:
-                  key: bili_jct
-                  name: meeting-server-secrets
-            - name: ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  key: access_key_id
-                  name: meeting-server-secrets
-            - name: SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: secret_access_key
-                  name: meeting-server-secrets
-            - name: OBS_ENDPOINT
-              valueFrom:
-                secretKeyRef:
-                  key: obs_endpoint
-                  name: meeting-server-secrets
-            - name: OBS_BUCKETNAME
-              valueFrom:
-                secretKeyRef:
-                  key: obs_bucketname
-                  name: meeting-server-secrets
-            - name: REDIRECT_HOME_PAGE
-              valueFrom:
-                secretKeyRef:
-                  key: redirect_home_page
-                  name: meeting-server-secrets
-            - name: ZOOM_HOST_FIRST
-              valueFrom:
-                secretKeyRef:
-                  key: zoom_host_first
-                  name: meeting-server-secrets
-            - name: ZOOM_HOST_SECOND
-              valueFrom:
-                secretKeyRef:
-                  key: zoom_host_second
-                  name: meeting-server-secrets
-            - name: WELINK_HOST_1
-              valueFrom:
-                secretKeyRef:
-                  key: welink_host_1
-                  name: meeting-server-secrets
-            - name: WELINK_HOST_1_ACCOUNT
-              valueFrom:
-                secretKeyRef:
-                  key: welink_host_1_account
-                  name: meeting-server-secrets
-            - name: WELINK_HOST_1_PWD
-              valueFrom:
-                secretKeyRef:
-                  key: welink_host_1_pwd
-                  name: meeting-server-secrets
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  key: db_user
-                  name: meeting-server-secrets
-            - name: TZ
-              value: Asia/Shanghai
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: db_password
-                  name: meeting-server-secrets
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: db_host
-                  name: meeting-server-secrets
-            - name: DB_PORT
-              value: "3306"
-            - name: GITEE_OAUTH_REDIRECT
-              valueFrom:
-                secretKeyRef:
-                  key: gitee_oauth_redirect
-                  name: meeting-server-secrets
-            - name: QUERY_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: query_token
-                  name: meeting-server-secrets
-            - name: ZOOM_ACCOUNT_FIRST
-              valueFrom:
-                secretKeyRef:
-                  key: ZOOM_ACCOUNT_FIRST
-                  name: meeting-server-secrets
-            - name: ZOOM_ACCOUNT_SECOND
-              valueFrom:
-                secretKeyRef:
-                  key: ZOOM_ACCOUNT_SECOND
-                  name: meeting-server-secrets
-            - name: SMTP_SENDER
-              valueFrom:
-                secretKeyRef:
-                  key: SMTP_SENDER
-                  name: meeting-server-secrets
-            - name: XARMOR_BACKEND_URL
-              valueFrom:
-                secretKeyRef:
-                  key: xarmor_backend_url
-                  name: meeting-server-secrets
-            - name: XARMOR_TENANT_ID
-              valueFrom:
-                secretKeyRef:
-                  key: xarmor_tenant_id
-                  name: meeting-server-secrets
-            - name: XARMOR_APP_ID
-              valueFrom:
-                secretKeyRef:
-                  key: xarmor_app_id
-                  name: meeting-server-secrets
-            - name: XARMOR_APP_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: xarmor_app_token
-                  name: meeting-server-secrets
+          - name: TZ
+            value: Asia/Shanghai
           command:
             - /bin/sh
             - -c
             - |
               strip -R .note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.11.3
+              cp /vault/secrets/xarmor_pyrasp.ini /work/app-meeting-server/xarmor_pyrasp.ini
+              rm -rf /vault/secrets/xarmor_pyrasp.ini
               python manage.py collectstatic
               python manage.py makemigrations
               python manage.py migrate
@@ -207,9 +62,9 @@ spec:
               exec uwsgi --ini /work/app-meeting-server/deploy/production/uwsgi.ini
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
-              name: http
-              protocol: TCP
+          - containerPort: 8080
+            name: http
+            protocol: TCP
           readinessProbe:              #就绪探针
             initialDelaySeconds: 20    #延迟加载时间
             periodSeconds: 5           #重试时间间隔
