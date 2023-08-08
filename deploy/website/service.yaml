@@ -9,7 +9,7 @@ spec:
   - name: http-port
     protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: 8080
   selector:
     app: websiteinfo
   type: ClusterIP
