@@ -192,6 +192,16 @@ spec:
             secretKeyRef:
               name: mailman-secrets
               key: xarmor_app_token
+        - name: DATA_STORAGE_LOCATION
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: DATA_STORAGE_LOCATION
+        - name: DATA_STORAGE_COMMUNITY
+          valueFrom:
+            secretKeyRef:
+              name: mailman-secrets
+              key: DATA_STORAGE_COMMUNITY
         resources:
           requests:
             cpu: 1000m
