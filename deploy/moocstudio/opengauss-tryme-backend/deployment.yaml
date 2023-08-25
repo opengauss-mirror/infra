@@ -4,7 +4,7 @@ metadata:
   name: opengauss-tryme-backend
   namespace: opengauss-tryme-backend
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 1
