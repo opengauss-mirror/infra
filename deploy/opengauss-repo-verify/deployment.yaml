@@ -5,7 +5,7 @@ metadata:
   name: post-verification-deployment
   namespace: opengauss-repo-verify
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
