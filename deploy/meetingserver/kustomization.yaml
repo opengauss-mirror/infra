@@ -16,4 +16,4 @@ kind: Kustomization
 namespace: meetingserver
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
-  newTag: 5ee2bff1077ac47c24dced7d37ddc688c76b22e0
+  newTag: ddfbe9e86f939bed13ff214b3a8e49549de6e1e3
