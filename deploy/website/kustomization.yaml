@@ -9,5 +9,4 @@ kind: Kustomization
 namespace: website
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/website
-  newName: swr.ap-southeast-1.myhuaweicloud.com/infra-hk/opengauss/website
-  newTag: v2-fa2dac
+  newTag: v2-47939e
