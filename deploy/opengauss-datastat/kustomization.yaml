@@ -4,6 +4,7 @@ resources:
 - deployment.yaml
 - service.yaml
 - namespace.yaml
+- secret.yaml
 namespace: opengauss-datastat
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-hk-cluster

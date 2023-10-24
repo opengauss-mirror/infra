@@ -9,3 +9,4 @@ resources:
 - website-ingress.yaml
 - website-service.yaml
 - website-deployment.yaml
+- secret.yaml
