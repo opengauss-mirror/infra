@@ -5,7 +5,7 @@ metadata:
   name: doc-search
   namespace: indextool
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -16,9 +16,23 @@ spec:
       app: doc-search
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'search'
+        vault.hashicorp.com/agent-inject-secret-application.yml: 'internal/data/opengauss/search'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-application.yml: "0600"
+        vault.hashicorp.com/agent-run-as-user: "1001"
+        vault.hashicorp.com/agent-inject-template-application.yml: |  
+          {{- with secret "internal/data/opengauss/search" -}}  
+          {{ .Data.data.application }}
+          {{- end }}
       labels:
         app: doc-search
     spec:
+      serviceAccount: search
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
       containers:
       - name: doc-search
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/doc-search:3ec3f143b2cb567b5929d6e01a8147aa3befb8a3
@@ -46,61 +60,6 @@ spec:
           failureThreshold: 3
           timeoutSeconds: 5
         env:
-        - name: eshost
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: host
-        - name: esusername
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: username
-        - name: espassword
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: password
-        - name: esport
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: port
-        - name: searchsystem
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: system
-        - name: depp
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: depp
-        - name: teshost
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: teshost
-        - name: tesusername
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: tesusername
-        - name: tespassword
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: tespassword
-        - name: tesport
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: tesport
-        - name: X_ARMOR_BACKEND_BACKEND_URL
-          valueFrom:
-            secretKeyRef:
-              name: doc-search-secrets
-              key: xarmor_backend_url
         - name: X_ARMOR_BACKEND_TENANT_ID
           valueFrom:
             secretKeyRef:
@@ -115,7 +74,27 @@ spec:
           valueFrom:
             secretKeyRef:
               name: doc-search-secrets
-              key: xarmor_app_token
+              key: xarmor_backend_app_token
+        - name: X_ARMOR_SECURITY_ENABLE
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: xarmor_security_enable
+        - name: X_ARMOR_SECURITY_ROOT_PASSWORD_0
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: xarmor_security_root_password
+        - name: X_ARMOR_SECURITY_WORK_PASSWORD_0
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: xarmor_security_work_password
+        - name: X_ARMOR_BACKEND_BACKEND_URL
+          valueFrom:
+            secretKeyRef:
+              name: doc-search-secrets
+              key: xarmor_backend_url
         - name: APPLICATION_PATH
-          value: "/home/easysearch/EaseSearch/target/classes/application.yml"
+          value: "/vault/secrets/application.yml"
 
