@@ -97,4 +97,10 @@ spec:
               key: xarmor_backend_url
         - name: APPLICATION_PATH
           value: "/vault/secrets/application.yml"
-
+        volumeMounts:
+        - mountPath: /opt/sql
+          name: sql-config-volume
+      volumes:
+      - name: sql-config-volume
+        persistentVolumeClaim:
+          claimName: opengauss-search-es
