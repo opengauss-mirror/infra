@@ -21,6 +21,7 @@ spec:
               servicePort: 80
             path: /calendar(/|$)(.*)
 
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -42,4 +43,27 @@ spec:
           - backend:
               serviceName: meeting-service
               servicePort: 80
+            path: /calendar(/|$)(.*)
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: opengauss-meeting-server-osinfra-ingress
+  namespace: meetingserver
+spec:
+  tls:
+    - hosts:
+        - meetings-opengauss.osinfra.cn
+      secretName: meeting-server-osinfra-tls
+  rules:
+    - host: meetings-opengauss.osinfra.cn
+      http:
+        paths:
+          - backend:
+              serviceName: meeting-service
+              servicePort: 8080
             path: /calendar(/|$)(.*)

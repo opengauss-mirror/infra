@@ -15,8 +15,8 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'opengauss-meeting'
-        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0700"
-        vault.hashicorp.com/agent-inject-perms-xarmor_pyrasp.ini: "0700"
+        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
+        vault.hashicorp.com/agent-inject-perms-xarmor_pyrasp.ini: "0600"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
         vault.hashicorp.com/agent-pre-populate-only: "true"
@@ -42,8 +42,6 @@ spec:
           volumeMounts:
             - mountPath: /work/app-meeting-server/meetings/migrations
               name: meeting-data-volume
-            - mountPath: /work/app-meeting-server/share
-              name: meeting-share-volume
           resources:
             requests:
               cpu: 2000m
@@ -66,6 +64,7 @@ spec:
               python manage.py makemigrations
               python manage.py migrate
               python manage.py sync_sigs
+              python manage.py upgrade_users
               exec uwsgi --ini /work/app-meeting-server/deploy/production/uwsgi.ini
           imagePullPolicy: IfNotPresent
           ports:
@@ -90,6 +89,3 @@ spec:
         - name: meeting-data-volume
           persistentVolumeClaim:
             claimName: meeting-data-volume
-        - name: meeting-share-volume
-          persistentVolumeClaim:
-            claimName: meetingserver-share-volume

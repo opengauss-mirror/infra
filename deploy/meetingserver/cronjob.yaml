@@ -14,7 +14,7 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: 'true'
             vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0700"
+            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
             vault.hashicorp.com/agent-run-as-user: "1000"
             vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
             vault.hashicorp.com/agent-pre-populate-only: "true"
@@ -65,7 +65,7 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: 'true'
             vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0700"
+            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
             vault.hashicorp.com/agent-run-as-user: "1000"
             vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
             vault.hashicorp.com/agent-pre-populate-only: "true"
@@ -109,7 +109,7 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: 'true'
             vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0700"
+            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
             vault.hashicorp.com/agent-run-as-user: "1000"
             vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
             vault.hashicorp.com/agent-pre-populate-only: "true"
@@ -153,7 +153,7 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: 'true'
             vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0700"
+            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
             vault.hashicorp.com/agent-run-as-user: "1000"
             vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
             vault.hashicorp.com/agent-pre-populate-only: "true"
