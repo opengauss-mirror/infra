@@ -6,14 +6,15 @@ resources:
 - cronjob.yaml
 - pvc.yaml
 - ingress.yaml
-commonLabels:
-  app: opengauss-meetingserver
 commonAnnotations:
-  email: 469227928@qq.com
-  owner: liuqi
+  kubernetes.ops.cluster: opengauss-hk-cluster
+  kubernetes.ops.email: ""
+  kubernetes.ops.os.base: openeuler
+  kubernetes.ops.owner: liuqi
+  kubernetes.ops.region: hk
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: meetingserver
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
-  newTag: 9a107228bab4d6cbee716d66f7cbcef4f4aaa155
+  newTag: e615276a67156dc45bf5ee6b831d3f30d94aac32
