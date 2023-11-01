@@ -4,8 +4,7 @@ metadata:
   name: meeting-service
 spec:
   selector:
-    app: meetingserver
-    component: web-server
+    app: meeting-server
   ports:
   - name: meeting-api-endpoint
     port: 80
