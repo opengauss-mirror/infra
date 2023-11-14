@@ -9,4 +9,4 @@ kind: Kustomization
 namespace: website
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/website
-  newTag: v2-0fd2fe
+  newTag: v2-2d5d66
