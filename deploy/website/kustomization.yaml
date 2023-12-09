@@ -2,11 +2,12 @@ resources:
 - namespace.yaml
 - deployment.yaml
 - service.yaml
-- configmap.yaml
 - ingress.yaml
+- secret.yaml
+- sa.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: website
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/website
-  newTag: v1.0.20231208201721
+  newTag: v1.0.20231209180239

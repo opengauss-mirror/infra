@@ -10,7 +10,7 @@ metadata:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.websiteinfod: semver:~1.0
 spec:
-  replicas: 4
+  replicas: 0
   strategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -63,3 +63,88 @@ spec:
       - name: configmap-volume
         configMap:
           name: websitesvcconfigmap
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-v2
+  namespace: website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: website-v2
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-perms-abc.txt: "0400"
+        vault.hashicorp.com/agent-inject-perms-dhparam.pem: "0600"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/secret-volume-path: "/etc/nginx/cert/"
+        vault.hashicorp.com/agent-inject-secret-server.crt: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-server.crt: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-server.key: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-server.key: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-abc.txt: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-abc.txt: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.certificatePassword }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-dhparam.pem: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-dhparam.pem: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.dhparamPem }}
+          {{- end }}
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: opengauss-website
+      labels:
+        app: website-v2
+    spec:
+      imagePullSecrets:
+        - name: huawei-swr-image-pull-secret
+      serviceAccount: opengauss-website
+      containers:
+      - name: website
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/website:v1.0.20231209180239
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DET_URL
+          value: https://opengauss.org
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 5
