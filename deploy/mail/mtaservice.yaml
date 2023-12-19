@@ -41,6 +41,8 @@ metadata:
 spec:
   serviceName: mail-suit-service
   replicas: 1
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: mail-suit-service
@@ -64,16 +66,16 @@ spec:
         - mountPath: /var/log/exim/
           name: mailman-exim4-log
         - name: mailman-secrets
-          mountPath: /etc/exim/passwd.ro
+          mountPath: /etc/exim/passwd
           subPath: exim4_credential
         - name: mailman-cert-secrets
-          mountPath: /etc/exim/exim.crt.ro
+          mountPath: /etc/exim/exim.crt
           subPath: server.crt
         - name: mailman-cert-secrets
-          mountPath: /etc/exim/exim.key.ro
+          mountPath: /etc/exim/exim.key
           subPath: server.key
         - name: mailman-secrets
-          mountPath: /etc/exim/dkim/opengauss.key.ro
+          mountPath: /etc/exim/dkim/opengauss.key
           subPath: dkim_key
         - name: exim4-tls-secret
           mountPath: /etc/exim/ssl_pool/opengauss.org.crt
@@ -93,13 +95,6 @@ spec:
         - /bin/sh
         - -c
         - |
-          cp /etc/exim/passwd.ro /etc/exim/passwd
-          cp /etc/exim/exim.crt.ro /etc/exim/exim.crt
-          cp /etc/exim/exim.key.ro /etc/exim/exim.key
-          cp /etc/exim/dkim/opengauss.key.ro /etc/exim/dkim/opengauss.key
-          chown root:exim /etc/exim/passwd /etc/exim/exim.crt /etc/exim/exim.key /etc/exim/dkim/opengauss.key
-          chmod 755       /etc/exim/passwd /etc/exim/exim.crt /etc/exim/exim.key /etc/exim/dkim/opengauss.key
-          mkdir -p /var/log/exim
           exec tini -- exim -bd -v;
       #NOTE: Empty dir can't be used in a production dir. Please upgrade it before using.
       volumes:

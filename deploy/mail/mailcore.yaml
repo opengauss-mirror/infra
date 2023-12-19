@@ -12,6 +12,8 @@ metadata:
 spec:
   serviceName: mail-suit-service
   replicas: 1
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: mail-suit-service
