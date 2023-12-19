@@ -15,8 +15,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/clean-pending-subscription
-  newTag: 5d9e8b1290ae810a1ce8621f5de6c6ccd9d296511677657068
+  newTag: 4a229e7f654a4ba58ca0df6c84d81ed0e011ab701702451209
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-core-new-build
-  newTag: 970d27521a1aca24f9e0ff85047f99755ba3af7c1677654154
+  newTag: 4a229e7f654a4ba58ca0df6c84d81ed0e011ab701702450969
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-exim-new-build
+  newTag: 4a229e7f654a4ba58ca0df6c84d81ed0e011ab701702451203
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/app-mailman/mailman-web-new-build
-  newTag: 6998ad8a19f71e65b78b4a1145f00ff218c712551691630699
+  newTag: 1f73f190ca80f4a73809d4362bb1e3be6ab1714e1702452693

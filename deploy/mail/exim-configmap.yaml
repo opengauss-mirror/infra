@@ -50,6 +50,7 @@ data:
     .endif
 
     UPEX4CmacrosUPEX4C = 1
+    smtp_accept_queue_per_connection=0
     ##############################################
     # the following macro definitions were created
     # dynamically by /usr/sbin/update-exim.conf
