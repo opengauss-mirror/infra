@@ -6,9 +6,30 @@ metadata:
 spec:
   ports:
   - name: http-port
-    port: 80
+    port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
     app: opengauss-summary
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.id: df576eaf-4de4-4a04-992b-fbbe19502e75
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
+  name: opengauss-summary-service-loadbalencer
+  namespace: community-summary
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: httpport
+    port: 4180
+    protocol: TCP
+    targetPort: 4180
+  selector:
+    k8s-app: opengauss-oauth2-proxy
+  type: LoadBalancer
