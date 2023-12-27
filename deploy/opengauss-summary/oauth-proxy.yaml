@@ -41,7 +41,7 @@ spec:
         - --skip-validate-email=true
         - --skip-auth-regex=^/agreement_ch.html
         - --skip-auth-regex=^/agreement_en.html
-        - --upstream=http://opengauss-summary-service.opengauss-summary.svc.cluster.local
+        - --upstream=http://opengauss-summary-service.opengauss-summary.svc.cluster.local:8080
         - --http-address=0.0.0.0:4180
         - --cookie-expire=6h0m0s
         - --set-xauthrequest=true

@@ -3,10 +3,10 @@ kind: Kustomization
 namespace: opengauss-summary
 resources:
 - opengauss-summary-deployment.yaml
-- opengauss-summary-ingress.yaml
 - opengauss-summary-service.yaml
 - oauth-proxy.yaml
 - namespace.yaml
+- sa.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy
   newTag: a8f9261f77b224247863f12986a33b4959472309
