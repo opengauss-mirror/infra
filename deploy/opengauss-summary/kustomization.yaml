@@ -9,6 +9,6 @@ resources:
 - sa.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy
-  newTag: c94419415051abe9cf2988b22758fdc76cc8e750
+  newTag: 602184701e2fcf43b14378416771efa55d792717
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/summary
   newTag: v1.0.20231229114839
