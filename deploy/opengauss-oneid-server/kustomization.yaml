@@ -13,4 +13,4 @@ resources:
 - secret.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-usercenter-server
-  newTag: 8c6dc706b1c9732fcd4071a43ee2fba02490df65
+  newTag: 44a8d8d5c13c8c249de8c8c6c6eb785c8aa31b18
