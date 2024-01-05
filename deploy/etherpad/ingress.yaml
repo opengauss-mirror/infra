@@ -1,3 +1,4 @@
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -19,8 +20,8 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: etherpad-lite
-          servicePort: 80
+          serviceName: etherpad-lite-v2
+          servicePort: 9001
         path: /
   tls:
   - hosts:
