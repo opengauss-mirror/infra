@@ -11,6 +11,6 @@ kind: Kustomization
 commonAnnotations:
   kubernetes.ops.cluster: infra-hk
   kubernetes.ops.email: ""
-  kubernetes.ops.os.base: Debian
+  kubernetes.ops.os.base: openEuler
   kubernetes.ops.owner: liuyang
   kubernetes.ops.region: hk

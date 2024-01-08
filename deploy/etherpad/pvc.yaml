@@ -20,3 +20,21 @@ spec:
   storageClassName: csi-disk
   volumeMode: Filesystem
   volumeName: pv-evs-opengauss-etherpad
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    failure-domain.beta.kubernetes.io/region: ap-southeast-1
+    failure-domain.beta.kubernetes.io/zone: ap-southeast-1a
+  name: ether-data-vol-v2
+  namespace: opengauss-etherpad
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: csi-disk
+  volumeMode: Filesystem
