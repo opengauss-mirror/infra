@@ -11,4 +11,4 @@ images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy
   newTag: 602184701e2fcf43b14378416771efa55d792717
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/summary
-  newTag: v1.0.20240109171022
+  newTag: v1.0.20240110154505
