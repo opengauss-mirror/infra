@@ -2,9 +2,7 @@ resources:
 - namespace.yaml
 - deployment.yaml
 - service.yaml
-- secrets.yaml
 - cronjob.yaml
-- pvc.yaml
 - ingress.yaml
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-hk-cluster
@@ -15,6 +13,3 @@ commonAnnotations:
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: meetingserver
-images:
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server
-  newTag: 024e1cb3924fb7d741c0cc0a0f4c7e21f8f9615b

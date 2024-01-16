@@ -1,22 +1,23 @@
-# Deployment for meeting service
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: meeting-server
+  namespace: meetingserver
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: meeting-server
-      component: web-server
+      app: meetingserver
   template:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'opengauss-meeting'
-        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
-        vault.hashicorp.com/agent-inject-perms-xarmor_pyrasp.ini: "0600"
+        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
+        vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
         vault.hashicorp.com/agent-pre-populate-only: "true"
@@ -24,68 +25,66 @@ spec:
           {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
           {{ .Data.data.config }}
           {{- end }}
-        vault.hashicorp.com/agent-inject-secret-xarmor_pyrasp.ini: 'internal/data/opengauss/opengauss-meeting'
-        vault.hashicorp.com/agent-inject-template-xarmor_pyrasp.ini: |  
+        vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/opengauss/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-ca.pem: |  
           {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-          {{ .Data.data.rasp }}
+          {{ .Data.data.MysqlCA }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/opengauss/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+          {{ .Data.data.servercrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/opengauss/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+          {{ .Data.data.serverkey }}
           {{- end }}
       labels:
-        app: meeting-server
-        component: web-server
+        app: meetingserver
     spec:
-      nodeSelector:
-        meeting-server: "true"
-      serviceAccountName: opengauss-meeting
       containers:
-        - name: meeting-server
-          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
-          volumeMounts:
-            - mountPath: /work/app-meeting-server/meetings/migrations
-              name: meeting-data-volume
-          resources:
-            requests:
-              cpu: 2000m
-              memory: 2000Mi
-          env:
-          - name: TZ
-            value: Asia/Shanghai
-          - name: CONFIG_PATH
-            value: /vault/secrets/secrets.yaml
-          - name: XARMOR_CONF
-            value: /work/app-meeting-server/xarmor_pyrasp.ini
-          command:
-            - /bin/sh
-            - -c
-            - |
-              strip -R .note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.11.3
-              cp /vault/secrets/xarmor_pyrasp.ini /work/app-meeting-server/xarmor_pyrasp.ini
-              rm -rf /vault/secrets/xarmor_pyrasp.ini
-              python manage.py collectstatic
-              python manage.py makemigrations
-              python manage.py migrate
-              python manage.py sync_sigs
-              python manage.py upgrade_users
-              exec uwsgi --ini /work/app-meeting-server/deploy/production/uwsgi.ini
-          imagePullPolicy: IfNotPresent
-          ports:
-          - containerPort: 8080
-            name: http
-            protocol: TCP
-          readinessProbe:              #就绪探针
-            initialDelaySeconds: 20    #延迟加载时间
-            periodSeconds: 5           #重试时间间隔
-            timeoutSeconds: 10         #超时时间设置
-            failureThreshold: 5        #探测失败的重试次数
-            tcpSocket:
-              port: 8080
-          livenessProbe:               #存活探针
-            initialDelaySeconds: 60    #延迟加载时间
-            periodSeconds: 5           #重试时间间隔
-            timeoutSeconds: 5          #超时时间设置
-            failureThreshold: 3        #探测失败的重试次数
-            tcpSocket:
-              port: 8080
-      volumes:
-        - name: meeting-data-volume
-          persistentVolumeClaim:
-            claimName: meeting-data-volume
+      - env:
+        - name: TZ
+          value: Asia/Shanghai
+        - name: CONFIG_PATH
+          value: /vault/secrets/secrets.yaml
+        - name: MYSQL_TLS_PEM_PATH
+          value: /vault/secrets/ca.pem
+        - name: TLS_CRT_PATH
+          value: /vault/secrets/server.crt
+        - name: TLS_KEY_PATH
+          value: /vault/secrets/server.key
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/app-meeting-server:dev_merge_opengauss-045ff7
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 20
+          periodSeconds: 20
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: meetingserver
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1000Mi
+          requests:
+            cpu: "1"
+            memory: 1000Mi
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      serviceAccountName: opengauss-meeting
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30

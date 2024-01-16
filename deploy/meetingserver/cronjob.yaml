@@ -3,6 +3,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: sync-sigs
+  namespace: meetingserver
 spec:
   schedule: "0 * * * *"
   concurrencyPolicy: Forbid
@@ -14,13 +15,31 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: 'true'
             vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
+            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
+            vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+            vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+            vault.hashicorp.com/agent-inject-perms-server.key: "0400"
             vault.hashicorp.com/agent-run-as-user: "1000"
             vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
             vault.hashicorp.com/agent-pre-populate-only: "true"
             vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
               {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
               {{ .Data.data.config }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/opengauss/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-ca.pem: |  
+              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+              {{ .Data.data.MysqlCA }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/opengauss/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.crt: |  
+              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+              {{ .Data.data.servercrt }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/opengauss/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.key: |  
+              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+              {{ .Data.data.serverkey }}
               {{- end }}
         spec:
           restartPolicy: OnFailure
@@ -29,31 +48,30 @@ spec:
           serviceAccountName: opengauss-meeting
           containers:
             - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
+              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/app-meeting-server:dev_merge_opengauss-045ff7
               env:
               - name: TZ
                 value: Asia/Shanghai
               - name: CONFIG_PATH
                 value: /vault/secrets/secrets.yaml
-              - name: XARMOR_CONF
-                value: /work/app-meeting-server/xarmor_pyrasp.ini
+              - name: MYSQL_TLS_PEM_PATH
+                value: /vault/secrets/ca.pem
+              - name: TLS_CRT_PATH
+                value: /vault/secrets/server.crt
+              - name: TLS_KEY_PATH
+                value: /vault/secrets/server.key
               command:
                 - /bin/sh
                 - -c
                 - |
                   python manage.py sync_sigs
-              volumeMounts:
-              - mountPath: /work/app-meeting-server/share
-                name: meeting-share-volume
-          volumes:
-          - name: meeting-share-volume
-            persistentVolumeClaim:
-              claimName: meetingserver-share-volume
+
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: handle-recordings
+  namespace: meetingserver
 spec:
   schedule: "0 * * * *"
   concurrencyPolicy: Forbid
@@ -65,13 +83,31 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: 'true'
             vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
+            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
+            vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+            vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+            vault.hashicorp.com/agent-inject-perms-server.key: "0400"
             vault.hashicorp.com/agent-run-as-user: "1000"
             vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
             vault.hashicorp.com/agent-pre-populate-only: "true"
             vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
               {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
               {{ .Data.data.config }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/opengauss/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-ca.pem: |  
+              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+              {{ .Data.data.MysqlCA }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/opengauss/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.crt: |  
+              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+              {{ .Data.data.servercrt }}
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/opengauss/opengauss-meeting'
+            vault.hashicorp.com/agent-inject-template-server.key: |  
+              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
+              {{ .Data.data.serverkey }}
               {{- end }}
         spec:
           restartPolicy: OnFailure
@@ -80,104 +116,20 @@ spec:
           serviceAccountName: opengauss-meeting
           containers:
             - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
+              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/app-meeting-server:dev_merge_opengauss-045ff7
               env:
               - name: TZ
                 value: Asia/Shanghai
               - name: CONFIG_PATH
                 value: /vault/secrets/secrets.yaml
-              - name: XARMOR_CONF
-                value: /work/app-meeting-server/xarmor_pyrasp.ini
+              - name: MYSQL_TLS_PEM_PATH
+                value: /vault/secrets/ca.pem
+              - name: TLS_CRT_PATH
+                value: /vault/secrets/server.crt
+              - name: TLS_KEY_PATH
+                value: /vault/secrets/server.key
               command:
                 - /bin/sh
                 - -c
                 - |
                   python manage.py handle_recordings
----
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: upload-to-bilibili
-spec:
-  schedule: "10 * * * *"
-  concurrencyPolicy: Forbid
-  startingDeadlineSeconds: 180
-  jobTemplate:
-    spec:
-      template:
-        metadata:
-          annotations:
-            vault.hashicorp.com/agent-inject: 'true'
-            vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
-            vault.hashicorp.com/agent-run-as-user: "1000"
-            vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
-            vault.hashicorp.com/agent-pre-populate-only: "true"
-            vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
-              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-              {{ .Data.data.config }}
-              {{- end }}
-        spec:
-          restartPolicy: OnFailure
-          imagePullSecrets:
-          - name: huawei-swr-image-pull-secret
-          serviceAccountName: opengauss-meeting
-          containers:
-            - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
-              env:
-              - name: TZ
-                value: Asia/Shanghai
-              - name: CONFIG_PATH
-                value: /vault/secrets/secrets.yaml
-              - name: XARMOR_CONF
-                value: /work/app-meeting-server/xarmor_pyrasp.ini
-              command:
-                - /bin/sh
-                - -c
-                - |
-                  python manage.py upload_to_bilibili
----
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: check-examination
-spec:
-  schedule: "20 * * * *"
-  concurrencyPolicy: Forbid
-  startingDeadlineSeconds: 180
-  jobTemplate:
-    spec:
-      template:
-        metadata:
-          annotations:
-            vault.hashicorp.com/agent-inject: 'true'
-            vault.hashicorp.com/role: 'opengauss-meeting'
-            vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0600"
-            vault.hashicorp.com/agent-run-as-user: "1000"
-            vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
-            vault.hashicorp.com/agent-pre-populate-only: "true"
-            vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
-              {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-              {{ .Data.data.config }}
-              {{- end }}
-        spec:
-          restartPolicy: OnFailure
-          imagePullSecrets:
-          - name: huawei-swr-image-pull-secret
-          serviceAccountName: opengauss-meeting
-          containers:
-            - name: meeting-server
-              image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-meeting-server:87b3e08acb3e4bfa8a18d4c347e3282b8942af1c
-              env:
-              - name: TZ
-                value: Asia/Shanghai
-              - name: CONFIG_PATH
-                value: /vault/secrets/secrets.yaml
-              - name: XARMOR_CONF
-                value: /work/app-meeting-server/xarmor_pyrasp.ini
-              command:
-                - /bin/sh
-                - -c
-                - |
-                  python manage.py check_examination
