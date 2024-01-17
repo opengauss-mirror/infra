@@ -2,11 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: meeting-service
+  namespace: meetingserver
 spec:
-  selector:
-    app: meeting-server
   ports:
-  - name: meeting-api-endpoint
-    port: 80
+  - name: http-port
+    port: 8080
+    protocol: TCP
     targetPort: 8080
+  selector:
+    app: meetingserver
+  sessionAffinity: None
   type: ClusterIP
