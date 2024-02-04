@@ -1,31 +1,61 @@
----
-# Source: jenkins/templates/jenkins-master-svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: jenkins
+    helm.sh/chart: jenkins-1.7.4
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.id: fb8e59e3-d68d-488b-bc35-706d145d4271
+    kubernetes.io/elb.lb-algorithm: ROUND_ROBIN
   name: opengauss-jenkins
   namespace: jenkins
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    nodePort: 30694
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    nodePort: 31927
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  - name: agent
+    nodePort: 32538
+    port: 50000
+    protocol: TCP
+    targetPort: 50000
+  selector:
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+  sessionAffinity: None
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Service
+metadata:
   labels:
-    "app.kubernetes.io/name": 'jenkins'
-    "helm.sh/chart": "jenkins-1.7.4"
-    "app.kubernetes.io/managed-by": "Tiller"
-    "app.kubernetes.io/instance": "jenkins"
-    "app.kubernetes.io/component": "jenkins-master"
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: jenkins
+    helm.sh/chart: jenkins-1.7.4
+  name: opengauss-jenkins-agent
+  namespace: jenkins
 spec:
   ports:
-    - port: 80
-      name: http
-      targetPort: 8080
-    - port: 443
-      name: https
-      targetPort: 443
-    - port: 50000
-      name: agent
-      targetPort: 50000
+  - name: slavelistener
+    port: 50000
+    protocol: TCP
+    targetPort: 50000
   selector:
-    "app.kubernetes.io/component": "jenkins-master"
-    "app.kubernetes.io/instance": "jenkins"
-  type: LoadBalancer
-  loadBalancerSourceRanges:
-    - 0.0.0.0/0
-  loadBalancerIP: 119.8.39.158
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,21 +1,20 @@
----
-# Source: jenkins/templates/home-pvc.yaml
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
+  labels:
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/instance: jenkins
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: jenkins
+    helm.sh/chart: jenkins-1.7.4
   name: jenkins-data-vol
   namespace: jenkins
-  labels:
-    "app.kubernetes.io/name": 'jenkins'
-    "helm.sh/chart": "jenkins-1.7.4"
-    "app.kubernetes.io/managed-by": "Tiller"
-    "app.kubernetes.io/instance": "jenkins"
-    "app.kubernetes.io/component": "jenkins-master"
 spec:
-  volumeMode: Filesystem
   accessModes:
-    - "ReadWriteMany"
+  - ReadWriteMany
+  dataSource: null
   resources:
     requests:
-      storage: "500Gi"
-  storageClassName: "sas"
+      storage: 500Gi
+  storageClassName: sas
+  volumeMode: Filesystem

@@ -7,9 +7,10 @@ resources:
 - secrets.yaml
 - pvc.yaml
 - service.yaml
+- cronjob.yaml
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-cn4-cce-x86
-  kubernetes.ops.email: 747802914@qq.com
+  kubernetes.ops.email: ""
   kubernetes.ops.os.base: debian
   kubernetes.ops.owner: liuyang
   kubernetes.ops.region: beijing

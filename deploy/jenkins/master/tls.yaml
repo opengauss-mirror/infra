@@ -7,11 +7,11 @@ spec:
   name: opengauss-jenkins-tls
   keysMap:
     ca.crt:
-      path: secrets/data/opengauss/mail_secrets
+      path: secrets/data/opengauss/opengauss-org-tls
       key: server.crt
     tls.crt:
-      path: secrets/data/opengauss/mail_secrets
+      path: secrets/data/opengauss/opengauss-org-tls
       key: server.crt
     tls.key:
-      path: secrets/data/opengauss/mail_secrets
+      path: secrets/data/opengauss/opengauss-org-tls
       key: server.key
