@@ -1,0 +1,19 @@
+resources:
+- namespace.yaml
+- deployment.yaml
+- cronjob.yaml
+- ingress.yaml
+- tls.yaml
+- oauth-proxy.yaml
+- storage.yaml
+- masterservice.yaml
+- role.yaml
+- secrets.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: jenkins
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/openeuler/bak-jenkins
+  newTag: fc7cbd36549e0ff0f6f019916a1972ec09c52044
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy
+  newTag: b2d87e8e29285720327bf01aee604f929ea64dd4
