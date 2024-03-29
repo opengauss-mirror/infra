@@ -953,11 +953,12 @@ data:
     .endif
 
     begin authenticators
+    CLIENT_ALLOW_IP_HOSTS = 192.168.0.0/24 : 127.0.0.1 : ::::1 : 10.0.0.0/16 : 123.249.95.218 : 139.9.116.208 : 124.70.89.239
 
     plain_server:
       driver = plaintext
       public_name = PLAIN
-      server_condition = "${if crypteq{$auth3}{${extract{1}{:}{${lookup{$auth2}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}{1}{0}}"
+      server_condition = "${if and{{match_ip{$sender_host_address}{CLIENT_ALLOW_IP_HOSTS}}{crypteq{$auth3}{${extract{1}{:}{${lookup{$auth2}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}}}{1}{0}}"
       server_set_id = $auth2
       server_prompts = :
       .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
@@ -968,7 +969,7 @@ data:
       driver = plaintext
       public_name = LOGIN
       server_prompts = "Username:: : Password::"
-      server_condition = "${if crypteq{$auth2}{${extract{1}{:}{${lookup{$auth1}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}{1}{0}}"
+      server_condition = "${if and{{match_ip{$sender_host_address}{CLIENT_ALLOW_IP_HOSTS}}{crypteq{$auth2}{${extract{1}{:}{${lookup{$auth1}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}}}{1}{0}}"
       server_set_id = $auth1
       .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
       server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
