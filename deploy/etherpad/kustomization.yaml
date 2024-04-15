@@ -14,3 +14,6 @@ commonAnnotations:
   kubernetes.ops.os.base: openEuler
   kubernetes.ops.owner: liuyang
   kubernetes.ops.region: hk
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/etherpad
+  newTag: develop-93e26a
