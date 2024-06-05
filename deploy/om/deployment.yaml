@@ -23,7 +23,7 @@ spec:
         common-app: om
     spec:
       containers:
-      - image: swr.cn-north-4.myhuaweicloud.com/om/om-collection:0.5.61
+      - image: swr.cn-north-4.myhuaweicloud.com/om/om-collection:0.5.72
         imagePullPolicy: IfNotPresent
         name: om-collect
         ports:
