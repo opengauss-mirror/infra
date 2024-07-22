@@ -180,6 +180,34 @@ spec:
             secretKeyRef:
               key: admin_password
               name: ether-secret-v2
+        - name: ISSUER_AUTHORIZATION_ENDPOINT
+          value: "https://id.opengauss.org/oneid/oidc/authorize"
+        - name: ISSUER_TOKEN_ENDPOINT
+          value: "https://id.opengauss.org/oneid/oidc/token"
+        - name: ISSUER_USERINFO_ENDPOINT
+          value: "https://id.opengauss.org/oneid/oidc/user"
+        - name: ISSUER_ENDPOINT
+          value: "https://id.opengauss.org/login"
+        - name: ISSUER_JWKS_URI
+          value: "https://id.opengauss.org"
+        - name: ISSUER_BASE_URL
+          value: "https://etherpad.opengauss.org"
+        - name: REQUIRE_AUTHENTICATION
+          value: "true"
+        - name: SKIN_NAME
+          value: "colibris"
+        - name: TOKEN_ENDPOINT_AUTH_METHODS_SUPPORTED
+          value: "client_secret_post"
+        - name: ISSUER_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: ISSUER_CLIENT_SECRET
+              name: ether-secret-v2
+        - name: ISSUER_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: ISSUER_CLIENT_ID
+              name: ether-secret-v2
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/etherpad:dev-1.8.18-238541
         imagePullPolicy: IfNotPresent
         name: etherpad-lite
