@@ -20,12 +20,18 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'search'
         vault.hashicorp.com/agent-inject-secret-application.yml: 'internal/data/opengauss/search'
+        vault.hashicorp.com/agent-inject-secret-redis.crt: 'internal/data/opengauss/search'
         vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-perms-application.yml: "0600"
+        vault.hashicorp.com/agent-inject-perms-redis.crt: "0600"
         vault.hashicorp.com/agent-run-as-user: "1001"
         vault.hashicorp.com/agent-inject-template-application.yml: |  
           {{- with secret "internal/data/opengauss/search" -}}  
           {{ .Data.data.application }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-redis.crt: |  
+          {{- with secret "internal/data/opengauss/search" -}}  
+          {{ .Data.data.redisCrt }}
           {{- end }}
       labels:
         app: doc-search
