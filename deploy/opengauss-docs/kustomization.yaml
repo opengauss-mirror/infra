@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/website-docs
-  newTag: v1.0.20241026185800
+  newTag: v1.0.20241027084133
 kind: Kustomization
 namespace: opengauss-docs
 resources:
