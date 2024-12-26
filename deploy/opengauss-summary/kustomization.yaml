@@ -10,6 +10,6 @@ resources:
 - opengauss-summary-ingress.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy
-  newTag: b308d046610b7e3a8e8bc8e6dacf6b3725d2a6b4
+  newTag: d6d1e6378e682673085a49b8c6b946dbb4932104
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/summary
   newTag: v1.0.20241225173051
