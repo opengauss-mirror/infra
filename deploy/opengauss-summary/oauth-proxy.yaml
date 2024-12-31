@@ -22,7 +22,12 @@ metadata:
   name: opengauss-oauth2-proxy
   namespace: opengauss-summary
 spec:
-  replicas: 1
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
   selector:
     matchLabels:
       k8s-app: opengauss-oauth2-proxy
@@ -69,6 +74,13 @@ spec:
         ports:
         - containerPort: 4180
           protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
 
 ---
 apiVersion: secrets-manager.tuenti.io/v1alpha1

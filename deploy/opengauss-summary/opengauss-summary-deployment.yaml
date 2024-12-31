@@ -4,7 +4,7 @@ metadata:
   name: opengauss-summary-deployment
   namespace: opengauss-summary
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: opengauss-summary
