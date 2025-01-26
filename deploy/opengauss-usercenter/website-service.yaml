@@ -10,5 +10,5 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: website
+    app: website-v2
   type: ClusterIP

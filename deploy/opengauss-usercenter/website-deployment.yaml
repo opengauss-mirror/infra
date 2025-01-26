@@ -1,40 +1,88 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: website-deployment
+  name: website-v2-deployment
   namespace: opengauss-usercenter
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: website
+      app: website-v2
   strategy:
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable: 0
+      maxSurge: 1
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/role: 'opengauss-usercenter'
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-perms-abc.txt: "0400"
+        vault.hashicorp.com/agent-inject-perms-dhparam.pem: "0400"
+        vault.hashicorp.com/secret-volume-path: "/etc/nginx/cert/"
+        vault.hashicorp.com/agent-inject-secret-server.crt: "internal/data/opengauss/osinfra-cn-website"
+        vault.hashicorp.com/agent-inject-template-server.crt: |
+          {{- with secret "internal/data/opengauss/osinfra-cn-website" -}}
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-server.key: "internal/data/opengauss/osinfra-cn-website"
+        vault.hashicorp.com/agent-inject-template-server.key: |
+          {{- with secret "internal/data/opengauss/osinfra-cn-website" -}}
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-abc.txt: "internal/data/opengauss/osinfra-cn-website"
+        vault.hashicorp.com/agent-inject-template-abc.txt: |
+          {{- with secret "internal/data/opengauss/osinfra-cn-website" -}}
+          {{ .Data.data.certificatePassword }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-dhparam.pem: "internal/data/opengauss/osinfra-cn-website"
+        vault.hashicorp.com/agent-inject-template-dhparam.pem: |
+          {{- with secret "internal/data/opengauss/osinfra-cn-website" -}}
+          {{ .Data.data.dhparamPem }}
+          {{- end }}
       labels:
-        app: website
+        app: website-v2
     spec:
+      automountServiceAccountToken: false
+      serviceAccountName: opengauss-usercenter
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
       containers:
-      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-usercenter:v1.0.1
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/opengauss-usercenter:deb83a678981e3c73f3c4bad892da0cc3df0f8e9
         imagePullPolicy: IfNotPresent
+        env:
+        - name: DET_URL
+          value: https://id-opengauss.osinfra.cn
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
         livenessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 20
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 8080
           timeoutSeconds: 5
         name: website
         readinessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /
             port: 8080
           timeoutSeconds: 5
         resources:
@@ -42,5 +90,19 @@ spec:
             cpu: 1000m
             memory: 1000Mi
           requests:
-            cpu: 500m
-            memory: 500Mi
+            cpu: 1000m
+            memory: 1000Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+        - name: token-vol
+          projected:
+            sources:
+            - serviceAccountToken:
+                audience: api
+                expirationSeconds: 600
+                path: token
