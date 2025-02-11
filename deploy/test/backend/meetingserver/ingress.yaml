@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  name: opengauss-meetingserver-ingress
+  namespace: opengauss-meetingserver-v2
+spec:
+  tls:
+  - hosts:
+    - meeting-opengauss-v2.test.osinfra.cn
+    secretName: meetingserver-tls
+  rules:
+  - host: meeting-opengauss-v2.test.osinfra.cn
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: meetingserver-service
+            port:
+              number: 80
+  ingressClassName: nginx
