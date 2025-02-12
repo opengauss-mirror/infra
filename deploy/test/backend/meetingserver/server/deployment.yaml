@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meetingserver-deployment
+  namespace: opengauss-meetingserver-v2
+spec:
+  selector:
+    matchLabels:
+      app: meetingserver
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'opengauss-meetingserver-v2'
+        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
+        vault.hashicorp.com/agent-inject-perms-xarmor_pyrasp.ini: "0400"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.config }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-xarmor_pyrasp.ini: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-xarmor_pyrasp.ini: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.rasp }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+        vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-ca.pem: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.MysqlCA }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-server.crt: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.serverCrt  }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/infra-test/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-template-server.key: |  
+          {{- with secret "internal/data/infra-test/opengauss-meeting" -}}  
+          {{ .Data.data.serverKey }}
+          {{- end }}
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+      labels:
+        app: meetingserver
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: Asia/Shanghai
+        - name: CONFIG_PATH
+          value: /vault/secrets/secrets.yaml
+        - name: XARMOR_CONF
+          value: /work/app-meeting-server/xarmor_pyrasp.ini
+        - name: MYSQL_TLS_PEM_PATH
+          value: /vault/secrets/ca.pem
+        - name: TLS_CRT_PATH
+          value: /vault/secrets/server.crt
+        - name: TLS_KEY_PATH
+          value: /vault/secrets/server.key
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/app-meeting-server-test:fix_upload_bili_failed-6af860
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 20
+          periodSeconds: 20
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: meetingserver
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1000Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      serviceAccountName: opengauss-meetingserver
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
