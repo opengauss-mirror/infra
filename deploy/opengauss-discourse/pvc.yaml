@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner
+  name: discourse-share-volume
+  namespace: discourse
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: csi-sfsturbo
+  volumeMode: Filesystem
+  volumeName: pv-efs-discourse
