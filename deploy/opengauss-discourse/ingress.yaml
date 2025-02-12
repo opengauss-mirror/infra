@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "4m"
+  name: discourse-ingress
+  namespace: opengauss-discourse
+spec:
+  tls:
+    - hosts:
+        - forum.opengauss.org
+      secretName: discourse-tls
+  rules:
+  - host: forum.opengauss.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-server
+            port:
+              number: 80
+  ingressClassName: nginx
