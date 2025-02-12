@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   annotations:
     volume.beta.kubernetes.io/storage-provisioner: everest-csi-provisioner
-  name: openubmc-discourse-share-volume
+  name: discourse-share-volume
   namespace: discourse
 spec:
   accessModes:
