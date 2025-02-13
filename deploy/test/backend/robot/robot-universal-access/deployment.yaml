@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robot-universal-access
+  namespace: opengauss-backend-robot
+  labels:
+    app: robot-universal-access
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: robot-universal-access
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/role: 'opengauss-backend-robot'
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-perms-config: "0400"
+        vault.hashicorp.com/agent-inject-secret-config: 'internal/data/infra-test/opengauss-backend-robot'
+        vault.hashicorp.com/agent-inject-template-config: |  
+          {{- with secret "internal/data/infra-test/opengauss-backend-robot" -}}  
+          {{ .Data.data.accessConfig }}
+          {{- end }}
+      labels:
+        app: robot-universal-access
+    spec:
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
+      serviceAccountName: opengauss-backend-robot
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: robot-universal-access
+        args: 
+        - --port=8888 
+        - --handle-path=gitcode-hook 
+        - --config-file=/vault/secrets/config
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-access:develop-v0-899d4d
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8888
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8888
+          timeoutSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+        - name: token-vol
+          projected:
+            sources:
+            - serviceAccountToken:
+                audience: api
+                expirationSeconds: 600
+                path: token
