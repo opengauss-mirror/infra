@@ -217,7 +217,7 @@ spec:
         volumeMounts:
         - mountPath: /opt/mailman-web-static
           name: mailman-web-volume
-      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/nginx:latest
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/nginx:latest
         imagePullPolicy: IfNotPresent
         name: nginx-web
         volumeMounts:
