@@ -12,5 +12,8 @@ commonAnnotations:
   kubernetes.ops.owner: liuyang
   kubernetes.ops.region: hk
 namespace: download
-
-
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/nginx-fancyindex
+  newTag: v1.0.2
