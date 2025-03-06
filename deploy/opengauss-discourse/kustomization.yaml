@@ -16,4 +16,4 @@ commonAnnotations:
 namespace: opengauss-discourse
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/discourse
-  newTag: v1.8.7
+  newTag: v1.7.6
