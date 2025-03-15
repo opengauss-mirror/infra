@@ -22,7 +22,7 @@ metadata:
   name: opengauss-oauth2-proxy
   namespace: opengauss-summary
 spec:
-  replicas: 3
+  replicas: 0
   strategy:
     rollingUpdate:
       maxSurge: 1
