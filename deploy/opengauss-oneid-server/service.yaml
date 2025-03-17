@@ -11,6 +11,6 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: oneid-server
+    app: oneid-server-new
   sessionAffinity: None
   type: ClusterIP

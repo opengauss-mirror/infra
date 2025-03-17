@@ -5,12 +5,12 @@ commonAnnotations:
   kubernetes.ops.cluster: mindspore-cn1-cluster
   kubernetes.ops.email: ""
   kubernetes.ops.os.base: ubuntu
-  kubernetes.ops.owner: wangweifeng
+  kubernetes.ops.owner: taofeihu
   kubernetes.ops.region: beijing
 resources:
 - service.yaml
 - deployment.yaml
-- secret.yaml
+- sa.yaml
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-usercenter-server
   newTag: main-f87369
