@@ -1,15 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oneid-server
+  name: oneid-server-new
   namespace: opengauss-oneid-server
 spec:
-  progressDeadlineSeconds: 600
   replicas: 2
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: oneid-server
+      app: oneid-server-new
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,39 +15,64 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'oneid-server'
+        vault.hashicorp.com/agent-inject-secret-application.yml: 'internal/data/infra-common/oneid-server'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-application.yml: "0400"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/agent-inject-template-application.yml: |  
+          {{- with secret "internal/data/infra-common/oneid-server" -}}  
+          {{ .Data.data.OneidServer }}
+          {{- end }}
       labels:
-        app: oneid-server
+        app: oneid-server-new
     spec:
+      automountServiceAccountToken: false
+      serviceAccountName: oneid-server
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
       containers:
-      - env:
-        - name: APPLICATION_PATH
-          value: /var/lib/oneid-server/application.yaml
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-usercenter-server:c4cf00e56d2ed372eefa841959f19d219ec9ce9e
+      - image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/openeuler-usercenter-server:main-f87369
         imagePullPolicy: IfNotPresent
         name: oneid-server
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
+        env:
+        - name: APPLICATION_PATH
+          value: "/vault/secrets/application.yml"
         resources:
           limits:
-            cpu: 500m
-            memory: 500Mi
+            cpu: 1000m
+            memory: 1000Mi
           requests:
-            cpu: 500m
-            memory: 500Mi
-        volumeMounts:
-        - mountPath: /var/lib/oneid-server/application.yaml
-          name: secret
-          subPath: application-yaml
-      dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: huawei-swr-image-pull-secret
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
+            cpu: 1000m
+            memory: 1000Mi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
       volumes:
-      - name: secret
-        secret:
-          defaultMode: 420
-          secretName: oneid-server-secrets
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
