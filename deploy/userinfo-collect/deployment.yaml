@@ -4,9 +4,7 @@ metadata:
   name: userinfo-collect
   namespace: opengauss-userinfo-collect
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: userinfo-collect
@@ -17,15 +15,33 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'opengauss-userinfo-collect'
+        vault.hashicorp.com/agent-inject-secret-config.ini: 'internal/data/infra-common/opengauss-userinfo-collect'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-inject-perms-config.ini: "0400"
+        vault.hashicorp.com/agent-run-as-user: "1001"
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/agent-inject-template-config.ini: |  
+          {{- with secret "internal/data/infra-common/opengauss-userinfo-collect" -}}  
+          {{ .Data.data.config }}
+          {{- end }}
+        vault.hashicorp.com/secret-volume-path: "/opt/config"
       labels:
         app: userinfo-collect
     spec:
       automountServiceAccountToken: false
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      serviceAccountName: opengauss-userinfo-collect
       containers:
       - image: swr.cn-north-4.myhuaweicloud.com/om/om-collection:0.5.82
         imagePullPolicy: IfNotPresent
         name: userinfo-collect
+        env:
+        - name: APPLICATION_PATH
+          value: "/opt/config"
         resources:
           limits:
             cpu: 500m
@@ -37,21 +53,19 @@ spec:
         terminationMessagePolicy: File
         securityContext:
           allowPrivilegeEscalation: false
-          runAsUser: 1000
+          runAsUser: 1001
           readOnlyRootFilesystem: true
           capabilities:
             drop:
-              - ALL
-        volumeMounts:
-        - mountPath: /var/lib/om/config.ini
-          name: opengauss-userinfo-collect-secrets
-          subPath: config_ini
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: opengauss-userinfo-collect-secrets
-        secret:
-          defaultMode: 420
-          secretName: opengauss-userinfo-collect-secrets
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
