@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opengauss-deployment
+  name: opengauss-deployment-v2
   namespace: opengauss-datastat
 spec:
   replicas: 2
@@ -11,50 +11,113 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: opengauss
+      app: opengauss-v2
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-perms-abc.txt: "0400"
+        vault.hashicorp.com/agent-inject-perms-dhparam.pem: "0600"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/secret-volume-path: "/etc/nginx/cert/"
+        vault.hashicorp.com/agent-inject-secret-server.crt: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-server.crt: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.ServerCrt }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-server.key: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-server.key: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.ServerKey }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-abc.txt: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-abc.txt: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.certificatePassword }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-dhparam.pem: "internal/data/opengauss/opengauss-website"
+        vault.hashicorp.com/agent-inject-template-dhparam.pem: |
+          {{- with secret "internal/data/opengauss/opengauss-website" -}}
+          {{ .Data.data.dhparamPem }}
+          {{- end }}
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: opengauss-datastat
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-init-first: "true"
       labels:
-        app: opengauss
+        app: opengauss-v2
     spec:
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      serviceAccount: opengauss-datastat
+      automountServiceAccountToken: false
+      initContainers:
+      - command:
+        - /bin/bash
+        - -c
+        - chmod 0700 /etc/nginx/cert/; chown -R 1000:1000 /etc/nginx/cert/; chmod g-s /etc/nginx/cert/; ls -ld /etc/nginx/cert/
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler:22.03-lts-sp3
+        imagePullPolicy: IfNotPresent
+        name: init-opengauss
       containers:
       - name: opengauss
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/datastat/opengauss:a5127b21a3effdae4612c5683283d7227758e350
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/datastat/opengauss:8a3f9fd718e87efd938aec96d1e2113a7eecfa6d
         imagePullPolicy: IfNotPresent
-        volumeMounts:
-        - mountPath: /etc/nginx/conf.d
-          name: datastat-nginx-volume
+        env:
+        - name: DET_URL
+          value: https://datastat.opengauss.org/zh/overview
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
         resources:
           requests:
-            cpu: 200m
-            memory: 200Mi
+            cpu: 1
+            memory: 1Gi
           limits:
-            cpu: 500m
-            memory: 500Mi
+            cpu: 1
+            memory: 1Gi
         livenessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 10
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /zh/overview
             port: 8080
-          timeoutSeconds: 5
+            httpHeaders:
+            - name: "Host"
+              value: "datastat.opengauss.org"
+          timeoutSeconds: 10
         readinessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 10
           successThreshold: 1
-          tcpSocket:
+          httpGet:
+            scheme: HTTPS
+            path: /zh/overview
             port: 8080
-          timeoutSeconds: 5
-      imagePullSecrets:
-      - name: huawei-swr-image-pull-secret
+            httpHeaders:
+            - name: "Host"
+              value: "datastat.opengauss.org"
+          timeoutSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
       volumes:
-      - configMap:
-          defaultMode: 420
-          name: opengauss-configmap
-        name: datastat-nginx-volume
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token

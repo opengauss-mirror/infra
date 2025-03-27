@@ -4,38 +4,16 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   name: opengauss-datastat-ingress
   namespace: opengauss-datastat
 spec:
   tls:
     - hosts:
         - datastat.opengauss.org
-      secretName: datastat-opengauss-new-tls
+      secretName: datastat-opengauss-tls
   rules:
     - host: datastat.opengauss.org
-      http:
-        paths:
-          - backend:
-              serviceName: opengauss-service
-              servicePort: 80
-            path: /
-
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    kubernetes.io/ingress.class: nginx
-  name: opengauss-datastat-osinfra-ingress
-  namespace: opengauss-datastat
-spec:
-  tls:
-    - hosts:
-        - datastat-opengauss.osinfra.cn
-      secretName: datastat-opengauss-osinfra-tls
-  rules:
-    - host: datastat-opengauss.osinfra.cn
       http:
         paths:
           - backend:
