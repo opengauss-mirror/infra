@@ -1,19 +1,16 @@
 resources:
 - ingress.yaml
-- configmap.yaml
 - deployment.yaml
 - service.yaml
 - namespace.yaml
 - secret.yaml
+- sa.yaml
 namespace: opengauss-datastat
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-hk-cluster
   kubernetes.ops.email: ""
-  kubernetes.ops.os.base: debian
-  kubernetes.ops.owner: yuchunao
+  kubernetes.ops.os.base: openeuler
+  kubernetes.ops.owner: gongzhuangbang
   kubernetes.ops.region: hk
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-images:
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/datastat/opengauss
-  newTag: 8a3f9fd718e87efd938aec96d1e2113a7eecfa6d
