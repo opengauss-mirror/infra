@@ -1,90 +1,226 @@
----
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: meeting-server
+  name: meeting-center
   namespace: meetingserver
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: meetingserver
+      app: meeting-center
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'opengauss-meeting'
-        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
+        vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+        vault.hashicorp.com/agent-inject-perms-config: "0400"
+        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
         vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
         vault.hashicorp.com/agent-inject-perms-server.key: "0400"
-        vault.hashicorp.com/agent-run-as-user: "1000"
-        vault.hashicorp.com/agent-inject-secret-secrets.yaml: 'internal/data/opengauss/opengauss-meeting'
+        vault.hashicorp.com/agent-inject-secret-ca.pem: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-config: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-secrets.yaml: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-server.crt: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-server.key: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-template-ca.pem: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.MysqlCA }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-config: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.centerConfig }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-secrets.yaml: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.centerSecrets }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-server.crt: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.servercrt }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-server.key: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.serverkey }}\n{{- end }}\n"
         vault.hashicorp.com/agent-pre-populate-only: "true"
-        vault.hashicorp.com/agent-inject-template-secrets.yaml: |  
-          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-          {{ .Data.data.config }}
-          {{- end }}
-        vault.hashicorp.com/agent-inject-secret-ca.pem: 'internal/data/opengauss/opengauss-meeting'
-        vault.hashicorp.com/agent-inject-template-ca.pem: |  
-          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-          {{ .Data.data.MysqlCA }}
-          {{- end }}
-        vault.hashicorp.com/agent-inject-secret-server.crt: 'internal/data/opengauss/opengauss-meeting'
-        vault.hashicorp.com/agent-inject-template-server.crt: |  
-          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-          {{ .Data.data.servercrt }}
-          {{- end }}
-        vault.hashicorp.com/agent-inject-secret-server.key: 'internal/data/opengauss/opengauss-meeting'
-        vault.hashicorp.com/agent-inject-template-server.key: |  
-          {{- with secret "internal/data/opengauss/opengauss-meeting" -}}  
-          {{ .Data.data.serverkey }}
-          {{- end }}
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-service-account-token-volume-name: token-vol
+        vault.hashicorp.com/role: opengauss-meeting
+        vault.hashicorp.com/tls-skip-verify: "true"
+      creationTimestamp: null
       labels:
-        app: meetingserver
+        app: meeting-center
     spec:
+      automountServiceAccountToken: false
       containers:
       - env:
         - name: TZ
           value: Asia/Shanghai
         - name: CONFIG_PATH
+          value: /vault/secrets/config
+        - name: VAULT_PATH
           value: /vault/secrets/secrets.yaml
-        - name: MYSQL_TLS_PEM_PATH
-          value: /vault/secrets/ca.pem
-        - name: TLS_CRT_PATH
-          value: /vault/secrets/server.crt
-        - name: TLS_KEY_PATH
-          value: /vault/secrets/server.key
-        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/app-meeting-server:dev_merge_opengauss-045ff7
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/meeting/meeting-center:master-5725b4
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 20
-          periodSeconds: 20
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
           tcpSocket:
             port: 8080
           timeoutSeconds: 5
-        name: meetingserver
+        name: meeting-center
         readinessProbe:
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 30
+          periodSeconds: 30
           successThreshold: 1
           tcpSocket:
             port: 8080
           timeoutSeconds: 5
         resources:
           limits:
-            cpu: "1"
-            memory: 1000Mi
+            cpu: "2"
+            memory: 4Gi
           requests:
-            cpu: "1"
-            memory: 1000Mi
+            cpu: 500m
+            memory: 500Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
-      serviceAccountName: opengauss-meeting
       restartPolicy: Always
       schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: opengauss-meeting
+      serviceAccountName: opengauss-meeting
       terminationGracePeriodSeconds: 30
+      volumes:
+      - name: token-vol
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meeting-platform
+  namespace: meetingserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: meeting-platform
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-perms-ca.pem: "0400"
+        vault.hashicorp.com/agent-inject-perms-config: "0400"
+        vault.hashicorp.com/agent-inject-perms-kafka.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-secrets.yaml: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.crt: "0400"
+        vault.hashicorp.com/agent-inject-perms-server.key: "0400"
+        vault.hashicorp.com/agent-inject-secret-ca.pem: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-config: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-kafka.crt: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-secrets.yaml: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-server.crt: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-secret-server.key: internal/data/opengauss/opengauss-meeting
+        vault.hashicorp.com/agent-inject-template-ca.pem: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.MysqlCA }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-config: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.platformConfig }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-kafka.crt: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.kafkacrt }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-secrets.yaml: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.platformSecrets }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-server.crt: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.servercrt }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-inject-template-server.key: "{{- with secret \"internal/data/opengauss/opengauss-meeting\"
+          -}}  \n{{ .Data.data.serverkey }}\n{{- end }}\n"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-service-account-token-volume-name: token-vol
+        vault.hashicorp.com/role: opengauss-meeting
+        vault.hashicorp.com/tls-skip-verify: "true"
+      creationTimestamp: null
+      labels:
+        app: meeting-platform
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: TZ
+          value: Asia/Shanghai
+        - name: CONFIG_PATH
+          value: /vault/secrets/config
+        - name: VAULT_PATH
+          value: /vault/secrets/secrets.yaml
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/meeting/meeting-platform:main-863e34
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: meeting-platform
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsUser: 1000
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: opengauss-meeting
+      serviceAccountName: opengauss-meeting
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: token-vol
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token

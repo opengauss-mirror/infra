@@ -1,6 +1,40 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: meeting-center
+  namespace: meetingserver
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: meeting-center
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meeting-platform
+  namespace: meetingserver
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: meeting-platform
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: meeting-service
   namespace: meetingserver
 spec:
