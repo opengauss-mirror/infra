@@ -1,48 +1,79 @@
----
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-  name: opengauss-meeting-server-osinfra-ingress
-  namespace: meetingserver
-spec:
-  tls:
-    - hosts:
-        - meetings-opengauss.osinfra.cn
-      secretName: meeting-server-osinfra-tls
-  rules:
-    - host: meetings-opengauss.osinfra.cn
-      http:
-        paths:
-          - backend:
-              serviceName: meeting-service
-              servicePort: 8080
-            path: /
-
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   name: opengauss-meeting-server-ingress
   namespace: meetingserver
 spec:
-  tls:
-    - hosts:
-        - meetings.opengauss.org
-      secretName: meeting-server-tls
+  ingressClassName: nginx
   rules:
-    - host: meetings.opengauss.org
-      http:
-        paths:
-          - backend:
-              serviceName: meeting-service
-              servicePort: 8080
-            path: /
+  - host: meetings.opengauss.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: meeting-center
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - meetings.opengauss.org
+    secretName: meeting-server-tls
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  name: meeting-center
+  namespace: meetingserver
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: opengauss-meeting.osinfra.cn
+    http:
+      paths:
+      - backend:
+          service:
+            name: meeting
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - opengauss-meeting.osinfra.cn
+    secretName: meeting-server-osinfra-tls
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  name: opengauss-meeting-server-osinfra-ingress
+  namespace: meetingserver
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: meetings-opengauss.osinfra.cn
+    http:
+      paths:
+      - backend:
+          service:
+            name: meeting-service
+            port:
+              number: 8080
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - meetings-opengauss.osinfra.cn
+    secretName: meeting-server-osinfra-tls
 
 ---
 apiVersion: secrets-manager.tuenti.io/v1alpha1

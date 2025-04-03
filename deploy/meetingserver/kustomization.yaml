@@ -4,6 +4,7 @@ resources:
 - service.yaml
 - cronjob.yaml
 - ingress.yaml
+- sa.yaml
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-hk-cluster
   kubernetes.ops.email: ""
@@ -13,6 +14,3 @@ commonAnnotations:
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: meetingserver
-images:
-- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/openeuler/app-meeting-server
-  newTag: master-43a7ee
