@@ -264,7 +264,7 @@ spec:
               value: /vault/secrets/server.crt
             - name: TLS_KEY_PATH
               value: /vault/secrets/server.key
-            image: swr.cn-north-4.myhuaweicloud.com/opensourceway/meeting/meeting-center:master-5725b4
+            image: swr.cn-north-4.myhuaweicloud.com/opensourceway/meeting/meeting-platform:main-28a899
             imagePullPolicy: IfNotPresent
             name: meeting-server
             resources: {}
