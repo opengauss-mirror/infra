@@ -6,4 +6,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-label
-  newTag: develop-v0-744d27
+  newTag: develop-v0-28ce85
