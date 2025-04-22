@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-lifecycle
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    config_items:
+
+      - repos:
+          - opengaussmirror
+          - opengauss
+
+    sig_info_url: https://dsapi.osinfra.cn/query/sig/info
+    community_name: opengauss
+    event_state_opened: opened
+    event_state_closed: closed
+    comment_no_permission_operate_issue: " [@__commenter__](https://gitcode.com/__commenter__)  you can't __action__ an issue unless you are the author of it or a collaborator."
+    comment_issue_needs_link_pr: " [@__commenter__](https://gitcode.com/__commenter__)  you can't close an issue unless the issue has link pull requests."
+    comment_list_linking_pull_requests_failure: " [@__commenter__](https://gitcode.com/__commenter__)  fail to check link pull requests of the issue, please retry."
+    comment_no_permission_operate_pr: " [@__commenter__](https://gitcode.com/__commenter__)  you can't __action__ a pull request unless you are the author of it or a collaborator."

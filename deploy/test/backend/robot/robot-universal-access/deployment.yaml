@@ -14,21 +14,6 @@ spec:
       app: robot-universal-access
   template:
     metadata:
-      annotations:
-        vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/agent-pre-populate-only: "true"
-        vault.hashicorp.com/tls-skip-verify: "true"
-        vault.hashicorp.com/agent-init-first: "true"
-        vault.hashicorp.com/role: 'opengauss-backend-robot'
-        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
-        vault.hashicorp.com/agent-run-as-user: "1000"
-        vault.hashicorp.com/agent-run-as-group: "1000"
-        vault.hashicorp.com/agent-inject-perms-config: "0400"
-        vault.hashicorp.com/agent-inject-secret-config: 'internal/data/infra-test/opengauss-backend-robot'
-        vault.hashicorp.com/agent-inject-template-config: |  
-          {{- with secret "internal/data/infra-test/opengauss-backend-robot" -}}  
-          {{ .Data.data.accessConfig }}
-          {{- end }}
       labels:
         app: robot-universal-access
     spec:
@@ -37,7 +22,6 @@ spec:
           type: Localhost
           localhostProfile: infra-seccomp.json
       automountServiceAccountToken: false
-      serviceAccountName: opengauss-backend-robot
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
       containers:
@@ -45,7 +29,7 @@ spec:
         args: 
         - --port=8888 
         - --handle-path=gitcode-hook 
-        - --config-file=/vault/secrets/config
+        - --config-file=/app/conf/robot-gitee/app_config/config.yaml
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-access:develop-v0-899d4d
         resources:
           limits:
@@ -80,11 +64,11 @@ spec:
           capabilities:
             drop:
               - ALL
+        volumeMounts:
+        - mountPath: /app/conf/robot-gitee/app_config/
+          name: app-config
+          readOnly: true
       volumes:
-        - name: token-vol
-          projected:
-            sources:
-            - serviceAccountToken:
-                audience: api
-                expirationSeconds: 600
-                path: token
+      - name: app-config
+        configMap:
+          name: configmap-access

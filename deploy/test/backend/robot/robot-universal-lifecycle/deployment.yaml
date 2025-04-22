@@ -29,12 +29,6 @@ spec:
           {{- with secret "internal/data/infra-test/opengauss-backend-robot" -}}  
           {{ .Data.data.token }}
           {{- end }}
-        vault.hashicorp.com/agent-inject-perms-config: "0400"
-        vault.hashicorp.com/agent-inject-secret-config: 'internal/data/infra-test/opengauss-backend-robot'
-        vault.hashicorp.com/agent-inject-template-config: |  
-          {{- with secret "internal/data/infra-test/opengauss-backend-robot" -}}  
-          {{ .Data.data.lifecycleConfig }}
-          {{- end }}
       labels:
         app: robot-universal-lifecycle
     spec:
@@ -50,7 +44,7 @@ spec:
       - name: robot-universal-lifecycle
         args:
         - --port=8888 
-        - --config-file=/vault/secrets/config 
+        - --config-file=/app/conf/config.yaml
         - --handle-path=gitcode-hook 
         - --token-path=/vault/secrets/token
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-lifecycle:develop-v0-ced411
@@ -87,6 +81,10 @@ spec:
           capabilities:
             drop:
               - ALL
+        volumeMounts:
+        - mountPath: /app/conf/
+          name: app-config
+          readOnly: true
       volumes:
         - name: token-vol
           projected:
@@ -95,3 +93,6 @@ spec:
                 audience: api
                 expirationSeconds: 600
                 path: token
+        - name: app-config
+          configMap:
+            name: configmap-lifecycle
