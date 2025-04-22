@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-review
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    config_items:
+      - repos:
+          - opengauss
+          - opengaussmirror
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+          - ci-successful
+        labels_not_allow_merge:
+          - bug
+          - invalid
+        lgtm_counts_required: 2
+
+    comment_try_squash_again: "### Change Merge Method Failed \n Please comment the command **`/rebase cancel`** to remove the **merge/rebase** label, and then try comment **`/squash`** again."
+    comment_try_rebase_again: "### Change Merge Method Failed \n Please comment the command **`/squash cancel`** to remove the **merge/squash** label, and then try comment **`/rebase`** again."
+    comment_add_lgtm_by_self: "### Review Code Warning \n @%s , You can't review code by yourself, please contact the maintainers. :astonished: "
+    comment_removed_label: "### Review Code Feedback \n ***%s*** was removed in this pull request by: ***%s***. :flushed: "
+    comment_add_label_successful: "### Review Code Feedback \n ***%s*** was added to this pull request by: ***%s***. :wave: \n **NOTE:** If this pull request is not merged while all conditions are met, comment **`/check-pr`** to try again. :smile: "
+    comment_add_label_failed: "### Review Code Feedback \n ***%s*** was not added to this pull request by: ***%s***. :wave: \n Please try comment **`/squash`** again."
+    comment_no_permission_for_label: "### Review Code Feedback \n ***@%s*** has no permission to %s ***%s*** label in this pull request. :astonished: \nPlease contact to the collaborators in this repository."
+    comment_no_permission_for_lgtm_label: "### Review Code Feedback \n Thanks for your review, @%s, your opinion is very important to us. :wave: \nThe maintainers will consider your advice carefully."
+    comment_command_trigger: "### Merge Manual\n @s, Because of the network problem, please comment ***`/%s`*** once again. :pray: "
+    comment_clear_label_case_by_pr_update: "### Notice\n New code changes of the pull request are detected and remove these labels ***%s***. :flushed: "
+    comment_clear_label_case_by_reopen_pr: "### Notice\n When PR is reopened, remove these labels ***%s***. :flushed: "
+    comment_pr_cannot_merge_reason: "### Merge Verification Failed\n@%s, this pr is not mergeable and the reasons are below:\n\n%s"
+    comment_msg_missing_labels: "##### *Missing Labels*\n- the pull request needs **%s** label(s)."
+    comment_msg_invalid_labels: "##### *Label BackList*\n- the **%s** label(s) caused the pull request to be unable to merge."
+    comment_msg_not_enough_lgtm_label: "##### *Not Enough LGTM Labels*\n- the pull request needs **%d** **lgtm** labels and now gets **%d**."
+    comment_try_label_again: "### Notice\n the **%s** label's operation log can nof found! please check it."
+    comment_no_permission_add_label: "### Notice\n the **%s** user can't add the **%s** label, please fix it or contact the maintainers."
+    comment_failed_list_pr_operation_logs: "### Notice\n The corresponding operation log is missing."
+    comment_no_ready_tips: "##### *Non-Compliance Label Operations*\n- %s"
+    comment_failed_merge_pr: "PR merge failed"
+    label_usage_tip_title: "##### *Label Usage Tips*"
+    label_usage_tip_detail: "- **%s**: %s"
+    label_usage_description:
+      - label_name: lgtm
+        description: "The code has been reviewed. This can be accomplished by commenting ***`/lgtm`***"
+      - label_name: approved
+        description: "Agree to merge the pull request.This can be accomplished by commenting ***`/approve`***"
+      - label_name: needs-issue
+        description: "Before the PR is merged, it must be associated with the issue."

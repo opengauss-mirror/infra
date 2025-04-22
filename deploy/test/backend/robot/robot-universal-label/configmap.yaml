@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-label
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    config_items:
+
+      - repos:
+          - opengaussmirror
+          - opengauss
+        clear_labels:
+          - ci-pipeline-success
+          - codecheck-success
+          - lite-ci-success
+          - lgtm
+        clear_labels_by_regexp: lgtm-
+
+    user_mark_format: "[@【commenter】](https://gitcode.com/【commenter】)"
+    placeholder_commenter: "【commenter】"
+    squash_commit_label: stat/needs-squash
+    comment_command_trigger: "### Label Command Manual \n\nBecause of the network problem, please comment once again. :pray: "
+    comment_remove_labels_when_pr_source_code_updated: "### Notification  \n\nThis pull request source branch has changed, so removes the following label(s): %s."
+    comment_label_command_conflict: "### Label Command Feedback \n\n %s , the comment that add and delete a same label, please check it. :pray: "
+    comment_update_label_failed: "### Label Command Feedback \n\n %s, Because of the label(s) `%s` update failed, please comment once again. :pray: "
+    comment_add_not_exist_label: "### Label Command Feedback \n\n %s, Because of the repository doesn't have the label(s) `%s`, it cannot be added. :pray: "
+    remove_pr_label_delayed_seconds: 2

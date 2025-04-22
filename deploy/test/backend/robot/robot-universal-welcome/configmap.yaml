@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-welcome
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    config_items:
+      - repos:
+          - opengaussmirror
+          - opengauss
+        community_name: openGauss
+        command_link: https://gitee.com/opengauss/community/blob/master/contributors/command.en.md
+        welcome_message: "### Welcome\n\nHey **%s** , Welcome to %s Community.\n\nThis project in %s Community are maintained by %s .\n\nThat means the developers can comment below every pull request or issue to trigger Bot Commands.\n\nPlease follow instructions at **[Here](%s)** to find the details.\n"
+        welcome_message_with_committers: "### Welcome\n\nHey **%s** , Welcome to %s Community.\n\nThis project in %s Community are maintained by %s , and its committers: %s .\n\nThat means the developers can comment below every pull request or issue to trigger Bot Commands.\n\nPlease follow instructions at **[Here](%s)** to find the details.\n"
+
+    user_mark_format: "[@【committer】](https://gitcode.com/【committer】)"
+    placeholder_maintainer: "【committer】"
+    sig_info_url: https://dsapi.test.osinfra.cn/query/sig/info
+    community_name: opengauss
+    exclude_user:
+      - ""
+      - opengauss_bot

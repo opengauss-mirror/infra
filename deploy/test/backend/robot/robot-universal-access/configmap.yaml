@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-access
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    access:
+      repo_plugins:
+        opengaussmirror:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+        opengauss/infra:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+        opengauss/playground-course:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+        opengauss/openGauss-webclient-portal:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+        opengauss/opensource-intership:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+        opengauss/tryme:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+      plugins:
+        - name: robot-service-welcome
+          endpoint: http://robot-universal-welcome-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Issue Hook"
+        - name: robot-service-cla
+          endpoint: http://robot-universal-cla-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Note Hook"
+        - name: robot-service-lifecycle
+          endpoint: http://robot-universal-lifecycle-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Note Hook"
+        - name: robot-service-label
+          endpoint: http://robot-universal-label-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Note Hook"
+        - name: robot-service-review
+          endpoint: http://robot-universal-review-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Note Hook"

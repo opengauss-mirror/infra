@@ -23,12 +23,6 @@ spec:
         vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
         vault.hashicorp.com/agent-run-as-user: "1000"
         vault.hashicorp.com/agent-run-as-group: "1000"
-        vault.hashicorp.com/agent-inject-perms-config: "0400"
-        vault.hashicorp.com/agent-inject-secret-config: 'internal/data/infra-test/opengauss-backend-robot'
-        vault.hashicorp.com/agent-inject-template-config: |  
-          {{- with secret "internal/data/infra-test/opengauss-backend-robot" -}}  
-          {{ .Data.data.welcomeConfig }}
-          {{- end }}
         vault.hashicorp.com/agent-inject-perms-token: "0400"
         vault.hashicorp.com/agent-inject-secret-token: 'internal/data/infra-test/opengauss-backend-robot'
         vault.hashicorp.com/agent-inject-template-token: |  
@@ -49,7 +43,7 @@ spec:
       containers:
       - name: robot-universal-welcome
         args:
-        - --config-file=/vault/secrets/config 
+        - --config-file=/app/conf/config.yaml
         - --token-path=/vault/secrets/token 
         - --handle-path=gitcode-hook 
         - --port=8888
@@ -87,6 +81,10 @@ spec:
           capabilities:
             drop:
               - ALL
+        volumeMounts:
+        - mountPath: /app/conf/
+          name: app-config
+          readOnly: true
       volumes:
         - name: token-vol
           projected:
@@ -95,3 +93,6 @@ spec:
                 audience: api
                 expirationSeconds: 600
                 path: token
+        - name: app-config
+          configMap:
+            name: configmap-welcome
