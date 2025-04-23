@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-associate
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    config_items:
+    - repos:
+      - open_test/bind
+      enable_check_associate_issue: true
+      enable_check_associate_milestone: true

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robot-universal-repo-watcher
+  namespace: opengauss-backend-robot
+  labels:
+    app: robot-universal-repo-watcher
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: robot-universal-repo-watcher
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/role: 'opengauss-backend-robot'
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-perms-token: "0400"
+        vault.hashicorp.com/agent-inject-secret-token: 'internal/data/infra-test/opengauss-backend-robot'
+        vault.hashicorp.com/agent-inject-template-token: |  
+          {{- with secret "internal/data/infra-test/opengauss-backend-robot" -}}  
+          {{ .Data.data.token }}
+          {{- end }}
+      labels:
+        app: robot-universal-repo-watcher
+    spec:
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
+      serviceAccountName: opengauss-backend-robot
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: robot-universal-repo-watcher
+        args:
+        - --port=8888 
+        - --config-file=/app/conf/config.yaml
+        - --token-path=/vault/secrets/token
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-repo-watcher:develop-v0-b9c11c
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
+        volumeMounts:
+        - mountPath: /app/conf/
+          name: config-vol
+          readOnly: true
+      volumes:
+        - name: token-vol
+          projected:
+            sources:
+            - serviceAccountToken:
+                audience: api
+                expirationSeconds: 600
+                path: token
+        - configMap: 
+            name: configmap-repo-watcher
+          name: config-vol
