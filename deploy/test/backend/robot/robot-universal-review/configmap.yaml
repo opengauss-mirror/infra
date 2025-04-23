@@ -12,10 +12,6 @@ data:
         legal_operator: opengauss_bot
         labels_for_merge:
           - opengauss-cla/yes
-          - ci-successful
-        labels_not_allow_merge:
-          - bug
-          - invalid
         lgtm_counts_required: 2
 
     comment_try_squash_again: "### Change Merge Method Failed \n Please comment the command **`/rebase cancel`** to remove the **merge/rebase** label, and then try comment **`/squash`** again."
