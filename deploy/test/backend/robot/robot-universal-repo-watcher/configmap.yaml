@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-repo-watcher
+  namespace: opengauss-backend-robot
+data:
+  config.yaml: |
+    repo_owner: "opengaussmirror"
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot/robot-cache"
+    repo_fetch_interval: 120
