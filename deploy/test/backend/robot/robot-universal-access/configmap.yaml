@@ -13,36 +13,48 @@ data:
           - robot-service-lifecycle
           - robot-service-label
           - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
         opengauss/infra:
           - robot-service-welcome
           - robot-service-cla
           - robot-service-lifecycle
           - robot-service-label
           - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
         opengauss/playground-course:
           - robot-service-welcome
           - robot-service-cla
           - robot-service-lifecycle
           - robot-service-label
           - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
         opengauss/openGauss-webclient-portal:
           - robot-service-welcome
           - robot-service-cla
           - robot-service-lifecycle
           - robot-service-label
           - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
         opengauss/opensource-intership:
           - robot-service-welcome
           - robot-service-cla
           - robot-service-lifecycle
           - robot-service-label
           - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
         opengauss/tryme:
           - robot-service-welcome
           - robot-service-cla
           - robot-service-lifecycle
           - robot-service-label
           - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
       plugins:
         - name: robot-service-welcome
           endpoint: http://robot-universal-welcome-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
@@ -66,5 +78,15 @@ data:
         - name: robot-service-review
           endpoint: http://robot-universal-review-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
           events:
+            - "Merge Request Hook"
+            - "Note Hook"
+        - name: robot-service-assign
+          endpoint: http://robot-universal-assign-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Note Hook"
+        - name: robot-service-associate
+          endpoint: http://robot-universal-associate-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Issue Hook"
             - "Merge Request Hook"
             - "Note Hook"
