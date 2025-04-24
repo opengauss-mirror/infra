@@ -12,18 +12,14 @@ data:
         legal_operator: opengauss_bot
         labels_for_merge:
           - opengauss-cla/yes
-          - ci-successful
-        labels_not_allow_merge:
-          - bug
-          - invalid
         lgtm_counts_required: 2
 
     comment_try_squash_again: "### Change Merge Method Failed \n Please comment the command **`/rebase cancel`** to remove the **merge/rebase** label, and then try comment **`/squash`** again."
     comment_try_rebase_again: "### Change Merge Method Failed \n Please comment the command **`/squash cancel`** to remove the **merge/squash** label, and then try comment **`/rebase`** again."
     comment_add_lgtm_by_self: "### Review Code Warning \n @%s , You can't review code by yourself, please contact the maintainers. :astonished: "
     comment_removed_label: "### Review Code Feedback \n ***%s*** was removed in this pull request by: ***%s***. :flushed: "
-    comment_add_label_successful: "### Review Code Feedback \n ***%s*** was added to this pull request by: ***%s***. :wave: \n **NOTE:** If this pull request is not merged while all conditions are met, comment **`/check-pr`** to try again. :smile: "
-    comment_add_label_failed: "### Review Code Feedback \n ***%s*** was not added to this pull request by: ***%s***. :wave: \n Please try comment **`/squash`** again."
+    comment_add_label_successful: "### Review Code Feedback \n The label **%s** was added to this pull request by: ***%s***. :wave: \n **NOTE:** If this pull request is not merged while all conditions are met, comment **`/check-pr`** to try again. :smile: "
+    comment_add_label_failed: "### Review Code Feedback \n The label **%s** was not added to this pull request by: ***%s***. :wave: \n Please try comment **`/squash`** again."
     comment_no_permission_for_label: "### Review Code Feedback \n ***@%s*** has no permission to %s ***%s*** label in this pull request. :astonished: \nPlease contact to the collaborators in this repository."
     comment_no_permission_for_lgtm_label: "### Review Code Feedback \n Thanks for your review, @%s, your opinion is very important to us. :wave: \nThe maintainers will consider your advice carefully."
     comment_command_trigger: "### Merge Manual\n @s, Because of the network problem, please comment ***`/%s`*** once again. :pray: "
@@ -42,8 +38,24 @@ data:
     label_usage_tip_detail: "- **%s**: %s"
     label_usage_description:
       - label_name: lgtm
-        description: "The code has been reviewed. This can be accomplished by commenting ***`/lgtm`***"
+        description: "The code has been reviewed. This can be accomplished by commenting **`/lgtm`**"
       - label_name: approved
-        description: "Agree to merge the pull request.This can be accomplished by commenting ***`/approve`***"
+        description: "Agree to merge the pull request. This can be accomplished by commenting **`/approve`**"
       - label_name: needs-issue
         description: "Before the PR is merged, it must be associated with the issue."
+      - label_name: opengauss-cla/yes
+        description: "The code contributor has signed the CLA."
+      - label_name: opengauss-cla/no
+        description: "The code contributor has not signed the CLA!"
+      - label_name: ci-pipeline-success
+        description: "The code compilation check job is passed."
+      - label_name: codecheck-success
+        description: "BThe static code check job is passed."
+      - label_name: lite-ci-success
+        description: "The code build check job is passed."
+      - label_name: lite-ci-failed
+        description: "The code build check job failed!"
+      - label_name: codecheck-failed
+        description: "The static code check job failed!"
+      - label_name: ci-pipeline-failed
+        description: "The code compilation check job failed!"

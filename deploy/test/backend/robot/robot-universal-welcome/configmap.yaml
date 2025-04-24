@@ -15,16 +15,17 @@ data:
           - "### Welcome To %s Community"
           - "Hey %s , thanks for your contribution to the community."
           - "#### Bot Usage Manual"
-          - "I'm the Bot here serving you. You can find the instructions on how to interact with me at **[Here](%s)** . That means the developers can comment below every pull request or issue to trigger Bot Commands."
+          - "I'm the Bot here serving you. You can find the instructions on how to interact with me at **[Here](%s)** . That means you can comment below every pull request or issue to trigger Bot Commands."
           - "#### Contact Guide"
           - "If you have any questions, please contact the SIG: **%s** ,"
           - "and you want to get quick review about your pull request or issue, please contact the owners in first: %s ,"
           - "and any of the maintainers: %s ,"
           - "and any of the committers: %s ."
           - "[%s](https://https://gitcode.com/opengaussmirror/tc/blob/master/sigs/%s/README.md)"
+          - "If you have any questions, please contact any of the repository's maintainers: %s ."
 
     user_mark_format: "@"
-    sig_info_url: ""
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     community_name: opengauss
     exclude_user:
       - ""
