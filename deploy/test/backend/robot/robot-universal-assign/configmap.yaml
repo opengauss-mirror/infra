@@ -7,5 +7,6 @@ data:
   config.yaml: |
     config_items:
     - repos:
-      - open_test/bind
+      - opengaussmirror
+      - opengauss
       enable_issue_assign: true
