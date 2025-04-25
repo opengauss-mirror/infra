@@ -9,16 +9,48 @@ data:
       - repos:
           - opengauss
           - opengaussmirror
+        excluded_repos:
+          - opengaussmirror/website
+          - opengaussmirror/infra
+          - opengaussmirror/tryme
         legal_operator: opengauss_bot
         labels_for_merge:
           - opengauss-cla/yes
         lgtm_counts_required: 2
 
+      - repos:
+          - opengaussmirror/website
+        lgtm_counts_required: 2
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+          - ci-pipeline-success
+          - codecheck-success
+          - lite-ci-success
+          - needs-issue
+
+      - repos:
+          - opengaussmirror/tryme
+        lgtm_counts_required: 2
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+          - ci-pipeline-success
+          - codecheck-success
+          - lite-ci-success
+          - needs-issue
+        labels_not_allow_merge:
+          - lite-ci-failed
+          - codecheck-failed
+          - ci-pipeline-failed
+
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
+    community_name: opengauss
     comment_try_squash_again: "### Change Merge Method Failed \n Please comment the command **`/rebase cancel`** to remove the **merge/rebase** label, and then try comment **`/squash`** again."
     comment_try_rebase_again: "### Change Merge Method Failed \n Please comment the command **`/squash cancel`** to remove the **merge/squash** label, and then try comment **`/rebase`** again."
     comment_add_lgtm_by_self: "### Review Code Warning \n @%s , You can't review code by yourself, please contact the maintainers. :astonished: "
     comment_removed_label: "### Review Code Feedback \n ***%s*** was removed in this pull request by: ***%s***. :flushed: "
-    comment_add_label_successful: "### Review Code Feedback \n The label **%s** was added to this pull request by: ***%s***. :wave: \n **NOTE:** If this pull request is not merged while all conditions are met, comment **`/check-pr`** to try again. :smile: "
+    comment_add_label_successful: "### Review Code Feedback \n- the label **%s** was added to this pull request. It means that **%s** reviewed the code changes. :wave: \n ##### *Tips* \n- If this pull request is not merged while all conditions are met, comment **`/check-pr`** to try again. :smile: "
     comment_add_label_failed: "### Review Code Feedback \n The label **%s** was not added to this pull request by: ***%s***. :wave: \n Please try comment **`/squash`** again."
     comment_no_permission_for_label: "### Review Code Feedback \n ***@%s*** has no permission to %s ***%s*** label in this pull request. :astonished: \nPlease contact to the collaborators in this repository."
     comment_no_permission_for_lgtm_label: "### Review Code Feedback \n Thanks for your review, @%s, your opinion is very important to us. :wave: \nThe maintainers will consider your advice carefully."
