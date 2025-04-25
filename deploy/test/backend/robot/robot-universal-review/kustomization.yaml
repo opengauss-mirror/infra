@@ -7,4 +7,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-review
-  newTag: develop-v0-ae4c08
+  newTag: develop-v0-836c9a
