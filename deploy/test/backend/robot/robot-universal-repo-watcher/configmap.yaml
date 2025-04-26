@@ -7,4 +7,4 @@ data:
   config.yaml: |
     repo_owner: "opengaussmirror"
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
-    repo_fetch_interval: 120
+    repo_fetch_interval: 7200
