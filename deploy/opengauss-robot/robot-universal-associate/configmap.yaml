@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-associate
+  namespace: opengauss-robot
+data:
+  config.yaml: |
+    config_items:
+    - repos:
+      - opengauss
+      enable_check_associate_milestone: false

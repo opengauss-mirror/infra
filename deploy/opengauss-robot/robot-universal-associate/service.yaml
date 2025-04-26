@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: robot-universal-associate-service
+  namespace: opengauss-robot
+spec:
+  ports:
+  - name: http-port
+    port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: robot-universal-associate
+  type: ClusterIP

@@ -1,0 +1,19 @@
+resources:
+- namespace.yaml
+- sa.yaml
+- secret.yaml
+- robot-hook-dispatcher
+- robot-universal-access
+- robot-universal-hook-delivery
+- robot-universal-welcome
+- robot-universal-lifecycle
+- robot-universal-review
+- robot-universal-cla
+- robot-universal-label
+- robot-universal-assign
+- robot-universal-associate
+- robot-universal-cache
+- robot-universal-repo-watcher
+namespace: opengauss-robot
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization

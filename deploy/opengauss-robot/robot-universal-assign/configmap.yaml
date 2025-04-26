@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-assign
+  namespace: opengauss-robot
+data:
+  config.yaml: |
+    config_items:
+    - repos:
+      - opengauss
+      enable_issue_assign: true

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: robot-universal-hook-delivery-ingress
+  namespace: opengauss-robot
+spec:
+  rules:
+  - host: hook-delivery-opengauss.osinfra.cn
+    http:
+      paths:
+      - path: /gitcode-hook
+        pathType: Prefix
+        backend:
+          service:
+            name: robot-universal-hook-delivery-service
+            port:
+              number: 8888
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - hook-delivery-opengauss.osinfra.cn
+    secretName: osinfra-cn-tls

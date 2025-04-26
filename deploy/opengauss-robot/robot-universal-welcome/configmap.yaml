@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-welcome
+  namespace: opengauss-robot
+data:
+  config.yaml: |
+    config_items:
+      - repos:
+          - opengauss
+        community_name: openGauss
+        command_link: https://gitcode.com/opengauss/community/blob/master/contributors/command.en.md
+        welcome_message:
+          - "### Welcome To %s Community"
+          - "Hey %s , thanks for your contribution to the community."
+          - "#### Bot Usage Manual"
+          - "I'm the Bot here serving you. You can find the instructions on how to interact with me at **[Here](%s)** . That means you can comment below every pull request or issue to trigger Bot Commands."
+          - "#### Contact Guide"
+          - "If you have any questions, please contact the SIG: **%s** ,"
+          - "and you want to get quick review about your pull request or issue, please contact the owners in first: %s ,"
+          - "and any of the maintainers: %s ,"
+          - "and any of the committers: %s ."
+          - "[%s](https://https://gitcode.com/opengauss/tc/blob/master/sigs/%s/README.md)"
+          - "If you have any questions, please contact any of the repository's maintainers: %s ."
+
+    user_mark_format: "@"
+    sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
+    community_name: opengauss
+    exclude_user:
+      - ""
+      - opengauss_bot
+      - gitcode-xxm
+      - ibforu
+      - GeorgeCao
+      - gitcode_test_01
+      - dengmengmian
+      - wxltrulli
+      - LiYanghang00
+      - yao-xiaobai
+      - opengauss-bot
+      - zhaoyan0879
