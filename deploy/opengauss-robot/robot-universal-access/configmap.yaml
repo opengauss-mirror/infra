@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-access
+  namespace: opengauss-robot
+data:
+  config.yaml: |
+    access:
+      repo_plugins:
+        opengauss:
+          - robot-service-welcome
+          - robot-service-cla
+          - robot-service-lifecycle
+          - robot-service-label
+          - robot-service-review
+          - robot-service-assign
+          - robot-service-associate
+      plugins:
+        - name: robot-service-welcome
+          endpoint: http://robot-universal-welcome-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Issue Hook"
+        - name: robot-service-cla
+          endpoint: http://robot-universal-cla-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Note Hook"
+        - name: robot-service-lifecycle
+          endpoint: http://robot-universal-lifecycle-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Note Hook"
+        - name: robot-service-label
+          endpoint: http://robot-universal-label-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Note Hook"
+        - name: robot-service-review
+          endpoint: http://robot-universal-review-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Merge Request Hook"
+            - "Note Hook"
+        - name: robot-service-assign
+          endpoint: http://robot-universal-assign-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Note Hook"
+        - name: robot-service-associate
+          endpoint: http://robot-universal-associate-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
+          events:
+            - "Issue Hook"
+            - "Merge Request Hook"
+            - "Note Hook"

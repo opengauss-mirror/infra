@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robot-universal-access
+  namespace: opengauss-robot
+  labels:
+    app: robot-universal-access
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: robot-universal-access
+  template:
+    metadata:
+      labels:
+        app: robot-universal-access
+    spec:
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: robot-universal-access
+        args: 
+        - --port=8888 
+        - --handle-path=gitcode-hook 
+        - --config-file=/app/conf/config.yaml
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-access:develop-v0-899d4d
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8888
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8888
+          timeoutSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
+        volumeMounts:
+        - mountPath: /app/conf/
+          name: app-config
+          readOnly: true
+      volumes:
+      - name: app-config
+        configMap:
+          name: configmap-access

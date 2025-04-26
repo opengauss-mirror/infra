@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-cache
+  namespace: opengauss-robot
+data:
+  config.yaml: |
+    repo-save-dir: "/opt/app/repo/tc"
+    repo-cached-folder: "sigs"
+    cache-size: 128
+    git-platform-domain: gitcode.com
+    repo-owner: opengauss
+    repo-name: tc
+    repo-branch: master
+    repo-commit-depth: 1
+    repo-fetch-interval: 300

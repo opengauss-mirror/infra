@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robot-universal-hook-delivery
+  namespace: opengauss-robot
+  labels:
+    app: robot-universal-hook-delivery
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: robot-universal-hook-delivery
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/role: 'opengauss-robot'
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-perms-gitcode-secret: "0400"
+        vault.hashicorp.com/agent-inject-secret-gitcode-secret: 'internal/data/opengauss/robot'
+        vault.hashicorp.com/agent-inject-template-gitcode-secret: |  
+          {{- with secret "internal/data/opengauss/robot" -}}  
+          {{ .Data.data.deliverySecrets }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-config: "0400"
+        vault.hashicorp.com/agent-inject-secret-config: 'internal/data/opengauss/robot'
+        vault.hashicorp.com/agent-inject-template-config: |  
+          {{- with secret "internal/data/opengauss/robot" -}}  
+          {{ .Data.data.deliveryConfig }}
+          {{- end }}
+      labels:
+        app: robot-universal-hook-delivery
+    spec:
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
+      serviceAccountName: opengauss-robot
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret
+      containers:
+      - name: robot-universal-hook-delivery
+        args:
+        - --port=8888
+        - --hmac-secret-file=/vault/secrets/gitcode-secret
+        - --config-file=/vault/secrets/config
+        - --enable_debug=true
+        - --handle-path=gitcode-hook
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-hook-delivery:develop-v0-e036b5
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8888
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            port: 8888
+          timeoutSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+        - name: token-vol
+          projected:
+            sources:
+            - serviceAccountToken:
+                audience: api
+                expirationSeconds: 600
+                path: token

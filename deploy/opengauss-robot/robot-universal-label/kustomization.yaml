@@ -1,0 +1,10 @@
+resources:
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+namespace: opengauss-robot
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-label
+  newTag: develop-v0-2a4b1c
