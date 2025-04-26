@@ -17,7 +17,7 @@ data:
         legal_operator: opengauss_bot
         labels_for_merge:
           - opengauss-cla/yes
-        labels_not_allow_merge
+        labels_not_allow_merge:
           - needs-issue
         lgtm_counts_required: 2
         
@@ -43,7 +43,7 @@ data:
           - opengauss-cla/yes
           - ci-pipeline-success
           - codecheck-success
-        labels_not_allow_merge
+        labels_not_allow_merge:
           - needs-issue
 
       - repos:
