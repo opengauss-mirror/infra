@@ -20,6 +20,13 @@ data:
         lgtm_counts_required: 2
         
       - repos:
+          - opengauss/infra
+        lgtm_counts_required: 1
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+        
+      - repos:
           - opengauss/openGauss-workbench
           - opengauss/openGauss-OM
           - opengauss/openGauss-connector-jdbc
