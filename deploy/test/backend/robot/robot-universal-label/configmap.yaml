@@ -9,13 +9,10 @@ data:
 
       - repos:
           - opengaussmirror
-          - opengauss
         clear_labels:
           - ci-pipeline-success
           - codecheck-success
           - lite-ci-success
-          - lgtm
-        clear_labels_by_regexp: lgtm-
 
     user_mark_format: "[@【commenter】](https://gitcode.com/【commenter】)"
     placeholder_commenter: "【commenter】"

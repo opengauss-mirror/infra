@@ -8,6 +8,5 @@ data:
     config_items:
     - repos:
       - opengaussmirror
-      - opengauss
       enable_check_associate_issue: true
       enable_check_associate_milestone: true

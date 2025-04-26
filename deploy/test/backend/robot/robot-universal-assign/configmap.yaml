@@ -8,5 +8,4 @@ data:
     config_items:
     - repos:
       - opengaussmirror
-      - opengauss
       enable_issue_assign: true

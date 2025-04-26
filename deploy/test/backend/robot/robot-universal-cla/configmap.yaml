@@ -8,7 +8,6 @@ data:
     config_items:
       - repos:
         - opengaussmirror
-        - opengauss
         cla_label_yes: opengauss-cla/yes
         cla_label_no: opengauss-cla/no
         check_url: https://clasign.osinfra.cn/api/v1/individual-signing/gitee_opengauss-1614047760000855378

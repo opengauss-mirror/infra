@@ -8,7 +8,6 @@ data:
     config_items:
       - repos:
           - opengaussmirror
-          - opengauss
         community_name: openGauss
         command_link: https://gitee.com/opengauss/community/blob/master/contributors/command.en.md
         welcome_message:

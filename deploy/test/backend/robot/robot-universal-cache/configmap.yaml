@@ -5,12 +5,12 @@ metadata:
   namespace: opengauss-backend-robot
 data:
   config.yaml: |
-    repo-save-dir: '/opt/app/repo/etc'
-    repo-cached-folder: 'sigs'
+    repo-save-dir: "/opt/app/repo/tc"
+    repo-cached-folder: "sigs"
     cache-size: 128
     git-platform-domain: gitcode.com
     repo-owner: opengaussmirror
-    repo-name: tc
+    repo-name: tc_test
     repo-branch: master
     repo-commit-depth: 1
     repo-fetch-interval: 120

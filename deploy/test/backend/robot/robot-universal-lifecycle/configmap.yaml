@@ -6,9 +6,7 @@ metadata:
 data:
   config.yaml: |
     config_items:
-
       - repos:
-          - opengaussmirror
           - opengauss
 
     sig_info_url: https://dsapi.osinfra.cn/query/sig/info
