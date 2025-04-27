@@ -25,7 +25,7 @@ data:
     comment_command_trigger: "### CLA Signature Manual  \n\nBecause of the network problem, please comment `/check-cla` once again. :pray: "
     comment_pr_no_commits: "### CLA Signature Manual  \n\nThere is no vaild commits in the pull request, please check it. "
     comment_some_need_sign: "### CLA Signature Guide  \n\n %s , thanks for your pull request. \n\nThe authors of the commits have not signed **<font color=green>_Contributor License Agreement (CLA)_</font>**. \n\n[You can click here to sign the CLA](%s). :pray:  \n\nPlease check the [**<font color=red>_FAQs_</font>**](%s) first. \n\nAfter signing the CLA, you must comment `/check-cla` to check the CLA status again."
-    comment_update_label_failed: "### CLA Signature Manual  \n\nBecause of the CLA label update fail, please comment `/check-pr` once again. :pray: "
+    comment_update_label_failed: "### CLA Signature Manual  \n\nBecause of the CLA label update fail, please comment `/check-cla` once again. :pray: "
     comment_all_signed: "### CLA Signature Pass  \n\n【committer】, thanks for your pull request. All authors of the commits have signed the CLA. :wave: "
     sig_info_url: https://dsapi.test.osinfra.cn/query/sig/info
     community_name: opengauss

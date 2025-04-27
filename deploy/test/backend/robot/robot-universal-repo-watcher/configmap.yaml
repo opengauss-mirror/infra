@@ -8,3 +8,4 @@ data:
     repo_owner: "opengaussmirror"
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     repo_fetch_interval: 360
+    org_custom_role_name: "普通成员"
