@@ -9,3 +9,6 @@ data:
     - repos:
       - opengauss
       enable_check_associate_milestone: false
+      
+    sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
+    community_name: opengauss
