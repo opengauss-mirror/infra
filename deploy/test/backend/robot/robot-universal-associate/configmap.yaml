@@ -8,5 +8,7 @@ data:
     config_items:
     - repos:
       - opengaussmirror
-      enable_check_associate_issue: true
-      enable_check_associate_milestone: true
+      enable_check_associate_milestone: false
+    
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
+    community_name: opengauss
