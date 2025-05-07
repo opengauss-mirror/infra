@@ -17,12 +17,43 @@ data:
           - opengaussmirror/openGauss-tools-sql-translator
           - opengaussmirror/QA
           - opengaussmirror/Yat
-          - opengaussmirror/debezium
         lgtm_counts_required: 2
         legal_operator: opengauss_bot
         labels_for_merge:
           - opengauss-cla/yes
         labels_not_allow_merge:
+          - needs-issue
+    
+      - repos:
+          - opengaussmirror/debezium
+        lgtm_counts_required: 1
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+        labels_not_allow_merge:
+          - needs-issue
+    
+      - repos:
+          - opengauss/hcom4db
+        lgtm_counts_required: 1
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+          - codecheck-success
+
+      - repos:
+          - opengaussmirror/openGauss-server
+        lgtm_counts_required: 2
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+          - ci-pipeline-success
+          - codecheck-success
+          - lite-ci-success
+        labels_not_allow_merge:
+          - lite-ci-failed
+          - codecheck-failed
+          - ci-pipeline-failed
           - needs-issue
 
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
