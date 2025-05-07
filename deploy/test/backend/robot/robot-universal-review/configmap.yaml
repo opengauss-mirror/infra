@@ -6,12 +6,6 @@ metadata:
 data:
   config.yaml: |
     config_items:
-      - repos:
-          - opengaussmirror
-        legal_operator: opengauss_bot
-        labels_for_merge:
-          - opengauss-cla/yes
-        lgtm_counts_required: 2
     
       - repos:
           - opengaussmirror/openGauss-tools-sql-translator
@@ -55,6 +49,13 @@ data:
           - codecheck-failed
           - ci-pipeline-failed
           - needs-issue
+
+      - repos:
+          - opengaussmirror
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+        lgtm_counts_required: 2
 
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     community_name: opengauss

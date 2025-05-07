@@ -6,18 +6,6 @@ metadata:
 data:
   config.yaml: |
     config_items:
-      - repos:
-          - opengauss
-        excluded_repos:
-          - opengauss/tc
-          - opengauss/openGauss-server
-          - opengauss/docs
-          - opengauss/openGauss-workbench
-          - opengauss/openGauss-tools-sql-translator
-        legal_operator: opengauss_bot
-        labels_for_merge:
-          - opengauss-cla/yes
-        lgtm_counts_required: 2
         
       - repos:
           - opengauss/infra
@@ -149,6 +137,19 @@ data:
         labels_for_merge:
           - opengauss-cla/yes
           - codecheck-success
+
+      - repos:
+          - opengauss
+        excluded_repos:
+          - opengauss/tc
+          - opengauss/openGauss-server
+          - opengauss/docs
+          - opengauss/openGauss-workbench
+          - opengauss/openGauss-tools-sql-translator
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+        lgtm_counts_required: 2
 
     sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
     community_name: opengauss
