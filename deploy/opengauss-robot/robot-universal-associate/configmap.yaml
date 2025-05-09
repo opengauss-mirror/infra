@@ -7,7 +7,37 @@ data:
   config.yaml: |
     config_items:
     - repos:
-      - opengauss
+        - opengauss/openGauss-server
+        - opengauss/openGauss-workbench
+        - opengauss/openGauss-OM
+        - opengauss/openGauss-connector-jdbc
+        - opengauss/CM
+        - opengauss/Plugin
+        - opengauss/CBB
+        - opengauss/DSS
+        - opengauss/DCF
+        - opengauss/openGauss-embedded
+        - opengauss/docs
+        - opengauss/DMS
+        - opengauss/openGauss-connector-odbc
+        - opengauss/openGauss-tools-sql-translator
+        - opengauss/QA
+        - opengauss/Yat
+        - opengauss/cantian
+        - opengauss/openGauss-third_party
+        - opengauss/openGauss-connector-python-pyog
+        - opengauss/openGauss-connector-go-pq
+        - opengauss/CM-RestAPI
+        - opengauss/compatibility-assessment
+        - opengauss/ora-migration-tool
+        - opengauss/openGauss-container
+        - opengauss/openGauss-DBMind
+        - opengauss/openGauss-connector-python-psycopg2
+        - opengauss/DCC
+        - opengauss/openGauss-tools-datachecker-performance
+        - opengauss/debezium
+        - opengauss/openGauss-migration-portal
+        - opengauss/openGauss-tools-chameleon
       enable_check_associate_milestone: false
       
     sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
