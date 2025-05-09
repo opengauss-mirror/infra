@@ -7,7 +7,11 @@ data:
   config.yaml: |
     config_items:
     - repos:
-      - opengaussmirror
+        - opengaussmirror/openGauss-tools-sql-translator
+        - opengaussmirror/QA
+        - opengaussmirror/Yat
+        - opengaussmirror/debezium
+        - opengaussmirror/openGauss-server
       enable_check_associate_milestone: false
     
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
