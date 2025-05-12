@@ -181,20 +181,20 @@ data:
       - label_name: approved
         description: "Agree to merge the pull request. This can be accomplished by commenting **`/approve`**"
       - label_name: needs-issue
-        description: "Before the PR is merged, it must be associated with the issue."
+        description: "Before the PR is merged, it must be associated with the issue. If it is already associated with an issue, but the **needs-issue** label also exists, you can comment on **`/check-issue`** to remove this label."
       - label_name: opengauss-cla/yes
-        description: "The code contributor has signed the CLA."
+        description: "All contributor has signed the CLA."
       - label_name: opengauss-cla/no
-        description: "The code contributor has not signed the CLA!"
+        description: "At least one contributor has not signed the CLA!"
       - label_name: ci-pipeline-success
-        description: "The code compilation check job is passed."
+        description: "The code compilation/build/testcase check job is passed."
       - label_name: codecheck-success
-        description: "BThe static code check job is passed."
+        description: "The static code check job is passed."
       - label_name: lite-ci-success
-        description: "The code build check job is passed."
+        description: "The lite code compilation/build/testcase check job is passed."
       - label_name: lite-ci-failed
-        description: "The code build check job failed!"
+        description: "The lite code compilation/build/testcase check job failed!"
       - label_name: codecheck-failed
         description: "The static code check job failed!"
       - label_name: ci-pipeline-failed
-        description: "The code compilation check job failed!"
+        description: "The code compilation/build/testcase check job failed!"
