@@ -98,7 +98,7 @@ data:
           - needs-issue
       
       - repos:
-          - opengauss-dev/cantian
+          - opengauss/cantian
         lgtm_counts_required: 2
         legal_operator: opengauss_bot
         labels_for_merge:
