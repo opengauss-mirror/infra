@@ -90,11 +90,20 @@ data:
           - opengauss/openGauss-tools-sql-translator
           - opengauss/QA
           - opengauss/Yat
+        lgtm_counts_required: 2
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+        labels_not_allow_merge:
+          - needs-issue
+      
+      - repos:
           - opengauss/cantian
         lgtm_counts_required: 2
         legal_operator: opengauss_bot
         labels_for_merge:
           - opengauss-cla/yes
+          - ci-pipeline-success
         labels_not_allow_merge:
           - needs-issue
   
