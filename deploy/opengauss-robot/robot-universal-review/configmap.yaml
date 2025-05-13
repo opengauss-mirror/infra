@@ -104,7 +104,8 @@ data:
         labels_for_merge:
           - opengauss-cla/yes
           - ci-pipeline-success
-        needs_issues: true
+        labels_not_allow_merge:
+          - needs-issue
   
       - repos:
           - opengauss/openGauss-third_party
