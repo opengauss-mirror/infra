@@ -20,7 +20,7 @@ data:
           - "and you want to get quick review about your pull request or issue, please contact the owners in first: %s ,"
           - "and any of the maintainers: %s ,"
           - "and any of the committers: %s ."
-          - "[%s](https://https://gitcode.com/opengauss/tc/blob/master/sigs/%s/README.md)"
+          - "[%s](https://gitcode.com/opengauss/tc/blob/master/sigs/%s/README.md)"
           - "If you have any questions, please contact any of the repository's maintainers: %s ."
 
     user_mark_format: "@"
