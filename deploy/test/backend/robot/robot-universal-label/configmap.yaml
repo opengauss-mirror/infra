@@ -14,6 +14,8 @@ data:
           - codecheck-success
           - lite-ci-success
 
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
+    community_name: opengauss
     user_mark_format: "[@【commenter】](https://gitcode.com/【commenter】)"
     placeholder_commenter: "【commenter】"
     squash_commit_label: stat/needs-squash

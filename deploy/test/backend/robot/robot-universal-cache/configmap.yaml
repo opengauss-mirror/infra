@@ -6,7 +6,7 @@ metadata:
 data:
   config.yaml: |
     repo-save-dir: "/opt/app/repo/tc"
-    repo-cached-folder: "sigs"
+    repo-cached-folder: "community"
     cache-size: 512
     git-platform-domain: gitcode.com
     repo-owner: opengaussmirror

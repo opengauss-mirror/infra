@@ -7,6 +7,14 @@ data:
   config.yaml: |
     config_items:
     - repos:
-      - opengaussmirror
-      enable_check_associate_issue: true
-      enable_check_associate_milestone: true
+        - opengaussmirror/openGauss-tools-sql-translator
+        - opengaussmirror/QA
+        - opengaussmirror/Yat
+        - opengaussmirror/debezium
+        - opengaussmirror/openGauss-server
+      enable_check_associate_milestone: false
+    
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
+    community_name: opengauss
+    comment_miss_issue: "### Notice \n @%s , the pull request must be associated with at least one issue. \n If it is already associated with an issue, but the **needs-issue** label also exists, you can comment on **`/check-issue`** to remove this label."
+    comment_unset_milestone: "### Notice \n @%s , please select a milestone for the issue. Then, you can use the **/check-milestone** command to remove the **needs-milestone** label"

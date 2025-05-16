@@ -7,9 +7,9 @@ data:
   config.yaml: |
     config_items:
       - repos:
-          - opengauss
+          - opengaussmirror
 
-    sig_info_url: https://dsapi.osinfra.cn/query/sig/info
+    sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     community_name: opengauss
     event_state_opened: opened
     event_state_closed: closed
