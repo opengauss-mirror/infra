@@ -160,9 +160,9 @@ data:
     comment_msg_missing_labels: "##### *Missing Labels*\n- the pull request needs **%s** label(s)."
     comment_msg_invalid_labels: "##### *Label BackList*\n- the **%s** label(s) caused the pull request to be unable to merge."
     comment_msg_not_enough_lgtm_label: "##### *Not Enough LGTM Labels*\n- the pull request needs **%d** **lgtm** labels and now gets **%d**."
-    comment_try_label_again: "### Notice\n the **%s** label's operation log can nof found! please check it."
-    comment_no_permission_add_label: "### Notice\n the **%s** user can't add the **%s** label, please fix it or contact the maintainers."
-    comment_failed_list_pr_operation_logs: "### Notice\n The corresponding operation log is missing."
+    comment_try_label_again: "the **%s** label's operation log can not found! please check it."
+    comment_no_permission_add_label: "the **%s** user can't add the **%s** label, please fix it or contact the maintainers."
+    comment_failed_list_pr_operation_logs: "### Notice\n The corresponding operation log is missing! please check it."
     comment_no_ready_tips: "##### *Non-Compliance Label Operations*\n- %s"
     comment_failed_merge_pr: "PR merge failed"
     label_usage_tip_title: "##### *Label Usage Tips*"
@@ -173,20 +173,20 @@ data:
       - label_name: approved
         description: "Agree to merge the pull request. This can be accomplished by commenting **`/approve`**"
       - label_name: needs-issue
-        description: "Before the PR is merged, it must be associated with the issue."
+        description: "Before the PR is merged, it must be associated with the issue. If it is already associated with an issue, but the **needs-issue** label also exists, you can comment on **`/check-issue`** to remove this label."
       - label_name: opengauss-cla/yes
-        description: "The code contributor has signed the CLA."
+        description: "All contributor has signed the CLA."
       - label_name: opengauss-cla/no
-        description: "The code contributor has not signed the CLA!"
+        description: "At least one contributor has not signed the CLA!"
       - label_name: ci-pipeline-success
-        description: "The code compilation check job is passed."
+        description: "The code compilation/build/testcase check job is passed."
       - label_name: codecheck-success
-        description: "BThe static code check job is passed."
+        description: "The static code check job is passed."
       - label_name: lite-ci-success
-        description: "The code build check job is passed."
+        description: "The lite code compilation/build/testcase check job is passed."
       - label_name: lite-ci-failed
-        description: "The code build check job failed!"
+        description: "The lite code compilation/build/testcase check job failed!"
       - label_name: codecheck-failed
         description: "The static code check job failed!"
       - label_name: ci-pipeline-failed
-        description: "The code compilation check job failed!"
+        description: "The code compilation/build/testcase check job failed!"
