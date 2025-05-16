@@ -29,3 +29,4 @@ data:
     comment_all_signed: "### CLA Signature Pass  \n %s, thanks for your pull request. All authors of the commits have signed the CLA. :wave: "
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     community_name: opengauss
+    community_robot_id: opengauss_bot

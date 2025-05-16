@@ -25,3 +25,4 @@ data:
     comment_update_label_failed: "### Label Command Feedback \n\n %s, Because of the label(s) `%s` update failed, please comment once again. :pray: "
     comment_add_not_exist_label: "### Label Command Feedback \n\n %s, Because of the repository doesn't have the label(s) `%s`, it cannot be added. :pray: "
     remove_pr_label_delayed_seconds: 2
+    community_robot_id: opengauss_bot
