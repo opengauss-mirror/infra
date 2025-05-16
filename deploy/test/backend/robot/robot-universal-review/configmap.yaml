@@ -104,3 +104,4 @@ data:
         description: "The static code check job failed!"
       - label_name: ci-pipeline-failed
         description: "The code compilation/build/testcase check job failed!"
+    community_robot_id: opengauss_bot

@@ -9,3 +9,5 @@ data:
     - repos:
       - opengauss
       enable_issue_assign: true
+    
+    community_robot_id: opengauss_bot
