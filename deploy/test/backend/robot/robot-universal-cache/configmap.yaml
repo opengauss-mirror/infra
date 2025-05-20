@@ -14,7 +14,7 @@ data:
     repo-branch: master
     repo-commit-depth: 1
     repo-fetch-interval: 120
-    community-name: opengaussmirror
+    community-name: opengauss
     repo-of-multi-sig:
       - "opengaussmirror/openGauss-server"
       - "opengaussmirror/openGauss-third_party"
