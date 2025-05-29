@@ -9,7 +9,7 @@ data:
       - repos:
           - opengaussmirror
         community_name: openGauss
-        command_link: https://gitee.com/opengauss/community/blob/master/contributors/command.en.md
+        command_link: https://gitcode.com/opengauss/community/blob/master/contributors/command.en.md
         welcome_message:
           - "### Welcome To %s Community"
           - "Hey %s , thanks for your contribution to the community."
