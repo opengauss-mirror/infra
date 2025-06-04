@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - forum.opengauss.org
+        - discuss.opengauss.org
       secretName: discourse-tls
   rules:
-  - host: forum.opengauss.org
+  - host: discuss.opengauss.org
     http:
       paths:
       - path: /
