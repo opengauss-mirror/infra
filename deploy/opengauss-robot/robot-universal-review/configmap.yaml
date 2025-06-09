@@ -29,6 +29,7 @@ data:
           - opengauss-cla/yes
           - ci-pipeline-success
           - codecheck-success
+          - sca-success
         labels_not_allow_merge:
           - needs-issue
 
@@ -41,6 +42,7 @@ data:
           - ci-pipeline-success
           - codecheck-success
           - lite-ci-success
+          - sca-success
         labels_not_allow_merge:
           - lite-ci-failed
           - codecheck-failed
@@ -59,7 +61,6 @@ data:
   
       - repos:
           - opengauss/docs
-          - opengauss/DMS
         lgtm_counts_required: 2
         legal_operator: opengauss_bot
         labels_for_merge:
@@ -67,7 +68,18 @@ data:
           - ci-pipeline-success
         labels_not_allow_merge:
           - needs-issue
-  
+
+      - repos:
+          - opengauss/DMS
+        lgtm_counts_required: 2
+        legal_operator: opengauss_bot
+        labels_for_merge:
+          - opengauss-cla/yes
+          - ci-pipeline-success
+          - sca-success
+        labels_not_allow_merge:
+          - needs-issue
+
       - repos:
           - opengauss/tc
         lgtm_counts_required: 2
@@ -84,6 +96,7 @@ data:
         labels_for_merge:
           - opengauss-cla/yes
           - codecheck-success
+          - sca-success
         labels_not_allow_merge:
           - needs-issue
   
@@ -137,6 +150,7 @@ data:
         labels_for_merge:
           - opengauss-cla/yes
           - codecheck-success
+          - sca-success
         labels_not_allow_merge:
           - needs-issue
   
