@@ -23,13 +23,13 @@ data:
     placeholder_cla_sign_pass_title: "### CLA Signature Pass"
     comment_command_trigger: "### CLA Signature Manual  \n\nBecause of the network problem, please comment `/check-cla` once again. :pray: "
     comment_pr_no_commits: "### CLA Signature Manual  \n\nThere is no valid commits in the pull request, please check it. "
-    comment_some_need_sign: "### CLA Signature Guide  \n\n %s , thanks for your pull request. \n\nThe following commit(s) have not signed **<font color=green>_Contributor License Agreement (CLA)_</font>**.\n\n%s \n\nFirst, [you can click the here to check if the email is set up correctly in the **<font color=red>_FAQs_</font>**](%s). \n\nNext, [you can click here to sign the CLA](%s). \n\nAfter signing the CLA, you must comment `/check-cla` to check the CLA status again."
+    comment_some_need_sign: "### CLA Signature Guide  \n\n %s , thanks for your pull request. \n\nThe following commit(s) have not signed **<font color=green>_Contributor License Agreement (CLA)_</font>**.\n\n%s \n\nIf you need to sign CLA, [you can click here to sign the CLA](%s). \n\nIf you need to check if the email is set up correctly, [you can click here to do it in the **<font color=red>_FAQs_</font>**](%s). \n\nAfter signing the CLA or updating the email, you must comment `/check-cla` to check the CLA status again."
     comment_update_label_failed: "### CLA Signature Manual  \n\nBecause of the CLA label update fail, please comment `/check-cla` once again. :pray: "
     comment_all_signed: "### CLA Signature Pass  \n %s, thanks for your pull request. All authors of the commits have signed the CLA. :+1: "
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     community_name: opengauss
     community_robot_id: opengauss_bot
-    invalid_email: noreply@gitcode.com
+    invalid_email: "@noreply.gitcode.com"
     invalid_email_message: "it's an invalid email! please check it."
     cla_service_failed_message: "the CLA service call failed! please comment `/check-cla` once again."
     comment_unsigned_title: "| Commit | Reason |\n|--|--|"
