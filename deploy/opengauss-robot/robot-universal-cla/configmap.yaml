@@ -13,7 +13,6 @@ data:
         check_url: https://clasign.osinfra.cn/api/v1/individual-signing/gitee_opengauss-1614047760000855378
         sign_url: https://clasign.osinfra.cn/sign/gitee_opengauss-1614047760000855378
         faq_url: https://gitcode.com/opengauss/community/blob/master/cla/faq/check-by-author/faq.md
-        check_by_committer: true
         lite_pr_committer:
           email: noreply@gitcode.com
           name: GitCode
@@ -23,10 +22,16 @@ data:
     placeholder_cla_sign_guide_title: "### CLA Signature Guide"
     placeholder_cla_sign_pass_title: "### CLA Signature Pass"
     comment_command_trigger: "### CLA Signature Manual  \n\nBecause of the network problem, please comment `/check-cla` once again. :pray: "
-    comment_pr_no_commits: "### CLA Signature Manual  \n\nThere is no vaild commits in the pull request, please check it. "
-    comment_some_need_sign: "### CLA Signature Guide  \n\n %s , thanks for your pull request. \n\nThe authors of the commits have not signed **<font color=green>_Contributor License Agreement (CLA)_</font>**. \n\n[You can click here to sign the CLA](%s). :pray:  \n\nPlease check the [**<font color=red>_FAQs_</font>**](%s) first. \n\nAfter signing the CLA, you must comment `/check-cla` to check the CLA status again."
+    comment_pr_no_commits: "### CLA Signature Manual  \n\nThere is no valid commits in the pull request, please check it. "
+    comment_some_need_sign: "### CLA Signature Guide  \n\n %s , thanks for your pull request. \n\nThe following commit(s) have not signed **<font color=green>_Contributor License Agreement (CLA)_</font>**.\n\n%s \n\nIf you need to sign CLA, [you can click here to sign the CLA](%s). \n\nIf you need to check if the email is set up correctly, [you can click here to do it in the **<font color=red>_FAQs_</font>**](%s). \n\nAfter signing the CLA or updating the email, you must comment `/check-cla` to check the CLA status again."
     comment_update_label_failed: "### CLA Signature Manual  \n\nBecause of the CLA label update fail, please comment `/check-cla` once again. :pray: "
-    comment_all_signed: "### CLA Signature Pass  \n %s, thanks for your pull request. All authors of the commits have signed the CLA. :wave: "
+    comment_all_signed: "### CLA Signature Pass  \n %s, thanks for your pull request. All authors of the commits have signed the CLA. :+1: "
     sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
     community_name: opengauss
     community_robot_id: opengauss_bot
+    invalid_email: "@noreply.gitcode.com"
+    invalid_email_message: "it's an invalid email! please check it."
+    cla_service_failed_message: "the CLA service call failed! please comment `/check-cla` once again."
+    comment_unsigned_title: "| Commit | Reason |\n|--|--|"
+    comment_unsigned_line: "\n| %s | %s |"
+    not_signed_email_message: "the email is not signed for CLA! please check if it is correct and the same as your signed email."
