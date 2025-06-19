@@ -16,4 +16,4 @@ commonAnnotations:
   kubernetes.ops.region: hk
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/etherpad
-  newTag: opengauss-v1.9.7-98588b
+  newTag: opengauss-v1.9.7-606509
