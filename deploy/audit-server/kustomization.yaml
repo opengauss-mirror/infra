@@ -1,0 +1,11 @@
+resources:
+- deployment.yaml
+- service.yaml
+- namespace.yaml
+- sa.yaml
+namespace: audit-server
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/audit-server-prod
+  newTag: v1.12.0-20e77d

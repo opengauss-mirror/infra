@@ -1,0 +1,103 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-server
+  namespace: audit-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-server
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: 'audit-server'
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-perms-application.yaml: "0400"
+        vault.hashicorp.com/agent-inject-secret-application.yaml: 'internal/data/opengauss/audit-server'
+        vault.hashicorp.com/agent-inject-template-application.yaml: |  
+          {{- with secret "internal/data/opengauss/audit-server" -}}  
+          {{ .Data.data.config }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-postgre.crt: "0400"
+        vault.hashicorp.com/agent-inject-secret-postgre.crt: 'internal/data/opengauss/audit-server'
+        vault.hashicorp.com/agent-inject-template-postgre.crt: |  
+          {{- with secret "internal/data/opengauss/audit-server" -}}  
+          {{ .Data.data.pgsqlCA }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-command-application.yaml: |
+          for count in 1 2 3; do if [ $(netstat -anlp | grep 8000| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /vault/secrets/*; break; else echo "service not running skip";sleep 10; fi done
+        vault.hashicorp.com/agent-inject-command-postgre.crt: |
+          for count in 1 2 3; do if [ $(netstat -anlp | grep 8000| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /vault/secrets/*; break; else echo "service not running skip";sleep 10; fi done
+        vault.hashicorp.com/template-static-secret-render-interval: 5s
+      labels:
+        app: audit-server
+    spec:
+      serviceAccountName: audit-server
+      imagePullSecrets:
+      - name: huawei-swr-image-pull-secret      
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
+      containers:
+      - name: audit-server
+        image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/audit-server-prod:main-e6053b
+        imagePullPolicy: IfNotPresent
+        args:
+        - --port=8000
+        - --config-file=/vault/secrets/application.yaml
+        - --enable_debug=true
+        - --rm-cfg=true   
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /internal/heartbeat
+            port: 8000
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /internal/heartbeat
+            port: 8000
+          timeoutSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token
