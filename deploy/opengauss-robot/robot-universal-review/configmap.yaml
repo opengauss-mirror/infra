@@ -61,6 +61,7 @@ data:
   
       - repos:
           - opengauss/docs
+          - opengauss/oGRecorder
         lgtm_counts_required: 2
         legal_operator: opengauss_bot
         labels_for_merge:
@@ -168,6 +169,7 @@ data:
           - opengauss/tc
           - opengauss/openGauss-server
           - opengauss/docs
+          - opengauss/oGRecorder
           - opengauss/openGauss-workbench
           - opengauss/openGauss-tools-sql-translator
         legal_operator: opengauss_bot
