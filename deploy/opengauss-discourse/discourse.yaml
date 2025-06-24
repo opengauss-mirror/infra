@@ -10,7 +10,7 @@ spec:
   ports:
     - port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 8080
   selector:
     app: web-server
   sessionAffinity: None
@@ -36,111 +36,63 @@ spec:
     metadata:
       labels:
         app: web-server
+      annotations:
+        vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/role: 'opengauss-discourse'
+        vault.hashicorp.com/agent-run-as-user: "1000"
+        vault.hashicorp.com/agent-run-as-group: "1000"
+        vault.hashicorp.com/agent-inject-perms-monitor.sh: "0500"
+        vault.hashicorp.com/agent-inject-secret-monitor.sh: 'internal/data/infra-test/opengauss-discourse'
+        vault.hashicorp.com/agent-inject-template-monitor.sh: |  
+          {{- with secret "internal/data/infra-test/opengauss-discourse" -}}  
+          {{ .Data.data.monitorScript }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-perms-envbash.sh: "0500"
+        vault.hashicorp.com/agent-inject-secret-envbash.sh: 'internal/data/infra-test/opengauss-discourse'
+        vault.hashicorp.com/agent-inject-template-envbash.sh: |  
+          {{- with secret "internal/data/infra-test/opengauss-discourse" -}}  
+          {{ .Data.data.envScript }}
+          {{- end }}
     spec:
+      serviceAccountName: opengauss-discourse
       imagePullSecrets:
       - name: huawei-swr-image-pull-secret
+      securityContext:
+        seccompProfile:
+          type: Localhost
+          localhostProfile: infra-seccomp.json
+      automountServiceAccountToken: false
       containers:
       - name: web-server
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/discourse:v1.1.8
+        imagePullPolicy: Always
         command:
         - /bin/bash
         - -c
         - |
-          rails db:migrate
-          /sbin/boot
-        ports:
-        - containerPort: 80
-        env:
-        - name: DISCOURSE_DB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_database_userrname
-        - name: DISCOURSE_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_database_password
-        - name: DISCOURSE_DB_HOST
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_db_host
-        - name: DISCOURSE_DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_db_name
-        - name: DISCOURSE_REDIS_HOST
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_redis_host
+          /vault/secrets/envbash.sh
+        env: 
+        - name: DISCOURSE_MAXMIND_LICENSE_KEY
+          value: ""
         - name: DISCOURSE_DEVELOPER_EMAILS
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_developer_emails
-        - name: DISCOURSE_HOSTNAME
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_hostname
-        - name: DISCOURSE_SMTP_ADDRESS
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_smtp_address
-        - name: DISCOURSE_SMTP_PORT
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_smtp_port
-        - name: DISCOURSE_SMTP_USER_NAME
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_smtp_username
-        - name: DISCOURSE_SMTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_smtp_password
-        - name: DISCOURSE_SMTP_ENABLE_START_TLS
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_smtp_enable_start_tls
-        - name: DISCOURSE_SMTP_AUTHENTICATION
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_smtp_authentication
-        - name: DISCOURSE_NOTIFICATION_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: discourse_notification_email
-        - name: SENSITIVE_DOMAIN_NAME
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: sensitive_domain_name
-        - name: SENSITIVE_NAME
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: sensitive_name
-        - name: SENSITIVE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: sensitive_password
-        - name: UNICORN_SIDEKIQS
-          valueFrom:
-            secretKeyRef:
-              name: discourse-secret
-              key: unicorn_sidekiqs
+          value: ""
+        - name: DISCOURSE_DB_NAME
+          value: ""
+        - name: DISCOURSE_DB_PASSWORD
+          value: ""
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
         resources:
           requests:
             cpu: 500m
@@ -148,23 +100,20 @@ spec:
           limits:
             cpu: 2
             memory: 3000Mi
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 5
         readinessProbe:
           failureThreshold: 3
           initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
           tcpSocket:
-            port: 80
+            port: 8080
           timeoutSeconds: 5
-        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          capabilities:
+            drop:
+              - ALL
         volumeMounts:
         - name: discourse-storage-new
           mountPath: /shared
@@ -172,3 +121,10 @@ spec:
       - name: discourse-storage-new
         persistentVolumeClaim:
           claimName: discourse-share-volume
+      - name: token-vol
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: api
+              expirationSeconds: 600
+              path: token

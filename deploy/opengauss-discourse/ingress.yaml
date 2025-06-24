@@ -4,6 +4,8 @@ kind: Ingress
 metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "4m"
+    nginx.ingress.kubernetes.io/limit-rpm: "100"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
   name: discourse-ingress
   namespace: opengauss-discourse
 spec:
@@ -17,6 +19,33 @@ spec:
       paths:
       - path: /
         pathType: Prefix
+        backend:
+          service:
+            name: web-server
+            port:
+              number: 80
+  ingressClassName: nginx
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/limit-rpm: 1
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+  name: discourse-discussion-mail-send-ratelimit-ingress
+  namespace: opengauss-discourse
+spec:
+  tls:
+    - hosts:
+        - discuss.opengauss.org
+      secretName: discourse-tls
+  rules:
+  - host: discuss.opengauss.org
+    http:
+      paths:
+      - path: /admin/email/send-digest.json
+        pathType: Exact
         backend:
           service:
             name: web-server

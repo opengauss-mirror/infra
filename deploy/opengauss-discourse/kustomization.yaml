@@ -6,7 +6,7 @@ resources:
 - secret.yaml
 - namespace.yaml
 - pvc.yaml
-- redis.yaml
+- sa.yaml
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-cce
   kubernetes.ops.email: ""
