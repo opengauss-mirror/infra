@@ -54,6 +54,7 @@ spec:
       labels:
         app: meetingserver
     spec:
+      automountServiceAccountToken: false
       containers:
       - env:
         - name: TZ
