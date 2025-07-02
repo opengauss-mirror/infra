@@ -48,6 +48,7 @@ spec:
           imagePullSecrets:
           - name: huawei-swr-image-pull-secret
           serviceAccountName: opengauss-meeting
+          automountServiceAccountToken: false
           containers:
             - name: meeting-server
               image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/app-meeting-server-test:fix_upload_bili_failed-6af860
@@ -122,6 +123,7 @@ spec:
           imagePullSecrets:
           - name: huawei-swr-image-pull-secret
           serviceAccountName: opengauss-meeting
+          automountServiceAccountToken: false
           containers:
             - name: meeting-server
               image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/app-meeting-server-test:fix_upload_bili_failed-6af860
@@ -195,6 +197,7 @@ spec:
           imagePullSecrets:
           - name: huawei-swr-image-pull-secret
           serviceAccountName: opengauss-meeting
+          automountServiceAccountToken: false
           containers:
             - name: meeting-server
               image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/app-meeting-server-test:fix_upload_bili_failed-6af860
@@ -268,6 +271,7 @@ spec:
           imagePullSecrets:
           - name: huawei-swr-image-pull-secret
           serviceAccountName: opengauss-meeting
+          automountServiceAccountToken: false
           containers:
             - name: meeting-server
               image: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/app-meeting-server-test:fix_upload_bili_failed-6af860
