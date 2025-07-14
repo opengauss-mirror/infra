@@ -47,7 +47,6 @@ spec:
         args:
         - --port=8888
         - --config-file=/vault/secrets/config
-        - --enable_debug=true
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-hook-dispatcher:develop-v0-11d661
         resources:
           limits:

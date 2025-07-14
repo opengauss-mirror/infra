@@ -55,7 +55,6 @@ spec:
         - --port=8888
         - --hmac-secret-file=/vault/secrets/gitcode-secret
         - --config-file=/vault/secrets/config
-        - --enable_debug=true
         - --handle-path=gitcode-hook
         image: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-hook-delivery:develop-v0-e036b5
         resources:

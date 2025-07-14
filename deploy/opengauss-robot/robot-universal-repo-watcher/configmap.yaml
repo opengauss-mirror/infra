@@ -5,7 +5,7 @@ metadata:
   namespace: opengauss-robot
 data:
   config.yaml: |
-    repo_owner: "opengauss"
+    community_name: "opengauss"
     sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
     repo_fetch_interval: 360
     org_custom_role_name: "openGauss开发者"

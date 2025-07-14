@@ -14,3 +14,12 @@ data:
     repo-branch: master
     repo-commit-depth: 1
     repo-fetch-interval: 300
+    community-name: opengauss
+    repo-of-multi-sig:
+      - "opengauss/openGauss-server"
+      - "opengauss/openGauss-third_party"
+      - "opengauss/openGauss-workbench"
+    repo-sig-mapping:
+      - "opengauss/openGauss-server:StorageEngine"
+      - "opengauss/openGauss-third_party:StorageEngine"
+      - "opengauss/openGauss-workbench:Tools"
