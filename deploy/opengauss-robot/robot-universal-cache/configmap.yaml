@@ -23,3 +23,6 @@ data:
       - "opengauss/openGauss-server:StorageEngine"
       - "opengauss/openGauss-third_party:StorageEngine"
       - "opengauss/openGauss-workbench:Tools"
+      - "opengauss/openGauss-server:Community"
+      - "opengauss/openGauss-third_party:Community"
+      - "opengauss/openGauss-workbench:Community"
