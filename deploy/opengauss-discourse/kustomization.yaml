@@ -6,7 +6,7 @@ resources:
 - secret.yaml
 - namespace.yaml
 - pvc.yaml
-- redis.yaml
+- sa.yaml
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-cce
   kubernetes.ops.email: ""
@@ -16,4 +16,4 @@ commonAnnotations:
 namespace: opengauss-discourse
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/discourse
-  newTag: v1.8.0
+  newTag: v2.0.1
