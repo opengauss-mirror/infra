@@ -86,13 +86,8 @@ spec:
           {{ .Data.data.serverCrt }}
           {{- end }}
         vault.hashicorp.com/agent-inject-command-discourse.key: |
-          for count in 1 2 3; do if [ $(netstat -anlp | grep 8080| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /etc/nginx/* ; break; else echo "service not running skip";sleep 10; fi done
-        vault.hashicorp.com/agent-inject-command-discourse.crt: |
-          for count in 1 2 3; do if [ $(netstat -anlp | grep 8080| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /etc/nginx/* ; break; else echo "service not running skip";sleep 10; fi done
-        vault.hashicorp.com/agent-inject-command-pg-server-ca.crt: |
-          for count in 1 2 3; do if [ $(netstat -anlp | grep 8080| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /usr/local/share/ca-certificates/pg-server-ca.crt ; break; else echo "service not running skip";sleep 10; fi done
-        vault.hashicorp.com/agent-inject-command-redis-server-ca.crt: |
-          for count in 1 2 3; do if [ $(netstat -anlp | grep 8080| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /usr/local/share/ca-certificates/redis-server-ca.crt ; break; else echo "service not running skip";sleep 10; fi done
+          for count in 1 2 3; do if [ $(netstat -anlp | grep 8080| wc -l) -ge 1 ]; then echo "success delete config"; rm -rf /etc/nginx/* ; rm -rf /usr/local/share/ca-certificates/pg-server-ca.crt;
+          rm -rf /usr/local/share/ca-certificates/redis-server-ca.crt ; break; else echo "service not running skip";sleep 10; fi done
         vault.hashicorp.com/template-static-secret-render-interval: 5s
     spec:
       serviceAccountName: opengauss-discourse
