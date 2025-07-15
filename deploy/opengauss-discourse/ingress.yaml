@@ -3,7 +3,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "4m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "400m"
+    nginx.ingress.kubernetes.io/limit-rpm: "100"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   name: discourse-ingress
   namespace: opengauss-discourse
 spec:
@@ -22,4 +25,32 @@ spec:
             name: web-server
             port:
               number: 80
+  ingressClassName: nginx
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/limit-rpm: 1
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  name: discourse-discussion-mail-send-ratelimit-ingress
+  namespace: opengauss-discourse
+spec:
+  tls:
+    - hosts:
+        - discuss.opengauss.org
+      secretName: discourse-tls
+  rules:
+  - host: discuss.opengauss.org
+    http:
+      paths:
+      - path: /admin/email
+        pathType: Exact
+        backend:
+          service:
+            name: web-server
+            port:
+              number: 8080
   ingressClassName: nginx
