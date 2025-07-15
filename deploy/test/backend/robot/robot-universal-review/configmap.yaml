@@ -78,7 +78,8 @@ data:
     comment_no_permission_add_label: "the **%s** user can't add the **%s** label, please fix it or contact the maintainers."
     comment_failed_list_pr_operation_logs: "### Notice\n The corresponding operation log is missing! please check it."
     comment_no_ready_tips: "##### *Non-Compliance Label Operations*\n- %s"
-    comment_failed_merge_pr: "PR merge failed"
+    comment_failed_merge_pr: "### PR Merge Failed \n - reason: %s"
+    comment_failed_merge_pr_unknown_reason: "unknown error occurred, please contact community infrastructure team."
     label_usage_tip_title: "##### *Label Usage Tips*"
     label_usage_tip_detail: "- **%s**: %s"
     label_usage_description:
