@@ -6,7 +6,7 @@ metadata:
   labels:
     app: robot-universal-welcome
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
