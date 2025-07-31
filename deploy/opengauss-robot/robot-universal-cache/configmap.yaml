@@ -6,7 +6,7 @@ metadata:
 data:
   config.yaml: |
     repo-save-dir: "/opt/app/repo/tc"
-    repo-cached-folder: "community"
+    repo-cached-folder: "sigs"
     cache-size: 512
     git-platform-domain: gitcode.com
     repo-owner: opengauss
@@ -20,9 +20,14 @@ data:
       - "opengauss/openGauss-third_party"
       - "opengauss/openGauss-workbench"
     repo-sig-mapping:
+      - "opengauss/openGauss-server:AI"
+      - "opengauss/openGauss-server:CloudNative"
+      - "opengauss/openGauss-server:CM"
+      - "opengauss/openGauss-server:SecurityTechnology"
+      - "opengauss/openGauss-server:SQLEngine"
       - "opengauss/openGauss-server:StorageEngine"
       - "opengauss/openGauss-third_party:StorageEngine"
       - "opengauss/openGauss-workbench:Tools"
       - "opengauss/openGauss-server:Community"
-      - "opengauss/openGauss-third_party:Community"
-      - "opengauss/openGauss-workbench:Community"
+#      - "opengauss/openGauss-third_party:Community"
+#      - "opengauss/openGauss-workbench:Community"
