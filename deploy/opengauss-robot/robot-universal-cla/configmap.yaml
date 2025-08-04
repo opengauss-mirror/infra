@@ -13,6 +13,7 @@ data:
         check_url: https://clasign.osinfra.cn/api/v1/individual-signing/gitee_opengauss-1614047760000855378
         sign_url: https://clasign.osinfra.cn/sign/gitee_opengauss-1614047760000855378
         faq_url: https://gitcode.com/opengauss/community/blob/master/cla/faq/check-by-author/faq.md
+        check_by_committer: true
         lite_pr_committer:
           email: noreply@gitcode.com
           name: GitCode
