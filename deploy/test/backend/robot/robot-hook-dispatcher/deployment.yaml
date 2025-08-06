@@ -6,11 +6,11 @@ metadata:
   labels:
     app: robot-hook-dispatcher
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 0
-      maxSurge: 2
+      maxSurge: 1
     type: RollingUpdate
   selector:
     matchLabels:
