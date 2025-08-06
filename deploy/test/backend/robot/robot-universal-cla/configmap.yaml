@@ -10,11 +10,12 @@ data:
         - opengaussmirror
         cla_label_yes: opengauss-cla/yes
         cla_label_no: opengauss-cla/no
-        check_url: https://clasign.osinfra.cn/api/v1/individual-signing/gitee_opengauss-1614047760000855378
-        sign_url: https://clasign.osinfra.cn/sign/gitee_opengauss-1614047760000855378
+        check_url: https://clasign.test.osinfra.cn/api/v1/individual-signing/681d9d1b2e91e0b596754a7e
+        sign_url: https://clasign.test.osinfra.cn/sign/681d9d1b2e91e0b596754a7e
         faq_url: https://gitcode.com/opengauss/community/blob/master/cla/faq/check-by-author/faq.md
+        check_by_committer: true
         lite_pr_committer:
-          email: noreply@gitcode.com
+          email: "@noreply.gitcode.com"
           name: GitCode
 
     user_mark_format: "@"
@@ -35,3 +36,6 @@ data:
     comment_unsigned_title: "| Commit | Reason |\n|--|--|"
     comment_unsigned_line: "\n| %s | %s |"
     not_signed_email_message: "the email is not signed for CLA! please check if it is correct and the same as your signed email."
+    message_individual_version_behind: "the individual CLA content updated, need to sign again."
+    message_corporation_version_behind: "the corporation CLA content updated, need to sign again."
+    cla_signature_type_corporation: "corporation"

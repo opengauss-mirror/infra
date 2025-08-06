@@ -6,9 +6,12 @@ metadata:
   labels:
     app: robot-universal-hook-delivery
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
-    type: Recreate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 2
+    type: RollingUpdate
   selector:
     matchLabels:
       app: robot-universal-hook-delivery
