@@ -36,6 +36,6 @@ data:
     comment_unsigned_title: "| Commit | Reason |\n|--|--|"
     comment_unsigned_line: "\n| %s | %s |"
     not_signed_email_message: "the email is not signed for CLA! please check if it is correct and the same as your signed email."
-    message_individual_version_behind: "the individual CLA content updated, need to sign again."
-    message_corporation_version_behind: "the corporation CLA content updated, need to sign again."
+    message_individual_version_behind: "since the individual CLA content has been updated, please re-sign the agreement."
+    message_corporation_version_behind: "since the corporation CLA content has been updated, please re-sign the agreement."
     cla_signature_type_corporation: "corporation"
