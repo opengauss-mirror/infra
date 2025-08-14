@@ -126,7 +126,6 @@ data:
           - opengauss/openGauss-third_party
           - opengauss/openGauss-connector-python-pyog
           - opengauss/openGauss-connector-go-pq
-          - opengauss/CM-RestAPI
           - opengauss/compatibility-assessment
           - opengauss/ora-migration-tool
           - opengauss/openGauss-container
