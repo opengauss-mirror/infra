@@ -7,14 +7,16 @@ data:
   config.yaml: |
     access:
       repo_plugins:
-        opengauss:
-          - robot-service-welcome
-          - robot-service-cla
-          - robot-service-lifecycle
-          - robot-service-label
-          - robot-service-review
-          - robot-service-assign
-          - robot-service-associate
+        - org_or_repo: opengauss
+          plugin_name:
+            - robot-service-welcome
+            - robot-service-cla
+            - robot-service-lifecycle
+            - robot-service-label
+            - robot-service-review
+            - robot-service-assign
+            - robot-service-associate
+    
       plugins:
         - name: robot-service-welcome
           endpoint: http://robot-universal-welcome-service.opengauss-robot.svc.cluster.local:8888/gitcode-hook
