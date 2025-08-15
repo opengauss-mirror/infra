@@ -46,6 +46,7 @@ data:
           endpoint: http://robot-universal-assign-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
           events:
             - "Note Hook"
+            - "Issue Hook"
         - name: robot-service-associate
           endpoint: http://robot-universal-associate-service.opengauss-backend-robot.svc.cluster.local:8888/gitcode-hook
           events:
