@@ -9,7 +9,7 @@ data:
     - repos:
       - opengauss
       enable_issue_assign: true
-      default_assignee: opengauss_bot
+      default_assignee: TestManager
 
     community_robot_id: opengauss_bot
 
