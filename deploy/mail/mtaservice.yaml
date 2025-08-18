@@ -100,7 +100,7 @@ spec:
       volumes:
       - name: mailman-core-data
         persistentVolumeClaim:
-          claimName: config-vol
+          claimName: sfs-turbo-mail-data-vol
       - name: mailman-exim4-log
         persistentVolumeClaim:
           claimName: exim-log-data
