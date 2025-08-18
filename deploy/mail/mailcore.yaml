@@ -97,4 +97,4 @@ spec:
       volumes:
       - name: mailman-core-volume
         persistentVolumeClaim:
-          claimName: config-vol
+          claimName: sfs-turbo-mail-data-vol
