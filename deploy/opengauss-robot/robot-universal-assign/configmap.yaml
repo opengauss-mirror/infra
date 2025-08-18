@@ -9,5 +9,12 @@ data:
     - repos:
       - opengauss
       enable_issue_assign: true
-    
+      default_assignee: opengauss_bot
+
     community_robot_id: opengauss_bot
+
+    msg_multiple_assignee: "Can only assign one assignee to the issue."
+    msg_assign_repeatedly: "This issue is already assigned to ***%s***. Please do not assign repeatedly."
+    msg_not_allow_assign: "This issue can not be assigned to ***%s***. Please try to assign to the repository members."
+    msg_not_allow_unassign: "***%s*** can not be unassigned from this issue. Please try to unassign the assignee of this issue."
+    msg_default_assignee: "This issue requires an assignee. Since you haven't specified one, we've assigned ***%s*** as the default assignee for this issue."
