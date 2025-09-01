@@ -19,7 +19,6 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'opengauss-userinfo-collect'
         vault.hashicorp.com/agent-inject-secret-config.ini: 'internal/data/infra-common/opengauss-userinfo-collect'
-        vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-perms-config.ini: "0400"
         vault.hashicorp.com/agent-run-as-user: "1001"
         vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
@@ -28,6 +27,10 @@ spec:
           {{ .Data.data.config }}
           {{- end }}
         vault.hashicorp.com/secret-volume-path: "/opt/config"
+        vault.hashicorp.com/agent-inject-command-config.ini: |
+          if [ -f "/opt/config/healthcheck" ]; then rm -rf /opt/config/config.ini; else echo "service not running skip"; fi
+        vault.hashicorp.com/template-static-secret-render-interval: 5s
+        vault.hashicorp.com/log-level: "warn"
       labels:
         app: userinfo-collect
     spec:
@@ -49,6 +52,10 @@ spec:
           requests:
             cpu: 500m
             memory: 500Mi
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","rm -rf /opt/config/*"]
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         securityContext:
