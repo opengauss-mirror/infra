@@ -6,42 +6,70 @@ metadata:
 data:
   config.yaml: |
     config_items:
-    - repos:
-        - opengauss/openGauss-server
-        - opengauss/openGauss-workbench
-        - opengauss/openGauss-OM
-        - opengauss/openGauss-connector-jdbc
-        - opengauss/CM
-        - opengauss/Plugin
-        - opengauss/CBB
-        - opengauss/DSS
-        - opengauss/DCF
-        - opengauss/openGauss-embedded
-        - opengauss/docs
-        - opengauss/DMS
-        - opengauss/openGauss-connector-odbc
-        - opengauss/openGauss-tools-sql-translator
-        - opengauss/QA
-        - opengauss/Yat
-        - opengauss/cantian
-        - opengauss/openGauss-third_party
-        - opengauss/openGauss-connector-python-pyog
-        - opengauss/openGauss-connector-go-pq
-        - opengauss/CM-RestAPI
-        - opengauss/compatibility-assessment
-        - opengauss/ora-migration-tool
-        - opengauss/openGauss-container
-        - opengauss/openGauss-DBMind
-        - opengauss/openGauss-connector-python-psycopg2
-        - opengauss/DCC
-        - opengauss/openGauss-tools-datachecker-performance
-        - opengauss/debezium
-        - opengauss/openGauss-migration-portal
-        - opengauss/openGauss-tools-chameleon
-      enable_check_associate_milestone: false
+      - repos:
+          - opengauss/openGauss-workbench
+          - opengauss/openGauss-OM
+          - opengauss/openGauss-connector-jdbc
+          - opengauss/CM
+          - opengauss/Plugin
+          - opengauss/CBB
+          - opengauss/DSS
+          - opengauss/DCF
+          - opengauss/openGauss-embedded
+          - opengauss/docs
+          - opengauss/DMS
+          - opengauss/openGauss-connector-odbc
+          - opengauss/openGauss-tools-sql-translator
+          - opengauss/QA
+          - opengauss/Yat
+          - opengauss/cantian
+          - opengauss/openGauss-third_party
+          - opengauss/openGauss-connector-python-pyog
+          - opengauss/openGauss-connector-go-pq
+          - opengauss/CM-RestAPI
+          - opengauss/compatibility-assessment
+          - opengauss/ora-migration-tool
+          - opengauss/openGauss-container
+          - opengauss/openGauss-DBMind
+          - opengauss/openGauss-connector-python-psycopg2
+          - opengauss/DCC
+          - opengauss/openGauss-tools-datachecker-performance
+          - opengauss/debezium
+          - opengauss/openGauss-migration-portal
+          - opengauss/openGauss-tools-chameleon
+        associate_issue_rules:
+          org:
+            - "opengauss"
+          org_label: needs-issue
+          org_comment_command_check_label: /check-issue
+          org_comment_command_remove_label: /remove-needs-issue
+          org_remove_label_permission: true
+          org_comment_remove_label_no_permission: "### Notice \nOnly members of the repository can delete the **needs-issue** label. Please contact them to do it."
+          org_comment_label_block_feedback: "### Linking Issue Notice \n @%s , the pull request must be linked to at least one issue. \nIf an issue has already been linked, but the **needs-issue** label remains, you can remove the label by commenting **`/check-issue`** ."
+    
+      - repos:
+          - opengauss/openGauss-server
+        enable_check_associate_pr: true
+        associate_pr_rules:
+          repo:
+            - "docs"
+          repo_label: need-doc-pr
+          repo_comment_command_check_label: /check-doc
+          repo_comment_command_remove_label: /remove-need-doc
+          repo_remove_label_permission: false
+          repo_comment_label_block_feedback: "### Linking PR Notice \n @%s , the pull request should be linked to at least one https://gitcode.com/opengauss/docs repository's PR. \nIf it is confirmed that no PR association is needed, you can remove the label by commenting **`/remove-need-doc`** ."
+        associate_issue_rules:
+          org:
+            - "opengauss"
+          org_label: needs-issue
+          org_comment_command_check_label: /check-issue
+          org_comment_command_remove_label: /remove-needs-issue
+          org_remove_label_permission: true
+          org_comment_remove_label_no_permission: "### Notice \nOnly members of the repository can delete the **needs-issue** label. Please contact them to do it."
+          org_comment_label_block_feedback: "### Linking Issue Notice \n @%s , the pull request must be linked to at least one issue. \nIf an issue has already been linked, but the **needs-issue** label remains, you can remove the label by commenting **`/check-issue`** ."
     
     sig_info_url: "http://robot-universal-cache-service.opengauss-robot:8888/robot-cache"
     community_name: opengauss
-    comment_miss_issue: "### Notice \n @%s , the pull request must be associated with at least one issue. \n If it is already associated with an issue, but the **needs-issue** label also exists, you can comment on **`/check-issue`** to remove this label."
-    comment_unset_milestone: "### Notice \n @%s , please select a milestone for the issue. Then, you can use the **/check-milestone** command to remove the **needs-milestone** label"
     community_robot_id: opengauss_bot
+    placeholder_linking_issue_notice_title: "### Linking Issue Notice"
+    placeholder_linking_pr_notice_title: "### Linking PR Notice"

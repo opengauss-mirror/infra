@@ -7,4 +7,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/robot-universal-cla
-  newTag: develop-lts-1da7e4
+  newTag: develop-lts-558f21

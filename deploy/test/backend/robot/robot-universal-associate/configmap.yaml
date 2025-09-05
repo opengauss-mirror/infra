@@ -7,19 +7,16 @@ data:
   config.yaml: |
     config_items:
       - repos:
-          - opengaussmirror/repo-create1
-        enable_check_associate_issue: true
-        associate_issue_rules:
+          - opengaussmirror/repo-create2
+        enable_check_associate_pr: true
+        associate_pr_rules:
           repo:
             - "tc_test"
-          repo_label: need-doc
+          repo_label: need-doc-pr
           repo_comment_command_check_label: /check-doc
           repo_comment_command_remove_label: /remove-need-doc
           repo_remove_label_permission: false
-          repo_comment_label_block_feedback: "### Linking Issue Notice \n @%s , the pull request must be linked to at least one https://gitcode.com/opengaussmirror/tc_test repository's issue. \nIf an issue has already been linked, but the **needs-issue** label remains, you can remove the label by commenting **`/check-issue`** . \nAdditionally, if it is confirmed that no issue association is needed, you can remove the label by commenting **`/remove-need-doc`** ."
-
-      - repos:
-          - opengaussmirror/repo-create2
+          repo_comment_label_block_feedback: "### Linking PR Notice \n @%s , the pull request should be linked to at least one https://gitcode.com/opengaussmirror/tc_test repository's PR. \nIf it is confirmed that no PR association is needed, you can remove the label by commenting **`/remove-need-doc`** ."
         enable_check_associate_issue: true
         associate_issue_rules:
           org:
@@ -31,7 +28,20 @@ data:
           org_comment_remove_label_no_permission: "### Notice \nOnly members of the repository can delete the **needs-issue** label. Please contact them to do it."
           org_comment_label_block_feedback: "### Linking Issue Notice \n @%s , the pull request must be linked to at least one issue. \nIf an issue has already been linked, but the **needs-issue** label remains, you can remove the label by commenting **`/check-issue`** ."
     
+      - repos:
+          - opengaussmirror/repo-create1
+        enable_check_associate_issue: true
+        associate_issue_rules:
+          org:
+            - "opengaussmirror"
+          org_label: needs-issue
+          org_comment_command_check_label: /check-issue
+          org_comment_command_remove_label: /remove-needs-issue
+          org_remove_label_permission: true
+          org_comment_remove_label_no_permission: "### Notice \nOnly members of the repository can delete the **needs-issue** label. Please contact them to do it."
+          org_comment_label_block_feedback: "### Linking Issue Notice \n @%s , the pull request must be linked to at least one issue. \nIf an issue has already been linked, but the **needs-issue** label remains, you can remove the label by commenting **`/check-issue`** ."
     sig_info_url: "http://robot-universal-cache-service.opengauss-backend-robot:8888/robot-cache"
     community_name: opengauss
     community_robot_id: opengauss_bot
     placeholder_linking_issue_notice_title: "### Linking Issue Notice"
+    placeholder_linking_pr_notice_title: "### Linking PR Notice"
