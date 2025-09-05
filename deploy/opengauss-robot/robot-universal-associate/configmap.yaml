@@ -58,6 +58,7 @@ data:
           repo_comment_command_remove_label: /remove-need-doc
           repo_remove_label_permission: false
           repo_comment_label_block_feedback: "### Linking PR Notice \n @%s , the pull request should be linked to at least one https://gitcode.com/opengauss/docs repository's PR. \nIf it is confirmed that no PR association is needed, you can remove the label by commenting **`/remove-need-doc`** ."
+        enable_check_associate_issue: true
         associate_issue_rules:
           org:
             - "opengauss"
