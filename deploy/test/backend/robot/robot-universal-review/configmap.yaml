@@ -89,7 +89,7 @@ data:
         description: "Agree to merge the pull request. This can be accomplished by commenting **`/approve`**"
       - label_name: needs-issue
         description: "the pull request must be linked to at least one issue. If an issue has already been linked, but the **needs-issue** label remains, you can remove the label by commenting **`/check-issue`** ."
-      - label_name: need-doc
+      - label_name: need-doc-pr
         description: "the pull request must be linked to at least one https://gitcode.com/opengaussmirror/tc_test repository's issue. If an issue has already been linked, but the **need-doc** label remains, you can remove the label by commenting **`/check-doc`** ."
       - label_name: opengauss-cla/yes
         description: "All contributor has signed the CLA."
