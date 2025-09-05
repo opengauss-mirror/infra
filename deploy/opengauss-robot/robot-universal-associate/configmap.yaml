@@ -37,6 +37,7 @@ data:
           - opengauss/debezium
           - opengauss/openGauss-migration-portal
           - opengauss/openGauss-tools-chameleon
+        enable_check_associate_issue: true
         associate_issue_rules:
           org:
             - "opengauss"
