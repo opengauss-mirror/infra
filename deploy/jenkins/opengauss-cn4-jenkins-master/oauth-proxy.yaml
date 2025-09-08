@@ -61,7 +61,7 @@ spec:
             limits:
               cpu: 500m
               memory: 500Mi
-          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy:4b64a9c04a247dd5da3ff664d9d497c902324c3a
+          image: swr.cn-north-4.myhuaweicloud.com/opensourceway/common/oauth2-proxy:fa4e986305fedfcf61c4e094bce786699ba0ad1d
           imagePullPolicy: Always
           name: oauth2-proxy
           ports:
