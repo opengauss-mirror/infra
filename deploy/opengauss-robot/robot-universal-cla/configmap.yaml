@@ -36,6 +36,6 @@ data:
     comment_unsigned_title: "| Commit | Reason |\n|--|--|"
     comment_unsigned_line: "\n| %s | %s |"
     not_signed_email_message: "the email used in the commit is not linked to a signed CLA! <br>please verify that it matches the email you used when signing the CLA."
-    message_individual_version_behind: "the individual CLA content has been updated. <br>[Please click here to re-sign the agreement](https://clasign.osinfra.cn/sign-cla/gitee_opengauss-1614047760000855378/individual?email=%s)."
+    message_individual_version_behind: "the individual CLA content has been updated. <br>[Please click here to re-sign the agreement](https://clasign.osinfra.cn/sign-cla/gitee_opengauss-1614047760000855378/individual-update?email=%s)."
     message_corporation_version_behind: "the corporation CLA content has been updated. <br>Please contact your corporation CLA manager to re-sign the agreement."
     cla_signature_type_corporation: "corporation"
