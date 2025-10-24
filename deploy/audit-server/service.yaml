@@ -5,7 +5,7 @@ metadata:
   namespace: audit-server
 spec:
   ports:
-    - name: http
+    - name: tcp-1
       port: 80
       protocol: TCP
       targetPort: 8000
