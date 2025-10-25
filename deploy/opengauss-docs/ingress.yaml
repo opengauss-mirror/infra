@@ -1,9 +1,7 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  annotations:
-    kubernetes.io/ingress.class: nginx
   name: opengauss-docs-ingress
   namespace: opengauss-docs
 spec:
@@ -15,25 +13,29 @@ spec:
   - host: docs.opengauss.org
     http:
       paths:
-      - backend:
-          serviceName: opengauss-docs-service
-          servicePort: 80
-        path: /
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: opengauss-docs-service
+            port:
+              number: 80
+  ingressClassName: nginx
 
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/permanent-redirect: https://docs.opengauss.org$request_uri
   name: opengauss-docs-osinfra-ingress
   namespace: opengauss-docs
 spec:
+  tls:
+    - hosts:
+        - docs-opengauss.osinfra.cn
+      secretName: opengauss-docs-osinfra-tls
   rules:
   - host: docs-opengauss.osinfra.cn
-  tls:
-  - hosts:
-    - docs-opengauss.osinfra.cn
-    secretName: opengauss-docs-osinfra-tls
+  ingressClassName: nginx
