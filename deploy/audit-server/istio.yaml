@@ -1,0 +1,50 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: audit-server-virtualservice
+  namespace: audit-server
+spec:
+  gateways:
+  - istio-system/istio-gateway-https
+  hosts:
+  - audit.opengauss.org
+  http:
+  - route:
+    - destination:
+        host: audit-server-service.audit-server.svc.cluster.local
+        port:
+          number: 80
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: audit-server-destinationrule
+  namespace: audit-server
+spec:
+  host: audit-server-service
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 80
+        tls:
+          mode: DISABLE
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: audit-server-peerauthentication
+  namespace: audit-server
+spec:
+  mtls:
+    mode: DISABLE
+  selector:
+    matchLabels:
+      app: audit-server

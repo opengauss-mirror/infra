@@ -3,4 +3,5 @@ kind: Namespace
 metadata:
   labels:
     name: audit-server
+    istio-injection: enabled
   name: audit-server
