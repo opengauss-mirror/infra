@@ -5,6 +5,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 - service.yaml
+- istio.yaml
 commonAnnotations:
   kubernetes.ops.cluster: opengauss-hk-cluster
   kubernetes.ops.email: 747802914@qq.com
