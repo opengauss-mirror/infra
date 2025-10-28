@@ -53,3 +53,60 @@ spec:
       maxProtocolVersion: TLSV1_3
       minProtocolVersion: TLSV1_2
       mode: SIMPLE
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    asm/post: ""
+    kubernetes.io/elb.class: union
+    kubernetes.io/elb.health-check-flag: "on"
+    kubernetes.io/elb.health-check-option: '{"protocol":"TCP","delay":"5","timeout":"10","max_retries":"3"}'
+    kubernetes.io/elb.id: 14a34de2-89ac-4e25-9436-a35c0cf53918
+    kubernetes.io/elb.mark: "0"
+    service.protal.kubernetes.io/type: LoadBalancer
+  name: istio-gateway-osinfra-https-svc
+  namespace: istio-system
+spec:
+  allocateLoadBalancerNodePorts: true
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: https-1
+    port: 8443
+    protocol: TCP
+    targetPort: 1027
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  sessionAffinity: None
+  type: LoadBalancer
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  annotations:
+    asm/elbPort: "8443"
+    asm/gatewaySvc: istio-gateway-osinfra-https-svc.istio-system
+    asm/post: ""
+  name: istio-gateway-osinfra-https
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - '*.osinfra.cn'
+    port:
+      name: https-1
+      number: 1027
+      protocol: https
+    tls:
+      cipherSuites:
+      - ECDHE-RSA-AES256-GCM-SHA384
+      credentialName: osinfra-cn-tls
+      maxProtocolVersion: TLSV1_3
+      minProtocolVersion: TLSV1_2
+      mode: SIMPLE
