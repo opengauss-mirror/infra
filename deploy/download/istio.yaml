@@ -1,0 +1,101 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: repo-service-virtualservice
+  namespace: download
+spec:
+  gateways:
+  - istio-system/istio-gateway-https
+  hosts:
+  - download.opengauss.org
+  http:
+  - route:
+    - destination:
+        host: repo-service.download.svc.cluster.local
+        port:
+          number: 80
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: repo-service-destinationrule
+  namespace: download
+spec:
+  host: repo-service
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 80
+        tls:
+          mode: DISABLE
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: repo-service-peerauthentication
+  namespace: download
+spec:
+  mtls:
+    mode: DISABLE
+  selector:
+    matchLabels:
+      app: repo
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: repo-service-osinfra-virtualservice
+  namespace: download
+spec:
+  gateways:
+  - istio-system/istio-gateway-osinfra-https
+  hosts:
+  - download-opengauss.osinfra.cn
+  http:
+  - route:
+    - destination:
+        host: repo-service.download.svc.cluster.local
+        port:
+          number: 80
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: repo-service-osinfra-destinationrule
+  namespace: download
+spec:
+  host: repo-service
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 80
+        tls:
+          mode: DISABLE
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: repo-service-osinfra-peerauthentication
+  namespace: download
+spec:
+  mtls:
+    mode: DISABLE
+  selector:
+    matchLabels:
+      app: repo

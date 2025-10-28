@@ -5,7 +5,7 @@ metadata:
   namespace: download
 spec:
   ports:
-  - name: http-port
+  - name: tcp-1
     protocol: TCP
     port: 80
     targetPort: 80
