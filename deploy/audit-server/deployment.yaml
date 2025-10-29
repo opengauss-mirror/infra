@@ -17,6 +17,7 @@ spec:
   template:
     metadata:
       annotations:
+        traffic.sidecar.istio.io/excludeOutboundIPRanges: 0.0.0.0/0
         vault.hashicorp.com/agent-service-account-token-volume-name: "token-vol"
         vault.hashicorp.com/tls-skip-verify: "true"
         vault.hashicorp.com/agent-inject: 'true'
