@@ -9,4 +9,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: swr.cn-north-4.myhuaweicloud.com/opensourceway/opengauss/audit-server-prod
-  newTag: feat-optimization-prod-7c9300
+  newTag: v1.14.0-6999c4
