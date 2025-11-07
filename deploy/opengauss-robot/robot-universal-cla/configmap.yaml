@@ -10,8 +10,8 @@ data:
         - opengauss
         cla_label_yes: opengauss-cla/yes
         cla_label_no: opengauss-cla/no
-        check_url: https://clasign.osinfra.cn/api/v1/individual-signing/gitee_opengauss-1614047760000855378
-        sign_url: https://clasign.osinfra.cn/sign/gitee_opengauss-1614047760000855378
+        check_url: https://clasign.osinfra.cn/api/v1/individual-signing/690dba44479f483c74c264fd
+        sign_url: https://clasign.osinfra.cn/sign/690dba44479f483c74c264fd
         faq_url: https://gitcode.com/opengauss/community/blob/master/cla/faq/check-by-author/faq.md
         check_by_committer: true
         lite_pr_committer:
@@ -36,6 +36,6 @@ data:
     comment_unsigned_title: "| Commit | Reason |\n|--|--|"
     comment_unsigned_line: "\n| %s | %s |"
     not_signed_email_message: "the email used in the commit is not linked to a signed CLA! <br>please verify that it matches the email you used when signing the CLA."
-    message_individual_version_behind: "the individual CLA content has been updated. <br>[Please click here to re-sign the agreement](https://clasign.osinfra.cn/sign-cla/gitee_opengauss-1614047760000855378/individual-update?email=%s)."
+    message_individual_version_behind: "the individual CLA content has been updated. <br>[Please click here to re-sign the agreement](https://clasign.osinfra.cn/sign-cla/690dba44479f483c74c264fd/individual-update?email=%s)."
     message_corporation_version_behind: "the corporation CLA content has been updated. <br>Please contact your corporation CLA manager to re-sign the agreement."
     cla_signature_type_corporation: "corporation"
