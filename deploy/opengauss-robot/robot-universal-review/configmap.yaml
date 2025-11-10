@@ -23,6 +23,7 @@ data:
           - opengauss/CBB
           - opengauss/DSS
           - opengauss/DCF
+          - opengauss/oGRAC
         lgtm_counts_required: 2
         legal_operator: opengauss_bot
         labels_for_merge:
