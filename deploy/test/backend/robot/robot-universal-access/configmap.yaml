@@ -16,6 +16,7 @@ data:
             - robot-service-review
             - robot-service-assign
             - robot-service-associate
+            - message-center-githook
     
       plugins:
         - name: robot-service-welcome
@@ -53,3 +54,9 @@ data:
             - "Issue Hook"
             - "Merge Request Hook"
             - "Note Hook"
+        - name: message-center-githook
+          endpoint: http://collect-githook-service.opengauss-message-center.svc.cluster.local:8080/gitcode-hook
+          events:
+            - "Note Hook"
+            - "Issue Hook"
+            - "Merge Request Hook"
