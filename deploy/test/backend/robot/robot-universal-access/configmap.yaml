@@ -7,7 +7,8 @@ data:
   config.yaml: |
     access:
       repo_plugins:
-        - org_or_repo: opengaussmirror
+        - org_or_repo:
+            - opengaussmirror
           plugin_name:
             - robot-service-welcome
             - robot-service-cla
